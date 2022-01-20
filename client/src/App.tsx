@@ -1,10 +1,10 @@
 import React from "react";
+import StartPage from "./pages/startpage/StartPage";
 
 function App() {
   return (
     <div className="App">
-      <h1>Meetup</h1>
-      <p>Hej</p>
+      <StartPage />
     </div>
   );
 }
