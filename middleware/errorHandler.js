@@ -18,6 +18,10 @@ const errorHandler = (err, req, res, next) => {
 		error = new ErrorResponse(message, 400);
 	}
 
+	if (err.message === "jwt malformed") {
+		error = new ErrorResponse("Invalid token", 401);
+	}
+
 	res.status(error.statusCode || 500).json({
 		success: false,
 		error: error.message || "Server error...",

@@ -6,6 +6,7 @@ const api = supertest(app);
 
 describe("Meetups API", () => {
 	let userId;
+	let token = "";
 
 	beforeAll(async () => {
 		await User.deleteMany({});
@@ -17,7 +18,17 @@ describe("Meetups API", () => {
 			password: "test1234",
 		});
 
-		userId = user._id.toString();
+		const response = await api
+			.post("/api/login")
+			.send({
+				username: "test",
+				password: "test1234",
+			})
+			.expect(200)
+			.expect("Content-Type", /application\/json/);
+
+		userId = response.body.user.id.toString();
+		token = response.body.token;
 	});
 
 	describe("Creating a new user", () => {
@@ -123,8 +134,9 @@ describe("Meetups API", () => {
 	});
 
 	describe("Updating user data", () => {
-		it("succeeds when provided a valid id and new data", async () => {
+		beforeAll(async () => {
 			let userId;
+			let token;
 
 			const newUser = {
 				username: "saxon",
@@ -133,8 +145,17 @@ describe("Meetups API", () => {
 			};
 
 			const user = await User.create(newUser);
-			userId = user._id.toString();
 
+			const loggedInUser = await api.post("/api/login").send({
+				username: "saxon",
+				password: "test1234",
+			});
+
+			userId = loggedInUser.body.user.id.toString();
+			token = loggedInUser.body.token;
+		});
+
+		it("succeeds when provided a valid id and new data", async () => {
 			const updates = {
 				firstName: "Sixten",
 			};
@@ -142,11 +163,59 @@ describe("Meetups API", () => {
 			const response = await api
 				.put(`/api/users/${userId}`)
 				.send(updates)
+				.set("Authorization", `Bearer ${token}`)
 				.expect(200)
 				.expect("Content-Type", /application\/json/);
 
 			expect(response.body.user.firstName).toBe(updates.firstName);
-			console.log(response.body);
+		});
+
+		it("fails with status code 400 if there is no user with that ID", async () => {
+			const invalidId = 123;
+
+			const updates = {
+				firstName: "Agaton",
+			};
+
+			const response = await api
+				.put(`/api/users/${invalidId}`)
+				.send(updates)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Invalid ID");
+		});
+
+		it("fails with status code 400 if token is missing", async () => {
+			const updates = {
+				firstName: "Svea",
+			};
+
+			const response = await api
+				.put(`/api/users/${userId}`)
+				.send(updates)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Token missing");
+		});
+
+		it("fails with status code 401 if token is invalid", async () => {
+			const invalidToken = "invalidToken123";
+
+			const updates = {
+				firstName: "Rakel",
+			};
+
+			const response = await api
+				.put(`/api/users/${userId}`)
+				.send(updates)
+				.set("Authorization", `Bearer ${invalidToken}`)
+				.expect(401)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Invalid token");
 		});
 	});
 
