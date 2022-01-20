@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
-	_id: mongoose.Schema.Types.ObjectId,
 	username: {
 		type: String,
 		required: [true, "Please enter a username"],
@@ -40,9 +39,7 @@ userSchema.methods.checkPassword = function (enteredPassword, userPassword) {
 };
 
 userSchema.methods.getToken = function () {
-	return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-		expiresIn: process.env.JWT_EXPIRE,
-	});
+	return jwt.sign({ id: this._id }, process.env.JWT_SECRET);
 };
 
 userSchema.set("toJSON", {
