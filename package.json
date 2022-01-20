@@ -31,9 +31,9 @@
 	"devDependencies": {
 		"nodemon": "^2.0.15"
 	},
-  "jest": {
-    "testPathIgnorePatterns" : [
-      "<rootDir>/client" 
-    ]
-  }
+	"jest": {
+		"testPathIgnorePatterns": [
+			"<rootDir>/client"
+		]
+	}
 }
