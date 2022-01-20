@@ -1,33 +1,33 @@
 require("dotenv").config();
 const config = require("./utilities/config");
-const express = require("express");
+const path = require("path");
 const cors = require("cors");
+const express = require("express");
 const mongoose = require("mongoose");
 const meetupRoutes = require("./routes/meetupRoutes");
-
 const PORT = process.env.PORT || 8000;
 
 const app = express();
 
-const logger = (req, res, next) => {
-	console.log(req);
-	next();
-};
+// ### MIDDLEWARES ###
 
-// Middlewares
-app.use(cors);
+app.use(cors());
 app.use(express.json());
-app.use(logger);
+app.use(express.static(path.join(__dirname, "./client/build")));
 
-// Routes
-app.use("/api/meetups", meetupRoutes);
+// ### ROUTES ###
+
 app.get("/", (req, res) => {
-	res.send("Hej");
+	res.send("Hello!");
 });
+
+app.use("/api/meetups", meetupRoutes);
+
+// ### START SERVER AND CONNECT TO DB ###
 
 if (process.env.NODE_ENV !== "test") {
 	app.listen(PORT, () => {
-		console.log(`Server up and running on port ${PORT} 🎮`);
+		console.log(`Server up and running on port ${PORT}... 💻`);
 	});
 }
 
@@ -37,10 +37,10 @@ mongoose
 		useUnifiedTopology: true,
 	})
 	.then(() => {
-		console.log("Connected to database 🦄!");
+		console.log("Connected to database... 📝");
 	})
 	.catch((err) => {
-		console.log("There was an error connecting to database 💩", err);
+		console.log("There was an error connecting to database: ", err);
 	});
 
 module.exports = app;
