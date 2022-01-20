@@ -122,6 +122,34 @@ describe("Meetups API", () => {
 		});
 	});
 
+	describe("Updating user data", () => {
+		it("succeeds when provided a valid id and new data", async () => {
+			let userId;
+
+			const newUser = {
+				username: "saxon",
+				firstName: "Will change this",
+				password: "test1234",
+			};
+
+			const user = await User.create(newUser);
+			userId = user._id.toString();
+
+			const updates = {
+				firstName: "Sixten",
+			};
+
+			const response = await api
+				.put(`/api/users/${userId}`)
+				.send(updates)
+				.expect(200)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.user.firstName).toBe(updates.firstName);
+			console.log(response.body);
+		});
+	});
+
 	afterAll(async () => {
 		await mongoose.connection.close();
 	});

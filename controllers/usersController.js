@@ -55,4 +55,27 @@ async function getUserById(req, res, next) {
 	}
 }
 
-module.exports = { createUser, getAllUsers, getUserById };
+async function updateUser(req, res, next) {
+	try {
+		const id = req.params.id;
+		const updates = req.body;
+
+		const user = await User.findByIdAndUpdate(id, updates, {
+			new: true,
+			runValidators: true,
+		});
+
+		if (!user) {
+			return next(new ErrorResponse(`User not found`, 404));
+		}
+
+		res.status(200).json({
+			success: true,
+			user,
+		});
+	} catch (err) {
+		next(err);
+	}
+}
+
+module.exports = { createUser, getAllUsers, getUserById, updateUser };

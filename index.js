@@ -6,6 +6,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const meetupRoutes = require("./routes/meetupRoutes");
 const usersRoutes = require("./routes/usersRoutes");
+const authRoutes = require("./routes/authRoutes");
 const errorHandler = require("./middleware/errorHandler");
 const PORT = process.env.PORT || 8000;
 
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/meetups", meetupRoutes);
 app.use("/api/users", usersRoutes);
+app.use("/api/login", authRoutes);
 
 // Error Middleware
 app.use(errorHandler);
