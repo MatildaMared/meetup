@@ -5,25 +5,30 @@ const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 const meetupRoutes = require("./routes/meetupRoutes");
+const usersRoutes = require("./routes/usersRoutes");
+const errorHandler = require("./middleware/errorHandler");
 const PORT = process.env.PORT || 8000;
 
 const app = express();
 
-// ### MIDDLEWARES ###
+// Middlewares
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "./client/build")));
 
-// ### ROUTES ###
+// Routes
 
 app.get("/", (req, res) => {
-	res.send("Hello!");
+	res.send("Hello world!");
 });
 
 app.use("/api/meetups", meetupRoutes);
+app.use("/api/users", usersRoutes);
 
-// ### START SERVER AND CONNECT TO DB ###
+// Error Middleware
+app.use(errorHandler);
+
+// Start server and connect to DB
 
 if (process.env.NODE_ENV !== "test") {
 	app.listen(PORT, () => {
