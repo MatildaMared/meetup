@@ -24,9 +24,7 @@ const meetupSchema = new mongoose.Schema({
 		type: String,
 		required: [true, "Please enter a location"],
 	},
-	imageUrl: {
-		type: String,
-	},
+	imgUrl: String,
 	attendees: Array,
 	comments: Array,
 });

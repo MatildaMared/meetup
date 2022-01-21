@@ -17,8 +17,6 @@ const userSchema = new mongoose.Schema({
 		required: [true, "Please enter a password"],
 		minLength: [8, "Password needs to be at least 8 characters long"],
 	},
-	attending: Array,
-	createdMeetups: Array,
 });
 
 // Run this function before user is saved/re-saved

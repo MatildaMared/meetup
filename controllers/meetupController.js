@@ -18,9 +18,6 @@ async function createMeetup(req, res, next) {
 
 		const newMeetup = await Meetup.create(meetup);
 
-		user.attending = [...user.attending, newMeetup._id.toString()];
-		await user.save();
-
 		res.status(201).json({
 			success: true,
 			meetup: newMeetup,
@@ -108,12 +105,6 @@ async function deleteMeetup(req, res, next) {
 		await Meetup.findByIdAndDelete(meetupId);
 
 		const user = await User.findById(req.userId);
-
-		user.attending = user.attending.filter((attendingId) => {
-			return attendingId !== meetupId;
-		});
-
-		await user.save();
 
 		res.status(200).json({
 			success: true,
