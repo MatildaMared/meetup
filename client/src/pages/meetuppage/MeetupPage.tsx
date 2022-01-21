@@ -1,11 +1,11 @@
 import MeetupCard from "../../components/meetupcard/MeetupCard";
-import Form from "../../components/comment/Form";
+import Comment from "../../components/comment/Comment";
 
 function MeetupPage() {
   return (
     <div>
       <MeetupCard />
-      <Form />
+      <Comment />
     </div>
   );
 }
