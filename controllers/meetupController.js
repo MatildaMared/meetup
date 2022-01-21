@@ -150,7 +150,6 @@ async function addComment(req, res, next) {
 			meetup: meetup,
 		});
 	} catch (err) {
-		console.log(err);
 		next(err);
 	}
 }

@@ -75,6 +75,19 @@ describe("Commenting on a meetup", () => {
 
 			expect(response.body.error).toBe("Token missing");
 		});
+
+		it("fails with status code 400 if meetup id is invalid", async () => {
+			const invalidId = "badId839";
+
+			const response = await api
+				.post(`/api/meetups/${invalidId}/comments`)
+				.send(comment)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Invalid ID");
+		});
 	});
 
 	afterAll(async () => {
