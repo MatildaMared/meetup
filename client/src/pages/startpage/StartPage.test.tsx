@@ -7,6 +7,6 @@ describe("navbar component", () => {
     })
 })
 
-
-//it contains hero image 
-//
+//it contains Header Component skriv vad användaren kommer se istället
+//it contains EventSuggestion Component skriv vad användaren kommer se istället
+//it contains UpcomingEvents Component skriv vad användaren kommer se istället
