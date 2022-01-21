@@ -22,4 +22,21 @@ router.delete("/:id", tokenHandler, meetupController.deleteMeetup);
 // Adding a comment
 router.post("/:id/comments", tokenHandler, meetupController.addComment);
 
+// Deleting a comment
+router.delete(
+	"/:id/comments/:commentId",
+	tokenHandler,
+	meetupController.deleteComment
+);
+
+// Registering to a meetup
+router.post("/:id/register", tokenHandler, meetupController.registerToMeetup);
+
+// Unregistering from a meetup
+router.delete(
+	"/:id/register",
+	tokenHandler,
+	meetupController.unregisterFromMeetup
+);
+
 module.exports = router;
