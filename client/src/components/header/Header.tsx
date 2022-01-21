@@ -1,7 +1,10 @@
-import React from 'react';
+import React from "react";
+import meeting from "../../assets/meeting.jpg"
 
 function Header() {
-  return <div></div>;
+  return <header>
+    <img src={meeting} alt="" />
+  </header>;
 }
 
 export default Header;
