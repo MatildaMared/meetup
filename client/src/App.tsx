@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar/Navbar";
 import { MeetupProvider } from "./context/MeetupContext";
 // import SigninPage from "./pages/signinpage/SigninPage";
 import SignupPage from "./pages/signuppage/SignupPage";
+import LoginPage from "./pages/loginPage/LoginPage";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<StartPage />} />
             <Route path="/meetups" element={<MeetupPage />} />
-            {/* <Route path="/signin" element={<SigninPage />} /> */}
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
           </Routes>
         </div>
