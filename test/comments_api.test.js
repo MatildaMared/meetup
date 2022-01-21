@@ -10,6 +10,7 @@ describe("Meetup API", () => {
 	let meetupId;
 
 	beforeAll(async () => {
+		jest.setTimeout(60000);
 		await User.deleteMany({});
 		await Meetup.deleteMany({});
 

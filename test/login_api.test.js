@@ -8,6 +8,7 @@ describe("Login API", () => {
 	let userId;
 
 	beforeAll(async () => {
+		jest.setTimeout(60000);
 		await User.deleteMany({});
 
 		// Create a new user to test with
