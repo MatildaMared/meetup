@@ -5,7 +5,7 @@ const api = supertest(app);
 const User = require("../models/userModel");
 const Meetup = require("../models/meetupModel");
 
-describe("Commenting on a meetup", () => {
+describe("Meetup API", () => {
 	let token;
 	let meetupId;
 
@@ -143,16 +143,16 @@ describe("Commenting on a meetup", () => {
 			expect(response.body.error).toBe("Invalid ID");
 		});
 
-		it("fails with status code 400 if comment id is invalid", async () => {
+		it("fails with status code 404 if comment could not be found", async () => {
 			const invalidId = "badId839";
 
 			const response = await api
 				.delete(`/api/meetups/${meetupId}/comments/${invalidId}`)
 				.set("Authorization", `Bearer ${token}`)
-				.expect(400)
+				.expect(404)
 				.expect("Content-Type", /application\/json/);
 
-			expect(response.body.error).toBe("Invalid ID");
+			expect(response.body.error).toBe("Comment not found");
 		});
 	});
 

@@ -5,7 +5,7 @@ const api = supertest(app);
 const User = require("../models/userModel");
 const Meetup = require("../models/meetupModel");
 
-describe("Registering API", () => {
+describe("Meetup API", () => {
 	let token;
 	let meetupId;
 
@@ -175,6 +175,30 @@ describe("Registering API", () => {
 				.expect("Content-Type", /application\/json/);
 
 			expect(response.body.error).toBe("Token missing");
+		});
+
+		it("fails with status code 401 if token is invalid", async () => {
+			const invalidToken = "willNotWork78390";
+
+			const response = await api
+				.delete(`/api/meetups/${meetupId}/register`)
+				.set("Authorization", `Bearer ${invalidToken}`)
+				.expect(401)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Invalid token");
+		});
+
+		it("fails with status code 400 if meetup ID is invalid", async () => {
+			const invalidMeetupId = "invalid9527";
+
+			const response = await api
+				.delete(`/api/meetups/${invalidMeetupId}/register`)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Invalid ID");
 		});
 	});
 
