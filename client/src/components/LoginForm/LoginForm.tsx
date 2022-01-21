@@ -1,19 +1,68 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 
 function LoginForm() {
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const usernameInput = useRef<HTMLInputElement>(null);
+  const passwordInput = useRef<HTMLInputElement>(null);
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  function displayErrorMessage(message: string) {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 3000);
+  }
+
+  function onSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setErrorMessage("");
+    console.log(username, password);
+
+    if (!username || !password) {
+      displayErrorMessage("Please enter username and password");
+    }
+
+    resetInputFields();
+  }
+
+  function resetInputFields() {
+    setUsername("");
+    setPassword("");
+    if (usernameInput.current) {
+      usernameInput.current.blur();
+    }
+    if (passwordInput.current) {
+      passwordInput.current.blur();
+    }
+  }
+
   return (
-    <Form>
+    <Form onSubmit={onSubmitHandler}>
       <Heading>Login</Heading>
       <InputWrapper>
         <label htmlFor="username">Username</label>
-        <input type="text" id="username" />
+        <input
+          type="text"
+          id="username"
+          ref={usernameInput}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
       </InputWrapper>
       <InputWrapper>
         <label htmlFor="password">Password</label>
-        <input type="password" id="password" />
+        <input
+          type="password"
+          id="password"
+          ref={passwordInput}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
       </InputWrapper>
       <Button type="submit" value="Login" />
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </Form>
   );
 }
@@ -77,6 +126,12 @@ const Button = styled.input`
     outline: 2px dotted #5b5b5b;
     outline-offset: 4px;
   }
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  margin-top: 1rem;
+  margin-bottom: 0;
 `;
 
 export default LoginForm;
