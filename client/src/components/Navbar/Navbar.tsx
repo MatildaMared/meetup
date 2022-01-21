@@ -1,12 +1,13 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
 
-interface Props {
-  items: string[];
-}
+// interface Props {
+//   items: string[];
+// }
 
-function Navbar({ items }: Props) {
+function Navbar() {
   const [isSelected, setIsSelected] = useState<string>("Home");
+  const items= ["Home", "Find Meetups", "Sign in", "Sign up"];
 
   function addClassHandler(e: any) {
     setIsSelected(e.target.innerHTML);
