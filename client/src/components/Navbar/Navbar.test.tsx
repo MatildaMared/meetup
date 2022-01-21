@@ -46,6 +46,7 @@ describe("navbar component", () => {
     userEvent.click(selectedLi);
     expect(selectedLi).toHaveClass("selected");
   });
+});
 
   //Run this tests when able to sign in
   //user can only see login and sign up page when not logged in
@@ -61,4 +62,4 @@ describe("navbar component", () => {
   //     expect(listitems[2]).toHaveTextContent("My Page");
   //     expect(listitems[3]).toHaveTextContent("Sign out");
   //   });
-});
+
