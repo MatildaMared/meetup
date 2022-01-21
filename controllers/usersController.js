@@ -3,20 +3,6 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const ErrorResponse = require("./../utilities/errorResponse");
 
-async function decodeToken(req, res, next) {
-	try {
-		const token = req.headers.authorization?.split(" ")[1];
-		if (!token) {
-			return next(new ErrorResponse("Token missing", 400));
-		}
-
-		const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-		return decoded.id;
-	} catch (err) {
-		next(err);
-	}
-}
-
 async function createUser(req, res, next) {
 	try {
 		const { username, firstName, password } = req.body;
@@ -71,22 +57,22 @@ async function getUserById(req, res, next) {
 
 async function updateUser(req, res, next) {
 	try {
-		const id = req.params.id;
-		const user = await User.findById(id);
+		const userIdFromParams = req.params.id;
+		const userIdFromToken = req.userId;
+
+		const user = await User.findById(userIdFromParams);
 
 		if (!user) {
 			return next(new ErrorResponse(`User not found`, 404));
 		}
 
-		const decoded = await decodeToken(req, res, next);
-
-		if (id !== decoded) {
+		if (userIdFromParams !== userIdFromToken) {
 			return next(new ErrorResponse(`Unauthorized`, 401));
 		}
 
 		const updates = req.body;
 
-		const updatedUser = await User.findByIdAndUpdate(id, updates, {
+		const updatedUser = await User.findByIdAndUpdate(userIdFromToken, updates, {
 			new: true,
 			runValidators: true,
 		});
