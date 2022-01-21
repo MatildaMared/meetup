@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const { post } = require("..");
 const router = new Router();
 const meetupController = require("./../controllers/meetupController");
 const tokenHandler = require("./../middleware/tokenHandler");

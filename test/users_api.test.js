@@ -6,7 +6,7 @@ const api = supertest(app);
 
 describe("Meetups API", () => {
 	let userId;
-	let token = "";
+	let token;
 
 	beforeAll(async () => {
 		await User.deleteMany({});

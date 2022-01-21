@@ -59,6 +59,8 @@ describe("Commenting on a meetup", () => {
 				.expect(201)
 				.expect("Content-Type", /application\/json/);
 
+			console.log(response.body.meetup.comments);
+
 			const comments = response.body.meetup.comments.map(
 				(comment) => comment.content
 			);
