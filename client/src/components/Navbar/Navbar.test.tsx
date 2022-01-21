@@ -3,14 +3,12 @@ import userEvent from "@testing-library/user-event";
 import Navbar from "./Navbar";
 
 describe("navbar component", () => {
-  const items = ["Home", "Find Meetups", "Sign in", "Sign up"];
-
   it("renders without crashing", () => {
-    render(<Navbar items={items} />);
+    render(<Navbar />);
   });
 
   it("shows links Home, Find Meetups, Sign in, Sign up when user is not logged in", () => {
-    render(<Navbar items={items} />);
+    render(<Navbar />);
     const listitems = screen.getAllByRole("listitem");
 
     expect(listitems.length).toBe(4);
@@ -21,27 +19,27 @@ describe("navbar component", () => {
   });
 
   it("selected class is activated on Home when user enters page", () => {
-    render(<Navbar items={items} />);
+    render(<Navbar />);
     const selectedLi = screen.getByText("Home");
     expect(selectedLi).toHaveClass("selected");
   });
 
   it("selected-class is activated when user selects link Find Meetups", () => {
-    render(<Navbar items={items} />);
+    render(<Navbar />);
     const selectedLi = screen.getByText("Find Meetups");
     userEvent.click(selectedLi);
     expect(selectedLi).toHaveClass("selected");
   });
 
   it("selected-class is activated when user selects link Sign in", () => {
-    render(<Navbar items={items} />);
+    render(<Navbar />);
     const selectedLi = screen.getByText("Sign in");
     userEvent.click(selectedLi);
     expect(selectedLi).toHaveClass("selected");
   });
 
   it("selected-class is activated when user selects link Sign up", () => {
-    render(<Navbar items={items} />);
+    render(<Navbar />);
     const selectedLi = screen.getByText("Find Meetups");
     userEvent.click(selectedLi);
     expect(selectedLi).toHaveClass("selected");
