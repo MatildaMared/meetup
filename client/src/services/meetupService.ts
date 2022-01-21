@@ -1,4 +1,4 @@
-export async function fetchDataByUrl(url) {
+export async function fetchDataByUrl(url: string) {
   try {
     const res = await fetch(url);
     return await res.json();
@@ -12,7 +12,7 @@ export async function getAllMeetups() {
   return fetchDataByUrl(fetchUrl);
 }
 
-export async function getSingleMeetup(id) {
+export async function getSingleMeetup(id: string) {
   const fetchUrl = `http://localhost:8000/api/meetups/${id}`;
   return fetchDataByUrl(fetchUrl);
 }
