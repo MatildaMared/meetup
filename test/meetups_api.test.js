@@ -118,6 +118,250 @@ describe("Meetups API", () => {
 		});
 	});
 
+	describe("Getting all meetups", () => {
+		const meetup = {
+			title: "Example",
+			category: "gaming",
+			description: "This is a description",
+			date: new Date("2022-03-08T17:00:00"),
+			location: "location",
+			imgUrl: "http://url.com",
+		};
+
+		const anotherMeetup = {
+			title: "Another",
+			category: "gaming",
+			description: "This is a description",
+			date: new Date("2022-04-13T17:00:00"),
+			location: "location",
+			imgUrl: "http://url.com",
+		};
+
+		beforeAll(async () => {
+			await Meetup.deleteMany({});
+
+			await api
+				.post("/api/meetups/")
+				.send(meetup)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(201)
+				.expect("Content-Type", /application\/json/);
+
+			await api
+				.post("/api/meetups/")
+				.send(anotherMeetup)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(201)
+				.expect("Content-Type", /application\/json/);
+		});
+
+		it("succeeds if provided all necessary data", async () => {
+			const response = await api
+				.get("/api/meetups/")
+				.expect(200)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.meetups.length).toBe(2);
+
+			const titles = response.body.meetups.map((m) => m.title);
+
+			expect(titles).toContain(meetup.title);
+			expect(titles).toContain(anotherMeetup.title);
+		});
+	});
+
+	describe("Getting a specific meetup", () => {
+		let meetupId;
+
+		const meetup = {
+			title: "Example",
+			category: "gaming",
+			description: "This is a description",
+			date: new Date("2022-03-08T17:00:00"),
+			location: "location",
+			imgUrl: "http://url.com",
+		};
+
+		beforeAll(async () => {
+			await Meetup.deleteMany({});
+
+			const response = await api
+				.post("/api/meetups/")
+				.send(meetup)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(201)
+				.expect("Content-Type", /application\/json/);
+
+			meetupId = response.body.meetup.id;
+		});
+
+		it("succeeds if provided all necessary data", async () => {
+			const response = await api
+				.get(`/api/meetups/${meetupId}`)
+				.expect(200)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.meetup.title).toBe(meetup.title);
+		});
+
+		it("fails with status code 400 if id is invalid", async () => {
+			const wrongId = "wrongId683";
+			const response = await api
+				.get(`/api/meetups/${wrongId}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Invalid ID");
+		});
+	});
+
+	describe("Updating a meetup", () => {
+		let meetupId;
+
+		const meetup = {
+			title: "Example",
+			category: "gaming",
+			description: "This is a description",
+			date: new Date("2022-03-08T17:00:00"),
+			location: "location",
+			imgUrl: "http://url.com",
+		};
+
+		beforeAll(async () => {
+			await Meetup.deleteMany({});
+
+			const response = await api
+				.post("/api/meetups/")
+				.send(meetup)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(201)
+				.expect("Content-Type", /application\/json/);
+
+			meetupId = response.body.meetup.id;
+		});
+
+		it("succeeds if provided all necessary data", async () => {
+			const updates = {
+				title: "I'm updated",
+			};
+
+			const response = await api
+				.put(`/api/meetups/${meetupId}`)
+				.send(updates)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(200)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.meetup.title).toBe(updates.title);
+		});
+
+		it("fails with status code 400 if id is invalid", async () => {
+			const invalidId = "notCorrect394";
+
+			const updates = {
+				title: "Updated",
+			};
+
+			const response = await api
+				.put(`/api/meetups/${invalidId}`)
+				.send(updates)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Invalid ID");
+		});
+
+		it("fails with status code 400 if token is missing", async () => {
+			const updates = {
+				title: "Newtitle",
+			};
+
+			const response = await api
+				.put(`/api/meetups/${meetupId}`)
+				.send(updates)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Token missing");
+		});
+	});
+
+	describe("Deleting a meetup", () => {
+		let meetupId;
+
+		const meetup = {
+			title: "Will be deleted",
+			category: "gaming",
+			description: "description",
+			date: new Date("2022-03-08T17:00:00"),
+			location: "location",
+			imgUrl: "http://url.com",
+		};
+
+		beforeEach(async () => {
+			await Meetup.deleteMany({});
+
+			const response = await api
+				.post("/api/meetups/")
+				.send(meetup)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(201)
+				.expect("Content-Type", /application\/json/);
+
+			meetupId = response.body.meetup.id;
+		});
+
+		it("succeeds provided all necessary information", async () => {
+			const response = await api
+				.delete(`/api/meetups/${meetupId}`)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(200)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.message).toBe("Meetup deleted");
+
+			const allMeetups = await Meetup.find({});
+			expect(allMeetups.length).toBe(0);
+
+			const attendingIds = response.body.user.attending;
+			expect(attendingIds).not.toContain(meetupId);
+		});
+
+		it("fails with status code 400 if id is invalid", async () => {
+			const invalidId = "wrong892";
+
+			const response = await api
+				.delete(`/api/meetups/${invalidId}`)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Invalid ID");
+		});
+
+		it("fails with status code 400 if token is missing", async () => {
+			const response = await api
+				.delete(`/api/meetups/${meetupId}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Token missing");
+		});
+
+		it("fails with status code 404 if meetup is already deleted", async () => {
+			await Meetup.findByIdAndDelete(meetupId);
+
+			const response = await api
+				.delete(`/api/meetups/${meetupId}`)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(404)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Meetup not found");
+		});
+	});
+
 	afterAll(async () => {
 		await mongoose.connection.close();
 	});
