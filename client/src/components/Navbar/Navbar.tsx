@@ -9,7 +9,6 @@ function Navbar() {
   function addClassHandler(e: any) {
     setIsSelected(e.target.innerHTML);
     console.log(isSelected);
-    
   }
 
   return (

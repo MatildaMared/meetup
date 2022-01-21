@@ -3,8 +3,6 @@ import userEvent from "@testing-library/user-event";
 import Navbar from "./Navbar";
 
 describe("navbar component", () => {
-
-
   it("renders without crashing", () => {
     render(<Navbar />);
   });
