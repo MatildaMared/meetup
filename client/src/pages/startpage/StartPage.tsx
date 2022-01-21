@@ -17,11 +17,10 @@ function StartPage() {
   console.log(allmeetups);
 
   return (
-    <div>
+    <>
       <Header />
-
-      <ul>{allmeetups ? <li> {allmeetups.title} </li> : null}</ul>
-    </div>
+      {/* <ul>{allmeetups ? <li> {allmeetups.title} </li> : null}</ul> */}
+    </>
   );
 }
 
