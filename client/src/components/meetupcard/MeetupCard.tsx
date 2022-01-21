@@ -9,7 +9,7 @@ function MeetupCard() {
   async function getMeetup(id: string) {
     const meetupInfo = await getSingleMeetup(id);
     updateContext({ singleMeetup: meetupInfo.meetup });
-    console.log("hej äntligen har du lite info 🦄");
+    console.log("här har du äntligen lite info 🦄");
   }
 
   useEffect(() => {
