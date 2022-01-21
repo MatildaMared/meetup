@@ -2,44 +2,363 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../index");
 const api = supertest(app);
+const User = require("../models/userModel");
+const Meetup = require("../models/meetupModel");
 
 describe("Meetups API", () => {
+	let token;
+	let userId;
+
 	beforeAll(async () => {
-		// Delete all meetups from database
+		await User.deleteMany({});
+		await Meetup.deleteMany({});
+
+		const user = await User.create({
+			username: "test",
+			firstName: "Test",
+			password: "test1234",
+		});
+
+		const response = await api
+			.post("/api/login")
+			.send({ username: "test", password: "test1234" })
+			.expect(200)
+			.expect("Content-Type", /application\/json/);
+
+		token = response.body.token;
+		userId = response.body.user.id;
 	});
 
-	// describe("Creating new meetup", () => {
-	// 	it("succeeds if provided all necessary data", async () => {
-	// 		const meetup = {
-	// 			title: "Kodkväll för nybörjare",
-	// 			category: "programming",
-	// 			description:
-	// 				"Cat ipsum dolor sit amet, it's 3am, time to create some chaos bathe private parts with tongue then lick owner's face hell is other people so cat sit like bread. Lay on arms while you're using the keyboard put butt in owner's face or make it to the carpet before i vomit mmmmmm and claw drapes, and refuse to drink water except out of someone's glass. Why dog in house? i'm the sole ruler of this home and its inhabitants smelly, stupid dogs, inferior furballs time for night-hunt, human freakout mice blow up sofa in 3 seconds why can't i catch that stupid red dot. Kitty time. Steal mom's crouton while she is in the bathroom instead of drinking water from the cat bowl, make sure to steal water from the toilet and intrigued by the shower, but give me attention or face the wrath of my claws scratch me now! stop scratching me! scratch my tummy actually i hate you now fight me yet the cat was chasing the mouse. Kitty loves pigs eat owner's food, get video posted to internet for chasing red dot so jump on human and sleep on her all night long be long in the bed, purr in the morning and then give a bite to every human around for not waking up request food, purr loud scratch the walls, the floor, the windows, the humans and mark territory, but intently sniff hand. Cats are a queer kind of folk hate dogs, for flee in terror at cucumber discovered on floor, yet kitty poochy i vomit in the bed in the middle of the night.",
-	// 			date: new Date("2022-02-18T18:00:00"),
-	// 			location: "Mr Cake, Lilla Badhusgatan 2b, Göteborg",
-	// 			imgUrl:
-	// 				"https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2671&q=80",
-	// 			attendees: [],
-	// 			comments: [],
-	// 		};
+	describe("Creating new meetup", () => {
+		const exampleMeetup = {
+			title: "Meetup",
+			category: "programming",
+			description: "This is a description",
+			date: new Date("2022-02-18T18:00:00"),
+			location: "Mr Cake, Lilla Badhusgatan 2b, Göteborg",
+			imgUrl: "http://url.com",
+		};
 
-	// 		const response = await api
-	// 			.post("/api/meetups/")
-	// 			.send(meetup)
-	// 			.expect(201)
-	// 			.expect("Content-Type", /application\/json/);
-
-	// 		// console.log(response);
-	// 		// expect(response.body.title).toBe(meetup.title);
-	// 	});
-	// });
-
-	describe("Test", () => {
-		it("succeeds", async () => {
+		it("succeeds if provided all necessary data", async () => {
 			const response = await api
-				.get("/")
+				.post("/api/meetups/")
+				.send(exampleMeetup)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(201)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.meetup.title).toBe(exampleMeetup.title);
+		});
+
+		it("fails with status code 400 if token is missing", async () => {
+			const response = await api
+				.post("/api/meetups/")
+				.send(exampleMeetup)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Token missing");
+		});
+
+		it("fails with status code 401 if token is invalid", async () => {
+			const invalidToken = "invalidToken765";
+
+			const response = await api
+				.post("/api/meetups/")
+				.send(exampleMeetup)
+				.set("Authorization", `Bearer ${invalidToken}`)
+				.expect(401)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Invalid token");
+		});
+
+		it("fails with status code 400 if title is missing", async () => {
+			const response = await api
+				.post("/api/meetups/")
+				.send({ ...exampleMeetup, title: null })
+				.set("Authorization", `Bearer ${token}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Please enter a title");
+		});
+
+		it("fails with status code 400 if category is missing", async () => {
+			const response = await api
+				.post("/api/meetups/")
+				.send({ ...exampleMeetup, category: null })
+				.set("Authorization", `Bearer ${token}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Please choose a category");
+		});
+
+		it("fails with status code 400 if date is missing", async () => {
+			const response = await api
+				.post("/api/meetups/")
+				.send({ ...exampleMeetup, date: null })
+				.set("Authorization", `Bearer ${token}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Please enter a date");
+		});
+
+		it("fails with status code 400 if location is missing", async () => {
+			const response = await api
+				.post("/api/meetups/")
+				.send({ ...exampleMeetup, location: null })
+				.set("Authorization", `Bearer ${token}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Please enter a location");
+		});
+	});
+
+	describe("Getting all meetups", () => {
+		const meetup = {
+			title: "Example",
+			category: "gaming",
+			description: "This is a description",
+			date: new Date("2022-03-08T17:00:00"),
+			location: "location",
+			imgUrl: "http://url.com",
+		};
+
+		const anotherMeetup = {
+			title: "Another",
+			category: "gaming",
+			description: "This is a description",
+			date: new Date("2022-04-13T17:00:00"),
+			location: "location",
+			imgUrl: "http://url.com",
+		};
+
+		beforeAll(async () => {
+			await Meetup.deleteMany({});
+
+			await api
+				.post("/api/meetups/")
+				.send(meetup)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(201)
+				.expect("Content-Type", /application\/json/);
+
+			await api
+				.post("/api/meetups/")
+				.send(anotherMeetup)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(201)
+				.expect("Content-Type", /application\/json/);
+		});
+
+		it("succeeds if provided all necessary data", async () => {
+			const response = await api
+				.get("/api/meetups/")
 				.expect(200)
 				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.meetups.length).toBe(2);
+
+			const titles = response.body.meetups.map((m) => m.title);
+
+			expect(titles).toContain(meetup.title);
+			expect(titles).toContain(anotherMeetup.title);
+		});
+	});
+
+	describe("Getting a specific meetup", () => {
+		let meetupId;
+
+		const meetup = {
+			title: "Example",
+			category: "gaming",
+			description: "This is a description",
+			date: new Date("2022-03-08T17:00:00"),
+			location: "location",
+			imgUrl: "http://url.com",
+		};
+
+		beforeAll(async () => {
+			await Meetup.deleteMany({});
+
+			const response = await api
+				.post("/api/meetups/")
+				.send(meetup)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(201)
+				.expect("Content-Type", /application\/json/);
+
+			meetupId = response.body.meetup.id;
+		});
+
+		it("succeeds if provided all necessary data", async () => {
+			const response = await api
+				.get(`/api/meetups/${meetupId}`)
+				.expect(200)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.meetup.title).toBe(meetup.title);
+		});
+
+		it("fails with status code 400 if id is invalid", async () => {
+			const wrongId = "wrongId683";
+			const response = await api
+				.get(`/api/meetups/${wrongId}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Invalid ID");
+		});
+	});
+
+	describe("Updating a meetup", () => {
+		let meetupId;
+
+		const meetup = {
+			title: "Example",
+			category: "gaming",
+			description: "This is a description",
+			date: new Date("2022-03-08T17:00:00"),
+			location: "location",
+			imgUrl: "http://url.com",
+		};
+
+		beforeAll(async () => {
+			await Meetup.deleteMany({});
+
+			const response = await api
+				.post("/api/meetups/")
+				.send(meetup)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(201)
+				.expect("Content-Type", /application\/json/);
+
+			meetupId = response.body.meetup.id;
+		});
+
+		it("succeeds if provided all necessary data", async () => {
+			const updates = {
+				title: "I'm updated",
+			};
+
+			const response = await api
+				.put(`/api/meetups/${meetupId}`)
+				.send(updates)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(200)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.meetup.title).toBe(updates.title);
+		});
+
+		it("fails with status code 400 if id is invalid", async () => {
+			const invalidId = "notCorrect394";
+
+			const updates = {
+				title: "Updated",
+			};
+
+			const response = await api
+				.put(`/api/meetups/${invalidId}`)
+				.send(updates)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Invalid ID");
+		});
+
+		it("fails with status code 400 if token is missing", async () => {
+			const updates = {
+				title: "Newtitle",
+			};
+
+			const response = await api
+				.put(`/api/meetups/${meetupId}`)
+				.send(updates)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Token missing");
+		});
+	});
+
+	describe("Deleting a meetup", () => {
+		let meetupId;
+
+		const meetup = {
+			title: "Will be deleted",
+			category: "gaming",
+			description: "description",
+			date: new Date("2022-03-08T17:00:00"),
+			location: "location",
+			imgUrl: "http://url.com",
+		};
+
+		beforeEach(async () => {
+			await Meetup.deleteMany({});
+
+			const response = await api
+				.post("/api/meetups/")
+				.send(meetup)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(201)
+				.expect("Content-Type", /application\/json/);
+
+			meetupId = response.body.meetup.id;
+		});
+
+		it("succeeds provided all necessary information", async () => {
+			const response = await api
+				.delete(`/api/meetups/${meetupId}`)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(200)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.message).toBe("Meetup deleted");
+
+			const allMeetups = await Meetup.find({});
+			expect(allMeetups.length).toBe(0);
+
+			const attendingIds = response.body.user.attending;
+			expect(attendingIds).not.toContain(meetupId);
+		});
+
+		it("fails with status code 400 if id is invalid", async () => {
+			const invalidId = "wrong892";
+
+			const response = await api
+				.delete(`/api/meetups/${invalidId}`)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Invalid ID");
+		});
+
+		it("fails with status code 400 if token is missing", async () => {
+			const response = await api
+				.delete(`/api/meetups/${meetupId}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Token missing");
+		});
+
+		it("fails with status code 404 if meetup is already deleted", async () => {
+			await Meetup.findByIdAndDelete(meetupId);
+
+			const response = await api
+				.delete(`/api/meetups/${meetupId}`)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(404)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Meetup not found");
 		});
 	});
 

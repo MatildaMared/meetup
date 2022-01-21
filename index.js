@@ -1,33 +1,39 @@
 require("dotenv").config();
 const config = require("./utilities/config");
-const express = require("express");
+const path = require("path");
 const cors = require("cors");
+const express = require("express");
 const mongoose = require("mongoose");
 const meetupRoutes = require("./routes/meetupRoutes");
-
+const usersRoutes = require("./routes/usersRoutes");
+const authRoutes = require("./routes/authRoutes");
+const errorHandler = require("./middleware/errorHandler");
 const PORT = process.env.PORT || 8000;
 
 const app = express();
 
-const logger = (req, res, next) => {
-	console.log(req);
-	next();
-};
-
 // Middlewares
-app.use(cors);
+app.use(cors());
 app.use(express.json());
-app.use(logger);
 
 // Routes
-app.use("/api/meetups", meetupRoutes);
+
 app.get("/", (req, res) => {
-	res.send("Hej");
+	res.send("Hello world!");
 });
+
+app.use("/api/meetups", meetupRoutes);
+app.use("/api/users", usersRoutes);
+app.use("/api/login", authRoutes);
+
+// Error Middleware
+app.use(errorHandler);
+
+// Start server and connect to DB
 
 if (process.env.NODE_ENV !== "test") {
 	app.listen(PORT, () => {
-		console.log(`Server up and running on port ${PORT} 🎮`);
+		console.log(`Server up and running on port ${PORT}... 💻`);
 	});
 }
 
@@ -37,10 +43,10 @@ mongoose
 		useUnifiedTopology: true,
 	})
 	.then(() => {
-		console.log("Connected to database 🦄!");
+		console.log("Connected to database... 📝");
 	})
 	.catch((err) => {
-		console.log("There was an error connecting to database 💩", err);
+		console.log("There was an error connecting to database: ", err);
 	});
 
 module.exports = app;
