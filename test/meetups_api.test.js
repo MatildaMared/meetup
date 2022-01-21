@@ -323,9 +323,6 @@ describe("Meetups API", () => {
 
 			const allMeetups = await Meetup.find({});
 			expect(allMeetups.length).toBe(0);
-
-			const attendingIds = response.body.user.attending;
-			expect(attendingIds).not.toContain(meetupId);
 		});
 
 		it("fails with status code 400 if id is invalid", async () => {
