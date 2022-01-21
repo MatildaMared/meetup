@@ -1,12 +1,12 @@
-import { Events } from "../../models/Events";
+import { Meetups } from "../../models/Events";
 interface Props {
-  event: Events;
+  event: Meetups;
 }
 
 function EventCard({ event }: Props) {
   return (
     <div>
-      <h3>{event.name}</h3>
+      <h3>{event.title}</h3>
     </div>
   );
 }
