@@ -14,34 +14,30 @@ function Navbar() {
   return (
     <NavbarWrapper>
       <ListWrapper>
-        <Link
-          to="/"
+        <ListElement
           onClick={(e: object) => addClassHandler(e)}
           className={isSelected === items[0] ? "selected" : ""}
         >
-          {items[0]}
-        </Link>
-        <Link
-          to="/meetups"
+          <Link to="/">{items[0]}</Link>
+        </ListElement>
+        <ListElement
           onClick={(e: object) => addClassHandler(e)}
           className={isSelected === items[1] ? "selected" : ""}
         >
-          {items[1]}
-        </Link>
-        <Link
-          to="/signin"
+          <Link to="/meetups">{items[1]}</Link>
+        </ListElement>
+        <ListElement
           onClick={(e: object) => addClassHandler(e)}
           className={isSelected === items[2] ? "selected" : ""}
         >
-          {items[2]}
-        </Link>
-        <Link
-          to="/signup"
+          <Link to="/signin">{items[2]}</Link>
+        </ListElement>
+        <ListElement
           onClick={(e: object) => addClassHandler(e)}
           className={isSelected === items[3] ? "selected" : ""}
         >
-          {items[3]}
-        </Link>
+          <Link to="/signup">{items[3]}</Link>
+        </ListElement>
       </ListWrapper>
     </NavbarWrapper>
   );
