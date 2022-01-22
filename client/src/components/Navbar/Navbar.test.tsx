@@ -17,33 +17,6 @@ describe("navbar component", () => {
 //     expect(listitems[2]).toHaveTextContent("Sign in");
 //     expect(listitems[3]).toHaveTextContent("Sign up");
 //   });
-
-//   it("selected class is activated on Home when user enters page", () => {
-//     render(<Navbar />);
-//     const selectedLi = screen.getByText("Home");
-//     expect(selectedLi).toHaveClass("selected");
-//   });
-
-//   it("selected-class is activated when user selects link Find Meetups", () => {
-//     render(<Navbar />);
-//     const selectedLi = screen.getByText("Find Meetups");
-//     userEvent.click(selectedLi);
-//     expect(selectedLi).toHaveClass("selected");
-//   });
-
-//   it("selected-class is activated when user selects link Sign in", () => {
-//     render(<Navbar />);
-//     const selectedLi = screen.getByText("Sign in");
-//     userEvent.click(selectedLi);
-//     expect(selectedLi).toHaveClass("selected");
-//   });
-
-//   it("selected-class is activated when user selects link Sign up", () => {
-//     render(<Navbar />);
-//     const selectedLi = screen.getByText("Find Meetups");
-//     userEvent.click(selectedLi);
-//     expect(selectedLi).toHaveClass("selected");
-//   });
 });
 
   //Run this tests when able to sign in

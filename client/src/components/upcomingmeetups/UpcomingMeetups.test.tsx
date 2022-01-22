@@ -14,8 +14,15 @@ describe("Upcoming meetups component", () => {
     const text = "Upcoming Meetups"
     expect(header).toHaveTextContent(text);   
   });
+
+  it("displays 5 number of meetupCards", () => {
+
+  })
 });
 
 
-//displays * number of cards
-//displays ability to scroll horizontally
+//displays title of meetup in card
+//displays name of organizer of meetup in card
+//displays address of meetup in card
+//dispalys time and date of meetup in card
+//links to single meetup page when user clicks card

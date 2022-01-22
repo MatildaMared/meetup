@@ -16,27 +16,23 @@ function Navbar() {
       <ListWrapper>
         <ListElement
           onClick={(e: object) => addClassHandler(e)}
-          className={isSelected === items[0] ? "selected" : ""}
         >
-          <Link to="/">{items[0]}</Link>
+          <StyledLink to="/">{items[0]}</StyledLink>
         </ListElement>
         <ListElement
           onClick={(e: object) => addClassHandler(e)}
-          className={isSelected === items[1] ? "selected" : ""}
         >
-          <Link to="/meetups">{items[1]}</Link>
+          <StyledLink to="/meetups">{items[1]}</StyledLink>
         </ListElement>
         <ListElement
           onClick={(e: object) => addClassHandler(e)}
-          className={isSelected === items[2] ? "selected" : ""}
         >
-          <Link to="/signin">{items[2]}</Link>
+          <StyledLink to="/signin">{items[2]}</StyledLink>
         </ListElement>
         <ListElement
           onClick={(e: object) => addClassHandler(e)}
-          className={isSelected === items[3] ? "selected" : ""}
         >
-          <Link to="/signup">{items[3]}</Link>
+          <StyledLink to="/signup">{items[3]}</StyledLink>
         </ListElement>
       </ListWrapper>
     </NavbarWrapper>
@@ -44,8 +40,7 @@ function Navbar() {
 }
 
 const NavbarWrapper = styled.nav`
-  background: #454545;
-  color: #eee;
+  background: #454545;  
   height: 75px;
 `;
 
@@ -59,5 +54,14 @@ const ListWrapper = styled.ul`
 const ListElement = styled.li`
   cursor: pointer;
 `;
+
+const StyledLink  = styled(Link)`
+  text-decoration: none;
+  color: #eee;
+`;
+
+const linkStyle = {
+
+};
 
 export default Navbar;
