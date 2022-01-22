@@ -4,37 +4,68 @@ import { getAllMeetups } from "../../services/meetupService";
 import styled from "styled-components/macro";
 
 function UpcomingMeetups() {
-    const [context, updateContext] = useContext(MeetupContext);
-    const allMeetings = context.allMeetups;
+  const [context, updateContext] = useContext(MeetupContext);
+  const allMeetings = context.allMeetups;
 
-    async function getMeetups() {
-        const meetups = await getAllMeetups();
-        updateContext({ allMeetups: meetups});
-      }
+  async function getMeetups() {
+    const meetups = await getAllMeetups();
+    updateContext({ allMeetups: meetups.meetups });
+    console.log(meetups.meetups);
+    console.log("context: ", allMeetings[0].title);
+  }
 
-    useEffect(() => {
-        getMeetups();
-    }, []);
+  useEffect(() => {
+    getMeetups();
+  }, []);
 
-  return <UpcomingWrapper>
+  return (
+    <UpcomingWrapper>
       <h2>Upcoming Meetups</h2>
-      <EventWrapper>
-          
-      </EventWrapper>
-  </UpcomingWrapper>;
+      <MeetupWrapper>
+        {context.allMeetups.length > 0 &&
+          context.allMeetups.map((meet: any) => (
+            <MeetupCard key={meet.id}>
+              <MeetupAvatar src={meet.imgUrl} alt={meet.title} />
+              <MeetupInfo>
+                <h3>{meet.title}</h3>
+                <p>
+                  by {meet.ownerId} @ {meet.location} {meet.date}
+                </p>
+              </MeetupInfo>
+            </MeetupCard>
+          ))}
+      </MeetupWrapper>
+    </UpcomingWrapper>
+  );
 }
 
-const UpcomingWrapper = styled.section `
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 3;
-`
+const UpcomingWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 3;
+`;
 
-const EventWrapper = styled.div `
-    display: flex;
-    flex-direction: row;
-    overflow-x: scroll;
-`
+const MeetupWrapper = styled.ul`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  `;
+
+const MeetupCard = styled.li`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.1);
+`;
+
+const MeetupAvatar = styled.img`
+  padding: 2rem;
+`;
+
+const MeetupInfo = styled.div`
+  padding: 0 2rem 1rem 2rem;
+`;
 
 export default UpcomingMeetups;
