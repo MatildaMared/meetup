@@ -1,12 +1,25 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 function Form() {
+  const [inputValue, setInputValue] = useState("");
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    setInputValue("");
+  };
+
   return (
     <StyledDiv>
-      <StyledForm>
+      <StyledForm onSubmit={(e) => handleSubmit(e)}>
         <h3>Comment</h3>
-        <input type="text" />
-        <button>Submit</button>
+        <input
+          type="text"
+          placeholder="Enter your comment here..."
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <button type="submit">Submit</button>
       </StyledForm>
     </StyledDiv>
   );
@@ -31,8 +44,13 @@ const StyledForm = styled.form`
   }
 
   input {
-    padding: 2rem;
+    padding: 1rem 2rem 3rem 2rem;
     margin-bottom: 0.4rem;
+    font-family: sans-serif;
+
+    &:focus {
+      outline: none;
+    }
   }
 
   button {
@@ -43,7 +61,6 @@ const StyledForm = styled.form`
     background-color: transparent;
     border: 2px solid lightblue;
     border-radius: 4px;
-    /* text-transform: uppercase; */
     color: lightblue;
   }
 `;
