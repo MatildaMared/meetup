@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import StartPage from "./pages/startpage/StartPage";
 import MeetupPage from "./pages/meetuppage/MeetupPage";
 import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/footer/Footer"
 import { MeetupProvider } from "./context/MeetupContext";
 // import SigninPage from "./pages/signinpage/SigninPage";
 import SignupPage from "./pages/signuppage/SignupPage";
@@ -21,6 +22,7 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/create" element={<CreatePage />} />
           </Routes>
+          <Footer />
         </div>
       </MeetupProvider>
     </Router>
