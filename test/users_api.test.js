@@ -102,35 +102,13 @@ describe("Meetups API", () => {
 			expect(response.body.user.id).toBe(userId);
 		});
 
-		it("fails with status code 400 if id is invalid", async () => {
-			const invalidId = 123;
-
+		it("returns 400 if ID is invalid", async () => {
 			const response = await api
-				.get(`/api/users/${invalidId}`)
+				.get(`/api/users/123`)
 				.expect(400)
 				.expect("Content-Type", /application\/json/);
 
 			expect(response.body.error).toBe("Invalid ID");
-		});
-
-		it("fails with status code 404 if user could not be found", async () => {
-			const userToDelete = {
-				username: "willbedeleted",
-				firstName: "Will",
-				password: "test1234",
-			};
-
-			const user = await User.create(userToDelete);
-			const userId = user._id.toString();
-
-			await User.findByIdAndDelete(userId);
-
-			const response = await api
-				.get(`/api/users/${userId}`)
-				.expect(404)
-				.expect("Content-Type", /application\/json/);
-
-			expect(response.body.error).toBe("User not found");
 		});
 	});
 

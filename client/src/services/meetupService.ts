@@ -16,3 +16,20 @@ export async function getSingleMeetup(id: string) {
   const fetchUrl = `http://localhost:8000/api/meetups/${id}`;
   return fetchDataByUrl(fetchUrl);
 }
+
+export async function createMeetup(
+  meetupObj: object,
+  token: string
+): Promise<object> {
+  const meetup = await fetch(`/api/meetups`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(meetupObj),
+  });
+
+  const meetupData = await meetup.json();
+  return meetupData;
+}
