@@ -3,7 +3,7 @@ export function saveTokenInLocalStorage(token: string): void {
 }
 
 export function saveUserInLocalStorage(user: any): void {
-  localStorage.setItem("user", user);
+  localStorage.setItem("user", JSON.stringify(user));
 }
 
 export function getUserFromLocalStorage(): string | null {

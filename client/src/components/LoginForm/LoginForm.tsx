@@ -1,6 +1,10 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { login } from "../../services/authService";
+import {
+  saveUserInLocalStorage,
+  saveTokenInLocalStorage,
+} from "../../services/localStorageService";
 
 function LoginForm() {
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -31,6 +35,9 @@ function LoginForm() {
 
     if (data.error) {
       displayErrorMessage(data.error);
+    } else if (data.success) {
+      saveTokenInLocalStorage(data.token);
+      saveUserInLocalStorage(data.user);
     }
 
     resetInputFields();
