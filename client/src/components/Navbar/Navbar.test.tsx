@@ -29,8 +29,8 @@ describe("navbar component", () => {
 });
 
 //Run this tests when able to sign in
-//user can only see login and sign up page when not logged in
-//user can only see My page and Sign out page when logged in
+//user can only see login and sign up links when not logged in
+//user can only see Sign out link when logged in
 
 //   it("shows links Home, Find Meetups, My Page, Sign out when user is logged in", () => {
 //     render(    <Router>

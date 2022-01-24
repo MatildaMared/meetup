@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAllMeetups } from "../../services/meetupService";
 import { Meetups } from "../../models/Events"
 import styled from "styled-components/macro";
@@ -6,6 +7,7 @@ import styled from "styled-components/macro";
 function UpcomingMeetups() {
   const [allMeetups, setAllMeetups] = useState<[] | [Meetups]>([]);
   const [singleMeetup, setSingleMeetup] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     getMeetups();
@@ -18,6 +20,7 @@ function UpcomingMeetups() {
 
   function getSingleEventHandler (id: string) {
     setSingleMeetup(id);
+    navigate(`/meetups/${id}`);
   }
 
   return (

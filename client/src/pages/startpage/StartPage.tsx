@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
-import { Meetups } from "../../models/Events";
-import { getAllMeetups } from "../../services/meetupService";
+// import { useEffect, useState } from "react";
+// import { Meetups } from "../../models/Events";
+// import { getAllMeetups } from "../../services/meetupService";
 import Header from "../../components/header/Header";
 import styled from "styled-components";
 import UpcomingMeetups from "../../components/upcomingmeetups/UpcomingMeetups";
 
 function StartPage() {
-  const [allmeetups, setAllMeetups] = useState<null | Meetups>(null);
+  // const [allmeetups, setAllMeetups] = useState<null | Meetups>(null);
 
-  async function fetchAllMeetups() {
-    const data = await getAllMeetups();
-    setAllMeetups(data);
-  }
+  // async function fetchAllMeetups() {
+  //   const data = await getAllMeetups();
+  //   setAllMeetups(data);
+  // }
 
-  useEffect(() => {
-    fetchAllMeetups();
-  }, []);
+  // useEffect(() => {
+  //   fetchAllMeetups();
+  // }, []);
 
   return (
     <StartPageWrapper>
