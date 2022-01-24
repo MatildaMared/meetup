@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import MeetupCard from "./MeetupCard";
 import { Meetup } from "../../models/Meetup";
+import { User } from "../../models/User";
 
 const meetup: Meetup = {
   title:
@@ -29,13 +30,19 @@ const meetup: Meetup = {
   id: "61ea80effe705abdc1db26e8",
 };
 
+const user: User = {
+  username: "KlaraBella",
+  firstName: "Bellis",
+  id: "61ea80bcfe705abdc1db26e4",
+};
+
 describe("Testing for MeetupCard", () => {
   it("render without crashing", () => {
-    render(<MeetupCard meetup={meetup} />);
+    render(<MeetupCard meetup={meetup} user={user} />);
   });
 
   it("render an h2 with the title for the event", () => {
-    render(<MeetupCard meetup={meetup} />);
+    render(<MeetupCard meetup={meetup} user={user} />);
     const title = screen.getByRole("heading", {
       name: "Pokémon meetup (vi livesänder speedrun av pokémon Emerald på Twitch!)",
     });

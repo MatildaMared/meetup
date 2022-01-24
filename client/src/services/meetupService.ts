@@ -8,12 +8,12 @@ export async function fetchDataByUrl(url: string) {
 }
 
 export async function getAllMeetups() {
-  const fetchUrl = "http://localhost:8000/api/meetups";
+  const fetchUrl = "/api/meetups";
   return fetchDataByUrl(fetchUrl);
 }
 
 export async function getSingleMeetup(id: string) {
-  const fetchUrl = `http://localhost:8000/api/meetups/${id}`;
+  const fetchUrl = `/api/meetups/${id}`;
   return fetchDataByUrl(fetchUrl);
 }
 

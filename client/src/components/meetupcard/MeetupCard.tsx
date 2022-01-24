@@ -1,11 +1,13 @@
 import { Meetup } from "../../models/Meetup";
+import { User } from "../../models/User";
 import styled from "styled-components";
 
 interface MeetupProps {
   meetup: Meetup;
+  user: User;
 }
 
-const MeetupCard: React.FC<MeetupProps> = ({ meetup }): JSX.Element => {
+const MeetupCard: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
   return (
     <div>
       {meetup && (
@@ -13,7 +15,9 @@ const MeetupCard: React.FC<MeetupProps> = ({ meetup }): JSX.Element => {
           <Image src={meetup.imgUrl} alt="" />
           <Info>
             <h3>{meetup.title}</h3>
-            <small>{meetup.date}</small>
+            <small>
+              Date: {meetup.date} created by {user ? user.username : "unknown"}
+            </small>
             <h4>Event Info</h4>
             <p>{meetup.description}</p>
           </Info>
@@ -23,7 +27,7 @@ const MeetupCard: React.FC<MeetupProps> = ({ meetup }): JSX.Element => {
   );
 };
 
-// function MeetupCard(meetup: Meetup ) {
+// function MeetupCard(meetup: Meetup) {
 //   return (
 //     <div>
 //       {meetup && (
