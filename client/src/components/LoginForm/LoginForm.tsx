@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
+import { login } from "../../services/authService";
 
 function LoginForm() {
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -8,24 +9,6 @@ function LoginForm() {
   const buttonElement = useRef<HTMLInputElement>(null);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-
-  async function getUserById(id: string): Promise<any> {
-    const response = await fetch(`/api/users/${id}`);
-    const data = await response.json();
-    return data;
-  }
-
-  async function login(username: string, password: string): Promise<any> {
-    const response = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
-    const data = await response.json();
-    return data;
-  }
 
   function displayErrorMessage(message: string) {
     setErrorMessage(message);
