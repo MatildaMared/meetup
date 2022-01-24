@@ -27,8 +27,8 @@ describe("Testing for Comment-form", () => {
     userEvent.click(button);
     expect(inputElem).toHaveValue("");
   });
-  // shows the post in the comments, after submitting
-  // shows who posted the comment over the comment itself
+  it.todo("shows the post in the comments, after submitting");
+  it.todo("shows who posted the comment over the comment itself");
 
   // saves the comment to the user (if we should make it possible to delete later??)
 });

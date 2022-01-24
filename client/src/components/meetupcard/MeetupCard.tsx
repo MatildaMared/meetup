@@ -1,37 +1,45 @@
-import { MeetupContext } from "../../context/MeetupContext";
-import { useEffect, useContext } from "react";
-import { getSingleMeetup } from "../../services/meetupService";
+import { Meetup } from "../../models/Meetup";
 import styled from "styled-components";
 
-function MeetupCard() {
-  const [context, updateContext] = useContext(MeetupContext);
+interface MeetupProps {
+  meetup: Meetup;
+}
 
-  async function getMeetup(id: string) {
-    const meetupInfo = await getSingleMeetup(id);
-    updateContext({ singleMeetup: meetupInfo.meetup });
-    console.log("här har du äntligen lite info 🦄");
-  }
-
-  useEffect(() => {
-    getMeetup(context.singleMeetupId);
-  }, []);
-
+const MeetupCard: React.FC<MeetupProps> = ({ meetup }): JSX.Element => {
   return (
     <div>
-      {context.singleMeetup && (
+      {meetup && (
         <StyledCard>
-          <Image src={context.singleMeetup.imgUrl} alt="" />
+          <Image src={meetup.imgUrl} alt="" />
           <Info>
-            <h3>{context.singleMeetup.title}</h3>
-            <small>{context.singleMeetup.date}</small>
+            <h3>{meetup.title}</h3>
+            <small>{meetup.date}</small>
             <h4>Event Info</h4>
-            <p>{context.singleMeetup.description}</p>
+            <p>{meetup.description}</p>
           </Info>
         </StyledCard>
       )}
     </div>
   );
-}
+};
+
+// function MeetupCard(meetup: Meetup ) {
+//   return (
+//     <div>
+//       {meetup && (
+//         <StyledCard>
+//           <Image src={meetup.imgUrl} alt="" />
+//           <Info>
+//             <h3>{meetup.title}</h3>
+//             <small>{meetup.date}</small>
+//             <h4>Event Info</h4>
+//             <p>{meetup.description}</p>
+//           </Info>
+//         </StyledCard>
+//       )}
+//     </div>
+//   );
+// }
 
 export default MeetupCard;
 
@@ -44,7 +52,7 @@ const StyledCard = styled.div`
   padding: 3rem;
   margin: 10px auto;
   flex-direction: column;
-  background-color: #daf4fd;
+  background-color: lightgrey;
   border-radius: 5px;
 
   h3 {

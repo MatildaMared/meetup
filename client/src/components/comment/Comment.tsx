@@ -33,7 +33,7 @@ const StyledDiv = styled.div`
   width: 90vw;
   margin: 0 auto;
   padding: 3rem 5rem;
-  border: 2px solid darkgray;
+  border: 2px solid lightgrey;
 `;
 
 const StyledForm = styled.form`
