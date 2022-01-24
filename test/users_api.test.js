@@ -96,32 +96,19 @@ describe("Meetups API", () => {
 		it("returns user data", async () => {
 			const response = await api
 				.get(`/api/users/${userId}`)
-				.set("Authorization", `Bearer ${token}`)
 				.expect(200)
 				.expect("Content-Type", /application\/json/);
 
 			expect(response.body.user.id).toBe(userId);
 		});
 
-		it("fails with status code 400 if token is missing", async () => {
+		it("returns 400 if ID is invalid", async () => {
 			const response = await api
-				.get(`/api/users/${userId}`)
+				.get(`/api/users/123`)
 				.expect(400)
 				.expect("Content-Type", /application\/json/);
 
-			expect(response.body.error).toBe("Token missing");
-		});
-
-		it("fails with status code 401 if id sent in url parameter is not the same as from the decoded token", async () => {
-			const invalidId = 123;
-
-			const response = await api
-				.get(`/api/users/${invalidId}`)
-				.set("Authorization", `Bearer ${token}`)
-				.expect(401)
-				.expect("Content-Type", /application\/json/);
-
-			expect(response.body.error).toBe("Unauthorized");
+			expect(response.body.error).toBe("Invalid ID");
 		});
 	});
 
