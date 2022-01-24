@@ -15,7 +15,8 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<StartPage />} />
-            <Route path="/meetups" element={<MeetupPage />} />
+            {/* <Route path="/meetups" element={<MeetupPage />} /> */}
+            <Route path="/meetups/:meetupid" element={<MeetupPage />} />
             {/* <Route path="/signin" element={<SigninPage />} /> */}
             <Route path="/signup" element={<SignupPage />} />
           </Routes>
