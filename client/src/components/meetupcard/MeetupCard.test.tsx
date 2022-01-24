@@ -48,7 +48,35 @@ describe("Testing for MeetupCard", () => {
     });
     expect(title).toBeInTheDocument();
   });
-  // render the card-image for the event
-  // render an small element with the ownder and the time for the event
-  // render the event description for the event
+
+  it("render the card-image for the event", () => {
+    render(<MeetupCard meetup={meetup} user={user} />);
+    const image = screen.getByRole("img");
+    expect(image).toBeInTheDocument();
+  });
+
+  it("render an small element with the username of the owner", () => {
+    render(<MeetupCard meetup={meetup} user={user} />);
+    const username = screen.getByText(/Klarabella/i);
+    expect(username).toBeInTheDocument();
+  });
+  it("render the title Event info over the description", () => {
+    render(<MeetupCard meetup={meetup} user={user} />);
+    const eventInfo = screen.getByText(/event info/i);
+    expect(eventInfo).toBeInTheDocument();
+  });
+
+  it("render the event description for the event", () => {
+    render(<MeetupCard meetup={meetup} user={user} />);
+    const description = screen.getByText(
+      /Cat ipsum dolor sit amet, it's 3am, time to furballs time for night-hunt, human freakout mice blow up sofa in 3 seconds why caf hand. Cats are a queer kind of folk hate dogs, for flee in terror at cucumber discovered on floor, yet kitty poochy i vomit in the bed in the middle of the night./i
+    );
+    expect(description).toBeInTheDocument();
+  });
+
+  it("replace the date and time, and render a more sutible timestamp", () => {
+    render(<MeetupCard meetup={meetup} user={user} />);
+    const date = screen.getByText(/2022-03-10 Time: 17:00/i);
+    expect(date).toBeInTheDocument();
+  });
 });

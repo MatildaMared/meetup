@@ -8,6 +8,16 @@ interface MeetupProps {
 }
 
 const MeetupCard: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
+  const strReplace = () => {
+    if (meetup) {
+      const meetupDate = meetup.date.slice(0, 16);
+      const replaceMeetupDate = meetupDate.replace(/T/g, " Time: ");
+      const fixedDate = replaceMeetupDate.replace(/Z/g, "");
+      return fixedDate;
+    }
+  };
+  const meetupdate = strReplace();
+
   return (
     <div>
       {meetup && (
@@ -15,9 +25,11 @@ const MeetupCard: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
           <Image src={meetup.imgUrl} alt="" />
           <Info>
             <h3>{meetup.title}</h3>
-            <small>
-              Date: {meetup.date} created by {user ? user.username : "unknown"}
-            </small>
+            <p>
+              Date: {meetupdate}
+              <br />
+              <small>created by {user ? user.username : "unknown"}</small>
+            </p>
             <h4>Event Info</h4>
             <p>{meetup.description}</p>
           </Info>
@@ -89,7 +101,7 @@ const Image = styled.img`
 const Info = styled.div`
   max-width: 50vw;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 1rem 1rem 5rem;
   background-color: #ffffff;
 
   @media (max-width: 640px) {
