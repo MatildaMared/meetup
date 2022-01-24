@@ -16,22 +16,22 @@ function Navbar() {
         <ListElement
           onClick={(e: object) => addClassHandler(e)}
         >
-          <StyledLink to="/">{items[0]}</StyledLink>
+          <Link to="/">{items[0]}</Link>
         </ListElement>
-        <ListElement
+        {/* <ListElement
           onClick={(e: object) => addClassHandler(e)}
         >
           <StyledLink to="/meetups">{items[1]}</StyledLink>
+        </ListElement> */}
+        <ListElement
+          onClick={(e: object) => addClassHandler(e)}
+        >
+          <Link to="/signin">{items[2]}</Link>
         </ListElement>
         <ListElement
           onClick={(e: object) => addClassHandler(e)}
         >
-          <StyledLink to="/signin">{items[2]}</StyledLink>
-        </ListElement>
-        <ListElement
-          onClick={(e: object) => addClassHandler(e)}
-        >
-          <StyledLink to="/signup">{items[3]}</StyledLink>
+          <Link to="/signup">{items[3]}</Link>
         </ListElement>
       </ListWrapper>
     </NavbarWrapper>
@@ -54,13 +54,9 @@ const ListElement = styled.li`
   cursor: pointer;
 `;
 
-const StyledLink  = styled(Link)`
-  text-decoration: none;
-  color: #eee;
-`;
-
-const linkStyle = {
-
-};
+// const StyledLink  = styled(Link)`
+//   text-decoration: none;
+//   color: #eee;
+// `;
 
 export default Navbar;
