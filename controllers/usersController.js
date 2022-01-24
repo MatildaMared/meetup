@@ -38,9 +38,14 @@ async function getAllUsers(req, res, next) {
 
 async function getUserById(req, res, next) {
 	try {
-		const id = req.params.id;
+		const idFromParams = req.params.id;
+		const idFromToken = req.userId;
 
-		const user = await User.findById(id);
+		if (idFromParams !== idFromToken) {
+			throw new ErrorResponse("Unauthorized", 401);
+		}
+
+		const user = await User.findById(idFromToken);
 
 		if (!user) {
 			return next(new ErrorResponse(`User not found`, 404));

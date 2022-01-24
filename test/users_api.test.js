@@ -96,41 +96,32 @@ describe("Meetups API", () => {
 		it("returns user data", async () => {
 			const response = await api
 				.get(`/api/users/${userId}`)
+				.set("Authorization", `Bearer ${token}`)
 				.expect(200)
 				.expect("Content-Type", /application\/json/);
 
 			expect(response.body.user.id).toBe(userId);
 		});
 
-		it("fails with status code 400 if id is invalid", async () => {
+		it("fails with status code 400 if token is missing", async () => {
+			const response = await api
+				.get(`/api/users/${userId}`)
+				.expect(400)
+				.expect("Content-Type", /application\/json/);
+
+			expect(response.body.error).toBe("Token missing");
+		});
+
+		it("fails with status code 401 if id sent in url parameter is not the same as from the decoded token", async () => {
 			const invalidId = 123;
 
 			const response = await api
 				.get(`/api/users/${invalidId}`)
-				.expect(400)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(401)
 				.expect("Content-Type", /application\/json/);
 
-			expect(response.body.error).toBe("Invalid ID");
-		});
-
-		it("fails with status code 404 if user could not be found", async () => {
-			const userToDelete = {
-				username: "willbedeleted",
-				firstName: "Will",
-				password: "test1234",
-			};
-
-			const user = await User.create(userToDelete);
-			const userId = user._id.toString();
-
-			await User.findByIdAndDelete(userId);
-
-			const response = await api
-				.get(`/api/users/${userId}`)
-				.expect(404)
-				.expect("Content-Type", /application\/json/);
-
-			expect(response.body.error).toBe("User not found");
+			expect(response.body.error).toBe("Unauthorized");
 		});
 	});
 

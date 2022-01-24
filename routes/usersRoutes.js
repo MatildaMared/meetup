@@ -10,7 +10,7 @@ router.post("/", usersController.createUser);
 router.get("/", usersController.getAllUsers);
 
 // Returns single user
-router.get("/:id", usersController.getUserById);
+router.get("/:id", tokenHandler, usersController.getUserById);
 
 // Update user
 router.put("/:id", tokenHandler, usersController.updateUser);
