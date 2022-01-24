@@ -17,3 +17,6 @@ export function getTokenFromLocalStorage(): string | null {
   const token = localStorage.getItem("meetupToken");
   return token ? token : null;
 }
+
+// const token = getTokenFromLocalStorage()
+// const user = getUserFromLocalStorage()

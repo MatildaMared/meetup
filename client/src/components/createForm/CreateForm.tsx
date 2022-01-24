@@ -4,7 +4,16 @@ import {
   getTokenFromLocalStorage,
   getUserFromLocalStorage,
 } from "../../services/localStorageService";
+import { createMeetup } from "../../services/meetupService";
 import { useNavigate } from "react-router-dom";
+import { Meetup } from "../../models/Meetup";
+import { User } from "../../models/User";
+
+interface FetchResponse {
+  meetup: Meetup;
+  success: boolean;
+  user: User;
+}
 
 function CreateForm() {
   const [title, setTitle] = useState<string>("");
@@ -25,23 +34,6 @@ function CreateForm() {
     }, 3000);
   }
 
-  async function createMeetup(
-    meetupObj: object,
-    token: string
-  ): Promise<object> {
-    const meetup = await fetch(`/api/meetups`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(meetupObj),
-    });
-
-    const meetupData = await meetup.json();
-    return meetupData;
-  }
-
   async function onSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -54,34 +46,29 @@ function CreateForm() {
       imgUrl: imageUrl,
     };
 
-    console.log(meetupObj);
-
     const token = getTokenFromLocalStorage() || "";
-
-    if (!token) {
-      displayErrorMessage("Please login to create a meetup");
-    }
 
     if (!title || !category || !description || !date || !time || !location) {
       displayErrorMessage("Please fill in all fields");
     }
 
-    const meetupData = await createMeetup(meetupObj, token);
+    const meetupData = (await createMeetup(meetupObj, token)) as FetchResponse;
 
-    if (meetupData.hasOwnProperty("success")) {
+    if (meetupData.success === true) {
       setSuccess(true);
       setTimeout(() => {
+        // Fixa redirect till event-sidan
         navigate("/");
       }, 5000);
     }
   }
 
-  if (!getTokenFromLocalStorage() || !getUserFromLocalStorage()) {
+  if (!getTokenFromLocalStorage() && !getUserFromLocalStorage()) {
     return <p>You need to login first</p>;
   } else if (success) {
     return (
       <SuccessMessage>
-        Meetup created successfully! Redirecting to homepage in 5 seconds.
+        Meetup created successfully! Redirecting to meetup page in 5 seconds.
       </SuccessMessage>
     );
   } else {
