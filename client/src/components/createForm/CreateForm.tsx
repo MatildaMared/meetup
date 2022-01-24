@@ -1,59 +1,175 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import {
+  getTokenFromLocalStorage,
+  getUserFromLocalStorage,
+} from "../../services/localStorageService";
+import { useNavigate } from "react-router-dom";
 
 function CreateForm() {
-  return (
-    <Form>
-      <Heading>Create new meetup</Heading>
-      <InputWrapper>
-        <label htmlFor="title">Title</label>
-        <input type="text" id="title" required />
-      </InputWrapper>
-      <InputWrapper>
-        <label htmlFor="category">Category</label>
-        <select name="category" id="category" required>
-          <option value="gaming">Gaming</option>
-          <option value="programming">Programming</option>
-        </select>
-      </InputWrapper>
-      <InputWrapper>
-        <label htmlFor="description">Description</label>
-        <textarea name="description" id="description"></textarea>
-      </InputWrapper>
-      <InputWrapper>
-        <label htmlFor="date">Date</label>
-        <input
-          type="date"
-          id="date"
-          value="2022-01-01"
-          min="2022-01-01"
-          max="2022-12-31"
-          required
-        />
-      </InputWrapper>
-      <InputWrapper>
-        <label htmlFor="time">Time</label>
-        <input
-          type="time"
-          id="time"
-          name="time"
-          min="00:00"
-          max="23:59"
-          required
-        ></input>
-      </InputWrapper>
-      <InputWrapper>
-        <label htmlFor="location">Location</label>
-        <input type="text" id="location" required />
-      </InputWrapper>
-      <InputWrapper>
-        <label htmlFor="imageUrl">Image URL</label>
-        <input type="text" id="imageUrl" required />
-      </InputWrapper>
-      <Button type="submit">Create Meetup</Button>
-      <ErrorMessage />
-    </Form>
-  );
+  const [title, setTitle] = useState<string>("");
+  const [category, setCategory] = useState<string>("gaming");
+  const [description, setDescription] = useState<string>("");
+  const [date, setDate] = useState<string>("2022-01-01");
+  const [time, setTime] = useState<string>("19:00");
+  const [location, setLocation] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>("https://");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [success, setSuccess] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  function displayErrorMessage(message: string) {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 3000);
+  }
+
+  async function createMeetup(
+    meetupObj: object,
+    token: string
+  ): Promise<object> {
+    const meetup = await fetch(`/api/meetups`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(meetupObj),
+    });
+
+    const meetupData = await meetup.json();
+    return meetupData;
+  }
+
+  async function onSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const meetupObj = {
+      title,
+      category,
+      description,
+      date: `${date}T${time}`,
+      location,
+      imgUrl: imageUrl,
+    };
+
+    console.log(meetupObj);
+
+    const token = getTokenFromLocalStorage() || "";
+
+    if (!token) {
+      displayErrorMessage("Please login to create a meetup");
+    }
+
+    if (!title || !category || !description || !date || !time || !location) {
+      displayErrorMessage("Please fill in all fields");
+    }
+
+    const meetupData = await createMeetup(meetupObj, token);
+
+    if (meetupData.hasOwnProperty("success")) {
+      setSuccess(true);
+      setTimeout(() => {
+        navigate("/");
+      }, 5000);
+    }
+  }
+
+  if (!getTokenFromLocalStorage() || !getUserFromLocalStorage()) {
+    return <p>You need to login first</p>;
+  } else if (success) {
+    return (
+      <SuccessMessage>
+        Meetup created successfully! Redirecting to homepage in 5 seconds.
+      </SuccessMessage>
+    );
+  } else {
+    return (
+      <Form onSubmit={onSubmitHandler}>
+        <Heading>Create new meetup</Heading>
+        <InputWrapper>
+          <label htmlFor="title">Title</label>
+          <input
+            type="text"
+            id="title"
+            required
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </InputWrapper>
+        <InputWrapper>
+          <label htmlFor="category">Category</label>
+          <select
+            name="category"
+            id="category"
+            required
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="gaming">Gaming</option>
+            <option value="programming">Programming</option>
+          </select>
+        </InputWrapper>
+        <InputWrapper>
+          <label htmlFor="description">Description</label>
+          <textarea
+            name="description"
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          ></textarea>
+        </InputWrapper>
+        <InputWrapper>
+          <label htmlFor="date">Date</label>
+          <input
+            type="date"
+            id="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            min="2022-01-01"
+            max="2022-12-31"
+            required
+          />
+        </InputWrapper>
+        <InputWrapper>
+          <label htmlFor="time">Time</label>
+          <input
+            type="time"
+            id="time"
+            name="time"
+            min="00:00"
+            max="23:59"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            required
+          ></input>
+        </InputWrapper>
+        <InputWrapper>
+          <label htmlFor="location">Location</label>
+          <input
+            type="text"
+            id="location"
+            required
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+          />
+        </InputWrapper>
+        <InputWrapper>
+          <label htmlFor="imageUrl">Image URL</label>
+          <input
+            type="text"
+            id="imageUrl"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            required
+          />
+        </InputWrapper>
+        <Button type="submit">Create Meetup</Button>
+        <ErrorMessage>{errorMessage}</ErrorMessage>
+      </Form>
+    );
+  }
 }
 
 const Form = styled.form`
@@ -123,6 +239,13 @@ const ErrorMessage = styled.p`
   color: red;
   margin-top: 1rem;
   margin-bottom: 0;
+`;
+
+const SuccessMessage = styled.p`
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 auto;
+  text-align: center;
 `;
 
 export default CreateForm;
