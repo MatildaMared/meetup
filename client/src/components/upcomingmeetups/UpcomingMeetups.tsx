@@ -1,31 +1,31 @@
-import { useEffect, useContext } from "react";
-import { MeetupContext } from "../../context/MeetupContext";
+import { useEffect, useState } from "react";
 import { getAllMeetups } from "../../services/meetupService";
+import { Meetups } from "../../models/Events"
 import styled from "styled-components/macro";
 
 function UpcomingMeetups() {
-  const [context, updateContext] = useContext(MeetupContext);
+  const [allMeetups, setAllMeetups] = useState<[] | [Meetups]>([]);
+  const [singleMeetup, setSingleMeetup] = useState<string>("");
 
   useEffect(() => {
     getMeetups();
   }, []);
 
   async function getMeetups() {
-    const meetups = await getAllMeetups();
-    updateContext({ allMeetups: meetups.meetups });
+    const data = await getAllMeetups();
+    setAllMeetups(data.meetups)
   }
 
   function getSingleEventHandler (id: string) {
-    updateContext({ singleMeetupId: id });
-    //länka vidare till meetup-sidan
+    setSingleMeetup(id);
   }
 
   return (
     <UpcomingWrapper>
       <h2>Upcoming Meetups</h2>
       <MeetupWrapper>
-        {context.allMeetups.length > 0 &&
-          context.allMeetups.map((meet: any) => (
+        {allMeetups &&
+          allMeetups.map((meet: any) => (
             <MeetupCard key={meet.id} onClick={() => getSingleEventHandler(meet.id)}>
               <MeetupAvatar src={meet.imgUrl} alt={meet.title} />
               <MeetupInfo>

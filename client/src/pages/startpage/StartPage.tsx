@@ -16,7 +16,6 @@ function StartPage() {
   useEffect(() => {
     fetchAllMeetups();
   }, []);
-  console.log(allmeetups);
 
   return (
     <StartPageWrapper>
