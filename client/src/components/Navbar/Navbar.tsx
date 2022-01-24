@@ -3,35 +3,19 @@ import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
 
 function Navbar() {
-  const [isSelected, setIsSelected] = useState<string>("Home");
-  const items = ["Home", "Find Meetups", "Sign in", "Sign up"];
-
-  function addClassHandler(e: any) {
-    setIsSelected(e.target.innerHTML);
-  }
+  const items = ["Home", "Login", "Sign up"];
 
   return (
     <NavbarWrapper>
       <ListWrapper>
-        <ListElement
-          onClick={(e: object) => addClassHandler(e)}
-        >
-          <Link to="/">{items[0]}</Link>
+        <ListElement>
+          <StyledLink to="/">{items[0]}</StyledLink>
         </ListElement>
-        {/* <ListElement
-          onClick={(e: object) => addClassHandler(e)}
-        >
-          <StyledLink to="/meetups">{items[1]}</StyledLink>
-        </ListElement> */}
-        <ListElement
-          onClick={(e: object) => addClassHandler(e)}
-        >
-          <Link to="/signin">{items[2]}</Link>
+        <ListElement>
+          <StyledLink to="/login">{items[1]}</StyledLink>
         </ListElement>
-        <ListElement
-          onClick={(e: object) => addClassHandler(e)}
-        >
-          <Link to="/signup">{items[3]}</Link>
+        <ListElement>
+          <StyledLink to="/signup">{items[2]}</StyledLink>
         </ListElement>
       </ListWrapper>
     </NavbarWrapper>
@@ -54,9 +38,9 @@ const ListElement = styled.li`
   cursor: pointer;
 `;
 
-// const StyledLink  = styled(Link)`
-//   text-decoration: none;
-//   color: #eee;
-// `;
+const StyledLink  = styled(Link)`
+  text-decoration: none;
+  color: #eee;
+`;
 
 export default Navbar;
