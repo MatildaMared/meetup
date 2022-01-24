@@ -1,17 +1,17 @@
 export function saveTokenInLocalStorage(token: string): void {
-  localStorage.setItem("token", token);
+  localStorage.setItem("meetupToken", token);
 }
 
 export function saveUserInLocalStorage(user: any): void {
-  localStorage.setItem("user", JSON.stringify(user));
+  localStorage.setItem("meetupUser", JSON.stringify(user));
 }
 
 export function getUserFromLocalStorage(): string | null {
-  const user = localStorage.getItem("user");
+  const user = localStorage.getItem("meetupUser");
   return user ? JSON.parse(user) : null;
 }
 
 export function getTokenFromLocalStorage(): string | null {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("meetupToken");
   return token ? token : null;
 }
