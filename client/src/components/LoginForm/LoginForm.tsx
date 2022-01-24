@@ -5,8 +5,27 @@ function LoginForm() {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const usernameInput = useRef<HTMLInputElement>(null);
   const passwordInput = useRef<HTMLInputElement>(null);
+  const buttonElement = useRef<HTMLInputElement>(null);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  async function getUserById(id: string): Promise<any> {
+    const response = await fetch(`/api/users/${id}`);
+    const data = await response.json();
+    return data;
+  }
+
+  async function login(username: string, password: string): Promise<any> {
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
+    const data = await response.json();
+    return data;
+  }
 
   function displayErrorMessage(message: string) {
     setErrorMessage(message);
@@ -15,7 +34,7 @@ function LoginForm() {
     }, 3000);
   }
 
-  function onSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErrorMessage("");
     console.log(username, password);
@@ -24,10 +43,17 @@ function LoginForm() {
       displayErrorMessage("Please enter username and password");
     }
 
+    const data = await login(username, password);
+    console.log(data);
+
+    if (data.error) {
+      displayErrorMessage(data.error);
+    }
+
     resetInputFields();
   }
 
-  function resetInputFields() {
+  function resetInputFields(): void {
     setUsername("");
     setPassword("");
     if (usernameInput.current) {
@@ -35,6 +61,9 @@ function LoginForm() {
     }
     if (passwordInput.current) {
       passwordInput.current.blur();
+    }
+    if (buttonElement.current) {
+      buttonElement.current.blur();
     }
   }
 
@@ -61,7 +90,7 @@ function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
         />
       </InputWrapper>
-      <Button type="submit" value="Login" />
+      <Button type="submit" value="Login" ref={buttonElement} />
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </Form>
   );
