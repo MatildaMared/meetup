@@ -1,29 +1,71 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
 function Navbar() {
-  const items = ["Home", "Login", "Sign up"];
+  const navigate = useNavigate();
+
+  function logoutHandler() {
+    localStorage.removeItem("meetupToken");
+    localStorage.removeItem("meetupUser");
+    navigate("/");
+  }
+
+  //Om användaren är inloggad ska den kunna skapa nya meetups
+  //LOgga ut knapp istället för logga in när anvädaren har loggat in. clear LS och till Home
 
   return (
     <NavbarWrapper>
       <ListWrapper>
         <ListElement>
-          <StyledLink to="/">{items[0]}</StyledLink>
+          <button onClick={() => navigate("/")} style={{ color: "#fff", textDecoration: "none" }}>
+            Home
+          </button>
         </ListElement>
-        <ListElement>
-          <StyledLink to="/login">{items[1]}</StyledLink>
-        </ListElement>
-        <ListElement>
-          <StyledLink to="/signup">{items[2]}</StyledLink>
-        </ListElement>
+        {!localStorage.meetupToken && !localStorage.meetupUser && (
+          <ListElement>
+            <button  onClick={() => navigate("/login")} style={{ color: "#fff", textDecoration: "none" }}>
+              Login
+            </button>
+          </ListElement>
+        )}
+        {!localStorage.meetupToken && !localStorage.meetupUser && (
+          <ListElement>
+            <button
+              onClick={() => navigate("/signup")}
+              style={{ color: "#fff", textDecoration: "none" }}
+            >
+              Sign up
+            </button>
+          </ListElement>
+        )}
+        {localStorage.meetupToken && localStorage.meetupUser && (
+          <ListElement>
+            <button
+              onClick={() => navigate("/create")}
+              style={{ color: "#fff", textDecoration: "none" }}
+            >
+              Create Meetup
+            </button>
+          </ListElement>
+        )}
+        {localStorage.meetupToken && localStorage.meetupUser && (
+          <ListElement>
+            <button
+              onClick={() => logoutHandler()}
+              style={{ color: "#fff", textDecoration: "none" }}
+            >
+              Logout
+            </button>
+          </ListElement>
+        )}
       </ListWrapper>
     </NavbarWrapper>
   );
 }
 
 const NavbarWrapper = styled.nav`
-  background: #454545;  
+  background: #454545;
   height: 75px;
 `;
 
@@ -38,9 +80,9 @@ const ListElement = styled.li`
   cursor: pointer;
 `;
 
-const StyledLink  = styled(Link)`
-  text-decoration: none;
-  color: #eee;
-`;
+// const StyledLink  = styled(Link)`
+//   text-decoration: none;
+//   color: #eee;
+// `;
 
 export default Navbar;
