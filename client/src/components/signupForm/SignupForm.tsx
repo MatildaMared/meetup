@@ -8,6 +8,7 @@ import {
 } from "../../services/localStorageService";
 
 function SignupForm() {
+  const [successfulSignup, setSuccessfulSignup] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const firstNameInput = useRef<HTMLInputElement>(null);
   const usernameInput = useRef<HTMLInputElement>(null);
@@ -31,8 +32,6 @@ function SignupForm() {
     e.preventDefault();
     setErrorMessage("");
 
-    console.log(firstName, username, password, passwordConfirm);
-
     const passwordsMatch = comparePasswords(password, passwordConfirm);
 
     if (!passwordsMatch) {
@@ -53,7 +52,10 @@ function SignupForm() {
     } else if (data.success) {
       saveTokenInLocalStorage(data.token);
       saveUserInLocalStorage(data.user);
-      navigate("/");
+      setSuccessfulSignup(true);
+      setTimeout(() => {
+        navigate("/");
+      }, 5000);
     }
   }
 
@@ -86,54 +88,68 @@ function SignupForm() {
     return password === passwordConfirm;
   }
 
-  return (
-    <Form onSubmit={onSubmitHandler}>
-      <Heading>Sign up</Heading>
-      <InputWrapper>
-        <label htmlFor="firstName">First name</label>
-        <input
-          type="text"
-          id="firstName"
-          ref={firstNameInput}
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-      </InputWrapper>
-      <InputWrapper>
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          ref={usernameInput}
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </InputWrapper>
-      <InputWrapper>
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          ref={passwordInput}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </InputWrapper>
-      <InputWrapper>
-        <label htmlFor="passwordConfirm">Confirm password</label>
-        <input
-          type="password"
-          id="passwordConfirm"
-          ref={passwordConfirmInput}
-          value={passwordConfirm}
-          onChange={(e) => setPasswordConfirm(e.target.value)}
-        />
-      </InputWrapper>
-      <Button type="submit" value="Login" ref={buttonElement} />
-      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-    </Form>
-  );
+  if (successfulSignup) {
+    return (
+      <SuccessMessage>
+        Signed up successfully! Redirecting to homepage in 5 seconds..
+      </SuccessMessage>
+    );
+  } else {
+    return (
+      <Form onSubmit={onSubmitHandler}>
+        <Heading>Sign up</Heading>
+        <InputWrapper>
+          <label htmlFor="firstName">First name</label>
+          <input
+            type="text"
+            id="firstName"
+            ref={firstNameInput}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+        </InputWrapper>
+        <InputWrapper>
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            ref={usernameInput}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </InputWrapper>
+        <InputWrapper>
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            ref={passwordInput}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </InputWrapper>
+        <InputWrapper>
+          <label htmlFor="passwordConfirm">Confirm password</label>
+          <input
+            type="password"
+            id="passwordConfirm"
+            ref={passwordConfirmInput}
+            value={passwordConfirm}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
+          />
+        </InputWrapper>
+        <Button type="submit" value="Sign up" ref={buttonElement} />
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      </Form>
+    );
+  }
 }
+
+const SuccessMessage = styled.p`
+  font-size: 1.5rem;
+  text-align: center;
+  padding-bottom: 100px;
+`;
 
 const Form = styled.form`
   display: flex;
