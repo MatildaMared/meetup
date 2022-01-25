@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { login } from "../../services/authService";
 import {
@@ -13,6 +14,7 @@ function LoginForm() {
   const buttonElement = useRef<HTMLInputElement>(null);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const navigate = useNavigate();
 
   function displayErrorMessage(message: string) {
     setErrorMessage(message);
@@ -24,23 +26,23 @@ function LoginForm() {
   async function onSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErrorMessage("");
-    console.log(username, password);
 
     if (!username || !password) {
       displayErrorMessage("Please enter username and password");
+      return;
     }
 
     const data = await login(username, password);
     console.log(data);
+    resetInputFields();
 
     if (data.error) {
       displayErrorMessage(data.error);
     } else if (data.success) {
       saveTokenInLocalStorage(data.token);
       saveUserInLocalStorage(data.user);
+      navigate("/");
     }
-
-    resetInputFields();
   }
 
   function resetInputFields(): void {
