@@ -16,6 +16,7 @@ const MeetupCard: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
           <Info>
             <h3>{meetup.title}</h3>
             <p>
+              {meetup.location} <br />
               {new Date(meetup.date).toLocaleString([], {
                 weekday: "long",
                 year: "numeric",
@@ -25,7 +26,7 @@ const MeetupCard: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
                 minute: "2-digit",
               })}
               <br />
-              <small>created by {user ? user.username : "unknown"}</small>
+              <small>created by {user ? user.firstName : "unknown"}</small>
             </p>
             <h4>Event Info</h4>
             <p>{meetup.description}</p>

@@ -17,18 +17,34 @@ export async function getSingleMeetup(id: string) {
   return fetchDataByUrl(fetchUrl);
 }
 
-export async function attendMeetup(meetupId: string, userId: string) {
-  const token = localStorage.getItem('token')
-
-  const res = await fetch(`/api/${meetupId}/register`, {
+export async function attendMeetup(meetupId: string, token:string, user: object): Promise<object> {
+  // const token = localStorage.getItem('token')
+  
+  const res = await fetch(`/api/meetups/${meetupId}/register`, {
     method: 'POST',
     headers: {
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(userId)
+    body: JSON.stringify(user)
   })
   const data = await res.json()
+  console.log(data)
+  return data
+}
+
+export async function leaveMeetup(meetupId: string, token: string, user: object) {
+  const res = await fetch(`/api/meetups/${meetupId}/register`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type' : 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(user)
+  })
+
+  const data = await res.json()
+  console.log(data)
   return data
 }
 

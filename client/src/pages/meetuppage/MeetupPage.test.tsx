@@ -1,9 +1,16 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import { getTokenFromLocalStorage } from "../../services/localStorageService";
 import MeetupPage from "./MeetupPage";
 
-const testData = {
-  loggedIn: true,
+let isLoggedIn = {
+  success: true,
 };
+
+jest.mock("../../services/localStorageServices", () => {
+  return {
+    getTokenFromLocalStorage: jest.fn(),
+  };
+});
 
 describe("Testing for the MeetupPage", () => {
   it("render the MeetupPage component without crashing", () => {
