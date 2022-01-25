@@ -1,14 +1,45 @@
 import { useState } from "react";
+import { createComment } from "../../services/meetupService";
+import { getTokenFromLocalStorage } from "../../services/localStorageService";
+import { UserComment } from "../../models/Comment";
+import { Meetup } from "../../models/Meetup";
+import { User } from "../../models/User";
 import styled from "styled-components";
 
-function Form() {
-  const [inputValue, setInputValue] = useState("");
+interface MeetupProps {
+  meetup: Meetup;
+  user: User;
+}
 
-  const handleSubmit = (e: any) => {
+const Comment: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
+  const [inputValue, setInputValue] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  
+
+  function displayErrorMessage(message: string) {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 3000);
+  }
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
+    const token = getTokenFromLocalStorage();
+    const newComment: string = e.target.firstChild.nextSibling.value;
+
+    if (!token) {
+      displayErrorMessage("You must be logged in to write a comment");
+      return;
+    }
+    
+    const fetchResponse = await createComment(meetup.id, token, newComment);
+    console.log(fetchResponse);
+    
     setInputValue("");
   };
-
+  
   return (
     <StyledDiv>
       <StyledForm onSubmit={(e) => handleSubmit(e)}>
@@ -21,11 +52,12 @@ function Form() {
         />
         <button type="submit">Submit</button>
       </StyledForm>
+      {errorMessage}
     </StyledDiv>
   );
 }
 
-export default Form;
+export default Comment;
 
 const StyledDiv = styled.div`
   display: flex;

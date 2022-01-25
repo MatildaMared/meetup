@@ -70,7 +70,7 @@ function MeetupPage() {
         <AttendButton meetup={singleMeetup as Meetup} user={user as User} />
       )}
       <MeetupCard meetup={singleMeetup as Meetup} user={user as User} />
-      <Comment />
+      <Comment meetup={singleMeetup as Meetup} user={user as User} />
     </StyledPage>
   );
 }
