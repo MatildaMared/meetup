@@ -1,11 +1,13 @@
 import { Meetup } from "../../models/Meetup";
+import { User } from "../../models/User";
 import styled from "styled-components";
 
 interface MeetupProps {
   meetup: Meetup;
+  user: User;
 }
 
-const MeetupCard: React.FC<MeetupProps> = ({ meetup }): JSX.Element => {
+const MeetupCard: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
   return (
     <div>
       {meetup && (
@@ -13,7 +15,18 @@ const MeetupCard: React.FC<MeetupProps> = ({ meetup }): JSX.Element => {
           <Image src={meetup.imgUrl} alt="" />
           <Info>
             <h3>{meetup.title}</h3>
-            <small>{meetup.date}</small>
+            <p>
+              {new Date(meetup.date).toLocaleString([], {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+              <br />
+              <small>created by {user ? user.username : "unknown"}</small>
+            </p>
             <h4>Event Info</h4>
             <p>{meetup.description}</p>
           </Info>
@@ -22,24 +35,6 @@ const MeetupCard: React.FC<MeetupProps> = ({ meetup }): JSX.Element => {
     </div>
   );
 };
-
-// function MeetupCard(meetup: Meetup ) {
-//   return (
-//     <div>
-//       {meetup && (
-//         <StyledCard>
-//           <Image src={meetup.imgUrl} alt="" />
-//           <Info>
-//             <h3>{meetup.title}</h3>
-//             <small>{meetup.date}</small>
-//             <h4>Event Info</h4>
-//             <p>{meetup.description}</p>
-//           </Info>
-//         </StyledCard>
-//       )}
-//     </div>
-//   );
-// }
 
 export default MeetupCard;
 
@@ -85,7 +80,7 @@ const Image = styled.img`
 const Info = styled.div`
   max-width: 50vw;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 1rem 1rem 5rem;
   background-color: #ffffff;
 
   @media (max-width: 640px) {
