@@ -1,19 +1,23 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { login } from "../../services/authService";
+import { signup } from "../../services/authService";
 import {
   saveUserInLocalStorage,
   saveTokenInLocalStorage,
 } from "../../services/localStorageService";
 
-function LoginForm() {
+function SignupForm() {
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const firstNameInput = useRef<HTMLInputElement>(null);
   const usernameInput = useRef<HTMLInputElement>(null);
   const passwordInput = useRef<HTMLInputElement>(null);
+  const passwordConfirmInput = useRef<HTMLInputElement>(null);
   const buttonElement = useRef<HTMLInputElement>(null);
+  const [firstName, setFirstName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
   const navigate = useNavigate();
 
   function displayErrorMessage(message: string) {
@@ -27,12 +31,21 @@ function LoginForm() {
     e.preventDefault();
     setErrorMessage("");
 
-    if (!username || !password) {
-      displayErrorMessage("Please enter username and password");
+    console.log(firstName, username, password, passwordConfirm);
+
+    const passwordsMatch = comparePasswords(password, passwordConfirm);
+
+    if (!passwordsMatch) {
+      displayErrorMessage("Passwords do not match");
       return;
     }
 
-    const data = await login(username, password);
+    if (!username || !password || !firstName || !passwordConfirm) {
+      displayErrorMessage("Please fill in all fields");
+      return;
+    }
+
+    const data = await signup(firstName, username, password);
     resetInputFields();
 
     if (data.error) {
@@ -45,22 +58,47 @@ function LoginForm() {
   }
 
   function resetInputFields(): void {
+    setFirstName("");
     setUsername("");
     setPassword("");
+    setPasswordConfirm("");
     if (usernameInput.current) {
       usernameInput.current.blur();
     }
+    if (firstNameInput.current) {
+      firstNameInput.current.blur();
+    }
     if (passwordInput.current) {
       passwordInput.current.blur();
+    }
+    if (passwordConfirmInput.current) {
+      passwordConfirmInput.current.blur();
     }
     if (buttonElement.current) {
       buttonElement.current.blur();
     }
   }
 
+  function comparePasswords(
+    password: string,
+    passwordConfirm: string
+  ): boolean {
+    return password === passwordConfirm;
+  }
+
   return (
     <Form onSubmit={onSubmitHandler}>
-      <Heading>Login</Heading>
+      <Heading>Sign up</Heading>
+      <InputWrapper>
+        <label htmlFor="firstName">First name</label>
+        <input
+          type="text"
+          id="firstName"
+          ref={firstNameInput}
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+      </InputWrapper>
       <InputWrapper>
         <label htmlFor="username">Username</label>
         <input
@@ -79,6 +117,16 @@ function LoginForm() {
           ref={passwordInput}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+        />
+      </InputWrapper>
+      <InputWrapper>
+        <label htmlFor="passwordConfirm">Confirm password</label>
+        <input
+          type="password"
+          id="passwordConfirm"
+          ref={passwordConfirmInput}
+          value={passwordConfirm}
+          onChange={(e) => setPasswordConfirm(e.target.value)}
         />
       </InputWrapper>
       <Button type="submit" value="Login" ref={buttonElement} />
@@ -154,4 +202,4 @@ const ErrorMessage = styled.p`
   margin-bottom: 0;
 `;
 
-export default LoginForm;
+export default SignupForm;
