@@ -1,6 +1,5 @@
 export async function login(username: string, password: string): Promise<any> {
   try {
-    console.log("Login");
     const response = await fetch("/api/login", {
       method: "POST",
       headers: {
@@ -8,7 +7,6 @@ export async function login(username: string, password: string): Promise<any> {
       },
       body: JSON.stringify({ username, password }),
     });
-    console.log(response);
     const data = await response.json();
     return data;
   } catch (err) {

@@ -33,7 +33,6 @@ function LoginForm() {
     }
 
     const data = await login(username, password);
-    console.log(data);
     resetInputFields();
 
     if (data.error) {
