@@ -221,6 +221,8 @@ const SuccessMessage = styled.p`
   font-weight: 600;
   margin: 0 auto;
   text-align: center;
+  padding-top: 100px;
+  padding-bottom: 100px;
 `;
 
 export default CreateForm;
