@@ -17,25 +17,46 @@ export async function getSingleMeetup(id: string) {
   return fetchDataByUrl(fetchUrl);
 }
 
-export async function attendMeetup(meetupId: string, userId: string) {
-  const token = localStorage.getItem('token')
+export async function attendMeetup(
+  meetupId: string,
+  token: string,
+  user: object
+): Promise<object> {
+  // const token = localStorage.getItem('token')
 
-  const res = await fetch(`/api/${meetupId}/register`, {
-    method: 'POST',
+  const res = await fetch(`/api/meetups/${meetupId}/register`, {
+    method: "POST",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(userId)
-  })
-  const data = await res.json()
-  return data
+    body: JSON.stringify(user),
+  });
+  const data = await res.json();
+  console.log(data);
+  return data;
 }
 
-export async function createMeetup(
-  meetupObj: object,
-  token: string
-): Promise<object> {
+export async function leaveMeetup(
+  meetupId: string,
+  token: string,
+  user: object
+) {
+  const res = await fetch(`/api/meetups/${meetupId}/register`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(user),
+  });
+
+  const data = await res.json();
+  console.log(data);
+  return data;
+}
+
+export async function createMeetup(meetupObj: object, token: string) {
   const meetup = await fetch(`/api/meetups`, {
     method: "POST",
     headers: {

@@ -1,19 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import {
-  getTokenFromLocalStorage,
-  getUserFromLocalStorage,
-} from "../../services/localStorageService";
+import { getTokenFromLocalStorage } from "../../services/localStorageService";
 import { createMeetup } from "../../services/meetupService";
 import { useNavigate } from "react-router-dom";
-import { Meetup } from "../../models/Meetup";
-import { User } from "../../models/User";
-
-interface FetchResponse {
-  meetup: Meetup;
-  success: boolean;
-  user: User;
-}
 
 function CreateForm() {
   const [title, setTitle] = useState<string>("");
@@ -37,6 +26,13 @@ function CreateForm() {
   async function onSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    const token = getTokenFromLocalStorage();
+
+    if (!token) {
+      displayErrorMessage("You must be logged in to create a meetup");
+      return;
+    }
+
     const meetupObj = {
       title,
       category,
@@ -46,26 +42,24 @@ function CreateForm() {
       imgUrl: imageUrl,
     };
 
-    const token = getTokenFromLocalStorage() || "";
-
     if (!title || !category || !description || !date || !time || !location) {
       displayErrorMessage("Please fill in all fields");
     }
 
-    const meetupData = (await createMeetup(meetupObj, token)) as FetchResponse;
+    const meetupData = await createMeetup(meetupObj, token);
 
     if (meetupData.success === true) {
       setSuccess(true);
       setTimeout(() => {
         // Fixa redirect till event-sidan
-        navigate("/");
+        navigate(`/meetups/${meetupData.meetup.id}`);
       }, 5000);
+    } else {
+      displayErrorMessage(meetupData.error);
     }
   }
 
-  if (!getTokenFromLocalStorage() && !getUserFromLocalStorage()) {
-    return <p>You need to login first</p>;
-  } else if (success) {
+  if (success) {
     return (
       <SuccessMessage>
         Meetup created successfully! Redirecting to meetup page in 5 seconds.
@@ -80,7 +74,6 @@ function CreateForm() {
           <input
             type="text"
             id="title"
-            required
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
@@ -90,7 +83,6 @@ function CreateForm() {
           <select
             name="category"
             id="category"
-            required
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
@@ -116,7 +108,6 @@ function CreateForm() {
             onChange={(e) => setDate(e.target.value)}
             min="2022-01-01"
             max="2022-12-31"
-            required
           />
         </InputWrapper>
         <InputWrapper>
@@ -129,7 +120,6 @@ function CreateForm() {
             max="23:59"
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            required
           ></input>
         </InputWrapper>
         <InputWrapper>
@@ -137,7 +127,6 @@ function CreateForm() {
           <input
             type="text"
             id="location"
-            required
             value={location}
             onChange={(e) => setLocation(e.target.value)}
           />
@@ -149,7 +138,6 @@ function CreateForm() {
             id="imageUrl"
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
-            required
           />
         </InputWrapper>
         <Button type="submit">Create Meetup</Button>
@@ -233,6 +221,8 @@ const SuccessMessage = styled.p`
   font-weight: 600;
   margin: 0 auto;
   text-align: center;
+  padding-top: 100px;
+  padding-bottom: 100px;
 `;
 
 export default CreateForm;

@@ -47,24 +47,27 @@ describe("LoginForm component", () => {
     render(<LoginForm />);
   });
 
-  it("displays two input fields", () => {
+  it("displays two input fields", async () => {
     render(<LoginForm />);
     expect(screen.getByLabelText("Username")).toBeInTheDocument();
     expect(screen.getByLabelText("Password")).toBeInTheDocument();
   });
 
-  it("displays a submit button", () => {
+  it("displays a submit button", async () => {
     render(<LoginForm />);
     expect(screen.getByRole("button", { name: "Login" })).toBeInTheDocument();
   });
 
-  it("displays an error message if user clicks button when input fields are empty", () => {
+  it("displays an error message if user clicks button when input fields are empty", async () => {
     render(<LoginForm />);
     const submitButton = screen.getByRole("button", { name: "Login" });
-    submitButton.click();
-    expect(
-      screen.getByText("Please enter username and password")
-    ).toBeInTheDocument();
+    userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Please enter username and password")
+      ).toBeInTheDocument();
+    });
   });
 
   describe("If login is successful", () => {
@@ -84,7 +87,8 @@ describe("LoginForm component", () => {
 
       userEvent.type(usernameInput, "username");
       userEvent.type(passwordInput, "password");
-      submitButton.click();
+
+      userEvent.click(submitButton);
 
       await waitFor(() => {
         expect(mockedNavigator).toHaveBeenCalledWith("/");
@@ -100,7 +104,7 @@ describe("LoginForm component", () => {
 
       userEvent.type(usernameInput, "username");
       userEvent.type(passwordInput, "password");
-      submitButton.click();
+      userEvent.click(submitButton);
 
       await waitFor(() => {
         expect(saveTokenInLocalStorage).toHaveBeenCalledWith(
@@ -164,7 +168,7 @@ describe("LoginForm component", () => {
       });
     });
 
-    it("does not redirect the user to homepage", () => {
+    it("does not redirect the user to homepage", async () => {
       render(<LoginForm />);
 
       const usernameInput = screen.getByLabelText("Username");
@@ -175,7 +179,9 @@ describe("LoginForm component", () => {
       userEvent.type(passwordInput, "password");
       submitButton.click();
 
-      expect(mockedNavigator).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(mockedNavigator).not.toHaveBeenCalled();
+      });
     });
 
     afterAll(() => {

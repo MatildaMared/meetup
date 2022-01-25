@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { getAllMeetups } from "../../services/meetupService";
 import { getUserById } from "../../services/userService";
 import { Meetup } from "../../models/Meetup";
-import {RiMapPin5Fill, RiTimeFill} from "react-icons/ri";
+import { RiMapPin5Fill, RiTimeFill } from "react-icons/ri";
 import styled from "styled-components/macro";
 
 function UpcomingMeetups() {
   const [allMeetups, setAllMeetups] = useState<[] | [Meetup]>([]);
+  const [upcomingMeetups, setUpcomingMeetups] = useState<[] | [Meetup]>([]);
   const [meetOwners, setMeetOwners] = useState<[] | any>([]);
   // const [singleMeetup, setSingleMeetup] = useState<string>("");
   const navigate = useNavigate();
@@ -16,17 +17,34 @@ function UpcomingMeetups() {
     getMeetups();
   }, []);
 
+  useEffect(() => {
+    if (allMeetups.length > 0) {
+      // remove all meetups that have already passed
+      const removedPassedMeetups = allMeetups.filter((meetup) => {
+        const meetupDate = new Date(meetup.date);
+        const currentDate = new Date();
+        return meetupDate > currentDate;
+      });
+
+      const filtered = removedPassedMeetups.sort((meetupA, meetupB) => {
+        return Number(new Date(meetupA.date)) - Number(new Date(meetupB.date));
+      });
+
+      setUpcomingMeetups(filtered as [] | [Meetup]);
+    }
+  }, [allMeetups]);
+
   async function getMeetups() {
     const data = await getAllMeetups();
     setAllMeetups(data.meetups);
   }
 
-  async function getUserId(id: string) {
-    const userName: any = await getUserById(id).then(function (value) {
-      // setMeetOwners([...meetOwners, value.user.firstName]);
-      return userName;
-    });
-  }
+  // async function getUserId(id: string) {
+  //   const userName: any = await getUserById(id).then(function (value) {
+  //     // setMeetOwners([...meetOwners, value.user.firstName]);
+  //     return userName;
+  //   });
+  // }
 
   function getSingleEventHandler(id: string) {
     navigate(`/meetups/${id}`);
@@ -36,8 +54,8 @@ function UpcomingMeetups() {
     <UpcomingWrapper>
       <h2>Upcoming Meetups</h2>
       <MeetupWrapper>
-        {allMeetups &&
-          allMeetups.map((meet: any) => (
+        {upcomingMeetups &&
+          upcomingMeetups.map((meet: any) => (
             <MeetupCard
               key={meet.id}
               onClick={() => getSingleEventHandler(meet.id)}
@@ -46,17 +64,34 @@ function UpcomingMeetups() {
               <MeetupInfo>
                 <h3>{meet.title}</h3>
                 <p>
-                  <RiMapPin5Fill style={{display: "inline"}} /> {meet.location},
+                  <RiMapPin5Fill style={{ display: "inline" }} />{" "}
+                  {meet.location},
                 </p>
                 <p>
-                  <RiTimeFill style={{display: "inline"}} /> {new Date(meet.date).toLocaleString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}     
+                  <RiTimeFill style={{ display: "inline" }} />{" "}
+                  {new Date(meet.date).toLocaleString([], {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
                 </p>
-                                 {/* {getUserId(meet.ownerId)}@{meet.location}{" "} */}
+                {/* {getUserId(meet.ownerId)}@{meet.location}{" "} */}
               </MeetupInfo>
             </MeetupCard>
           ))}
       </MeetupWrapper>
     </UpcomingWrapper>
+  );
+}
+
+function MeetupData(props: any) {
+  return (
+    <>
+      <UpcomingMeetups />
+    </>
   );
 }
 
