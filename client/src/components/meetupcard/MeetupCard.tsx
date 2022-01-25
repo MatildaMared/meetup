@@ -8,16 +8,6 @@ interface MeetupProps {
 }
 
 const MeetupCard: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
-  const strReplace = () => {
-    if (meetup) {
-      const meetupDate = meetup.date.slice(0, 16);
-      const replaceMeetupDate = meetupDate.replace(/T/g, " Time: ");
-      const fixedDate = replaceMeetupDate.replace(/Z/g, "");
-      return fixedDate;
-    }
-  };
-  const meetupdate = strReplace();
-
   return (
     <div>
       {meetup && (
@@ -26,11 +16,14 @@ const MeetupCard: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
           <Info>
             <h3>{meetup.title}</h3>
             <p>
-              {/* {new Date(meetup.date).toLocaleString([], {
+              {new Date(meetup.date).toLocaleString([], {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
                 hour: "2-digit",
                 minute: "2-digit",
-              })} */}
-              Date: {meetupdate}
+              })}
               <br />
               <small>created by {user ? user.username : "unknown"}</small>
             </p>
