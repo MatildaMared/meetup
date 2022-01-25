@@ -6,9 +6,9 @@ import {
 } from "../../services/localStorageService";
 import LoginForm from "./LoginForm";
 
-// Dummy fetch response
+// Dummy fetch responses
 
-let fetchResponse = {
+let successfulFetchResponse = {
   success: true,
   token: "token",
   user: {
@@ -16,6 +16,11 @@ let fetchResponse = {
     username: "username",
     firstName: "First Name",
   },
+};
+
+let unsuccessfulFetchResponse = {
+  success: false,
+  error: "Error message",
 };
 
 // Set up mock for localStorageService
@@ -38,14 +43,6 @@ const mockedNavigator = jest.fn();
 // Actual tests
 
 describe("LoginForm component", () => {
-  beforeEach(() => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        json: () => Promise.resolve(fetchResponse),
-      })
-    ) as jest.Mock<any>;
-  });
-
   it("renders without crashing", () => {
     render(<LoginForm />);
   });
@@ -70,42 +67,117 @@ describe("LoginForm component", () => {
     ).toBeInTheDocument();
   });
 
-  it("calls the navigate function to redirect user to the home page after entering correct credentials", async () => {
-    render(<LoginForm />);
-    const usernameInput = screen.getByLabelText("Username");
-    const passwordInput = screen.getByLabelText("Password");
-    const submitButton = screen.getByRole("button", { name: "Login" });
+  describe("If login is successful", () => {
+    beforeEach(() => {
+      global.fetch = jest.fn(() =>
+        Promise.resolve({
+          json: () => Promise.resolve(successfulFetchResponse),
+        })
+      ) as jest.Mock<any>;
+    });
 
-    userEvent.type(usernameInput, "username");
-    userEvent.type(passwordInput, "password");
-    submitButton.click();
+    it("calls the navigate function to redirect user to the home page", async () => {
+      render(<LoginForm />);
+      const usernameInput = screen.getByLabelText("Username");
+      const passwordInput = screen.getByLabelText("Password");
+      const submitButton = screen.getByRole("button", { name: "Login" });
 
-    await waitFor(() => {
-      expect(mockedNavigator).toHaveBeenCalledWith("/");
+      userEvent.type(usernameInput, "username");
+      userEvent.type(passwordInput, "password");
+      submitButton.click();
+
+      await waitFor(() => {
+        expect(mockedNavigator).toHaveBeenCalledWith("/");
+      });
+    });
+
+    it("saves token and user in local storage", async () => {
+      render(<LoginForm />);
+
+      const usernameInput = screen.getByLabelText("Username");
+      const passwordInput = screen.getByLabelText("Password");
+      const submitButton = screen.getByRole("button", { name: "Login" });
+
+      userEvent.type(usernameInput, "username");
+      userEvent.type(passwordInput, "password");
+      submitButton.click();
+
+      await waitFor(() => {
+        expect(saveTokenInLocalStorage).toHaveBeenCalledWith("token");
+      });
+
+      await waitFor(() => {
+        expect(saveUserInLocalStorage).toHaveBeenCalledWith(
+          successfulFetchResponse.user
+        );
+      });
+    });
+    afterAll(() => {
+      jest.clearAllMocks();
     });
   });
 
-  it("saves token and user in local storage after logging in successfully", async () => {
-    render(<LoginForm />);
-
-    const usernameInput = screen.getByLabelText("Username");
-    const passwordInput = screen.getByLabelText("Password");
-    const submitButton = screen.getByRole("button", { name: "Login" });
-
-    userEvent.type(usernameInput, "username");
-    userEvent.type(passwordInput, "password");
-    submitButton.click();
-
-    await waitFor(() => {
-      expect(saveTokenInLocalStorage).toHaveBeenCalledWith("token");
+  describe("If login is unsuccessful", () => {
+    beforeEach(() => {
+      global.fetch = jest.fn(() =>
+        Promise.resolve({
+          json: () => Promise.resolve(unsuccessfulFetchResponse),
+        })
+      ) as jest.Mock<any>;
     });
 
-    await waitFor(() => {
-      expect(saveUserInLocalStorage).toHaveBeenCalledWith(fetchResponse.user);
-    });
-  });
+    it("displays an error message", async () => {
+      render(<LoginForm />);
 
-  afterAll(() => {
-    jest.clearAllMocks();
+      const usernameInput = screen.getByLabelText("Username");
+      const passwordInput = screen.getByLabelText("Password");
+      const submitButton = screen.getByRole("button", { name: "Login" });
+
+      userEvent.type(usernameInput, "username");
+      userEvent.type(passwordInput, "password");
+      submitButton.click();
+
+      await waitFor(() => {
+        expect(screen.getByText("Error message")).toBeInTheDocument();
+      });
+    });
+
+    it("does not try to save user and token to local storage", async () => {
+      render(<LoginForm />);
+
+      const usernameInput = screen.getByLabelText("Username");
+      const passwordInput = screen.getByLabelText("Password");
+      const submitButton = screen.getByRole("button", { name: "Login" });
+
+      userEvent.type(usernameInput, "username");
+      userEvent.type(passwordInput, "password");
+      submitButton.click();
+
+      await waitFor(() => {
+        expect(saveTokenInLocalStorage).not.toHaveBeenCalled();
+      });
+
+      await waitFor(() => {
+        expect(saveUserInLocalStorage).not.toHaveBeenCalled();
+      });
+    });
+
+    it("does not redirect the user to homepage", () => {
+      render(<LoginForm />);
+
+      const usernameInput = screen.getByLabelText("Username");
+      const passwordInput = screen.getByLabelText("Password");
+      const submitButton = screen.getByRole("button", { name: "Login" });
+
+      userEvent.type(usernameInput, "username");
+      userEvent.type(passwordInput, "password");
+      submitButton.click();
+
+      expect(mockedNavigator).not.toHaveBeenCalled();
+    });
+
+    afterAll(() => {
+      jest.clearAllMocks();
+    });
   });
 });
