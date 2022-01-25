@@ -11,20 +11,19 @@ import CreatePage from "./pages/createPage/CreatePage";
 function App() {
   return (
     <Router>
-      <div className="App">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<StartPage />} />
-          {/* <Route path="/meetups" element={<MeetupPage />} /> */}
-          <Route path="/meetups/:meetupid" element={<MeetupPage />} />
-          {/* <Route path="/signin" element={<SigninPage />} /> */}
-          {/* <Route path="/meetups" element={<MeetupPage />} /> */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/create" element={<CreatePage />} />
-        </Routes>
-        <Footer />
-      </div>
+      <MeetupProvider>
+        <div className="App">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<StartPage />} />
+            <Route path="/meetups/:meetupid" element={<MeetupPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/create" element={<CreatePage />} />
+          </Routes>
+          <Footer />
+        </div>
+      </MeetupProvider>
     </Router>
   );
 }
