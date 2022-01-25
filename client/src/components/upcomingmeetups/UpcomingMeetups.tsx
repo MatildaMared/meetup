@@ -49,7 +49,7 @@ function UpcomingMeetups() {
                   <RiMapPin5Fill style={{display: "inline"}} /> {meet.location},
                 </p>
                 <p>
-                  <RiTimeFill style={{display: "inline"}} /> {new Date(meet.date).toLocaleString([], { hour: '2-digit', minute: '2-digit' })}     
+                  <RiTimeFill style={{display: "inline"}} /> {new Date(meet.date).toLocaleString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}     
                 </p>
                                  {/* {getUserId(meet.ownerId)}@{meet.location}{" "} */}
               </MeetupInfo>

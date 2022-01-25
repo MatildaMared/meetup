@@ -29,3 +29,7 @@ describe("navbar component", () => {
 //Run this tests when able to sign in
 //user can only see login and sign up links when not logged in
 //user can only see Logout link when logged in
+//user is redirected to HomePage when click Home
+//user is redirected to LoginPage when click Login
+//user is redirected to SignupPage when click Sign up
+
