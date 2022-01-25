@@ -34,11 +34,11 @@ jest.mock("../../services/localStorageService", () => {
 
 // Set up mock for useNavigate from react-router-dom
 
+const mockedNavigator = jest.fn();
+
 jest.mock("react-router-dom", () => ({
   useNavigate: () => mockedNavigator,
 }));
-
-const mockedNavigator = jest.fn();
 
 // Actual tests
 
@@ -103,7 +103,9 @@ describe("LoginForm component", () => {
       submitButton.click();
 
       await waitFor(() => {
-        expect(saveTokenInLocalStorage).toHaveBeenCalledWith("token");
+        expect(saveTokenInLocalStorage).toHaveBeenCalledWith(
+          successfulFetchResponse.token
+        );
       });
 
       await waitFor(() => {
