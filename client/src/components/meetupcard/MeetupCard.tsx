@@ -26,6 +26,10 @@ const MeetupCard: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
           <Info>
             <h3>{meetup.title}</h3>
             <p>
+              {/* {new Date(meetup.date).toLocaleString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })} */}
               Date: {meetupdate}
               <br />
               <small>created by {user ? user.username : "unknown"}</small>
@@ -38,24 +42,6 @@ const MeetupCard: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
     </div>
   );
 };
-
-// function MeetupCard(meetup: Meetup) {
-//   return (
-//     <div>
-//       {meetup && (
-//         <StyledCard>
-//           <Image src={meetup.imgUrl} alt="" />
-//           <Info>
-//             <h3>{meetup.title}</h3>
-//             <small>{meetup.date}</small>
-//             <h4>Event Info</h4>
-//             <p>{meetup.description}</p>
-//           </Info>
-//         </StyledCard>
-//       )}
-//     </div>
-//   );
-// }
 
 export default MeetupCard;
 
