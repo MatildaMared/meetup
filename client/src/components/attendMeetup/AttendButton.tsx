@@ -43,7 +43,7 @@ function AttendButton({ attending, setAttending, setMeetup }: Props) {
   return (
     <div>
       <Button onClick={(e) => handleClick(e)}>
-        {attending ? "Leave Meetup" : "Attend Meetup"}
+        {attending ? "Leave Meetup" : "Unattend Meetup"}
       </Button>
     </div>
   );
