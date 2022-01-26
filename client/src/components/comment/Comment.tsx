@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createComment } from "../../services/meetupService";
 import {
   getTokenFromLocalStorage,
@@ -12,23 +12,15 @@ import styled from "styled-components";
 interface MeetupProps {
   meetup: Meetup;
   user: User;
+  setMeetup: Function;
 }
 
-const Comment: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
+const Comment: React.FC<MeetupProps> = ({ meetup, user, setMeetup }): JSX.Element => {
   const [inputValue, setInputValue] = useState("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [userComments, setUserComments] = useState<[] | [UserComment]>([]);
-  const currentUser = getUserFromLocalStorage();
+  const userComments = meetup?.comments as UserComment[];
+  console.log(userComments)
 
-  useEffect( () => {
-    fetchComments();
-  }, [])
-
-  async function fetchComments () {
-    console.log(meetup?.comments);
-    
-    setUserComments(meetup?.comments as []);
-  }
 
   function displayErrorMessage(message: string) {
     setErrorMessage(message);
@@ -49,7 +41,8 @@ const Comment: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
       displayErrorMessage("Please write a comment before submiting");
     } else {
       const fetchResponse = await createComment(meetup.id, token, newComment);
-      setUserComments(fetchResponse.meetup.comments);
+      setMeetup(fetchResponse.meetup);
+
       setInputValue("");
       return fetchResponse;
     }
@@ -72,15 +65,13 @@ const Comment: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
       </StyledDiv>
       <StyledDiv>
         <h3>Comments</h3>
-        {userComments.length === 0 && (
+        {userComments?.length === 0 && (
           <p>There are not comments yet, be the first to comment!</p>
         )}
-        {userComments.length > 0 &&
+        {userComments?.length > 0 &&
           userComments.map((comment) => (
             <CommentCard key={comment.id}>
               <p>{comment.comment}</p>
-              <p> by {}</p>
-              <p></p>
             </CommentCard>
           ))}
       </StyledDiv>
