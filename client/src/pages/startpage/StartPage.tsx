@@ -4,9 +4,11 @@ import Header from "../../components/header/Header";
 import styled from "styled-components";
 import UpcomingMeetups from "../../components/upcomingmeetups/UpcomingMeetups";
 import { Meetup } from "../../models/Meetup";
+import MeetupsAttending from "../../components/meetupsAttending/MeetupsAttending";
 
 function StartPage() {
   const [meetups, setMeetups] = useState<[] | [Meetup]>([]);
+  const [activeFilter, setActiveFilter] = useState<string>("upcoming");
 
   useEffect(() => {
     getMeetups();
@@ -18,16 +20,53 @@ function StartPage() {
   }
 
   return (
-    <StartPageWrapper>
+    <>
       <Header />
-      <UpcomingMeetups meetups={meetups} />
-    </StartPageWrapper>
+      <Wrapper>
+        <SelectWrapper>
+          <label htmlFor="activeFilter">Select Filter</label>
+          <select
+            name="activeFilter"
+            id="activeFilter"
+            value={activeFilter}
+            onChange={(e) => setActiveFilter(e.target.value)}
+          >
+            <option value="upcoming">Upcoming Meetups</option>
+            <option value="attending">Meetups that I'm attending</option>
+            <option value="my">My Meetups</option>
+            <option value="all">All Meetups</option>
+          </select>
+        </SelectWrapper>
+        {activeFilter === "upcoming" && <UpcomingMeetups meetups={meetups} />}
+        {activeFilter === "attending" && <MeetupsAttending meetups={meetups} />}
+      </Wrapper>
+    </>
   );
 }
 
-const StartPageWrapper = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem .5rem;
+`;
+
+const SelectWrapper = styled.div`
+  margin: 0 auto;
+  width: fit-content;
+  margin-bottom: 1rem;
+
+  & label {
+    margin-right: 0.5rem;
+    font-weight: 700;
+  }
+
+  & select {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ddd;
+  }
 `;
 
 export default StartPage;
