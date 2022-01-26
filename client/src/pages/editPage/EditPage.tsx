@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getSingleMeetup } from "../../services/meetupService";
+import { getUserFromLocalStorage } from "../../services/localStorageService";
 
 function EditPage() {
   const [title, setTitle] = useState<string>("");
@@ -15,17 +16,24 @@ function EditPage() {
   const navigate = useNavigate();
 
   const { meetupid } = useParams();
+  const user = getUserFromLocalStorage();
+  const userId = user?.id;
 
   const getMeetup = async () => {
     const response = await getSingleMeetup(meetupid as string);
     if (response.success) {
-      setTitle(response.meetup.title);
-      setCategory(response.meetup.category);
-      setDescription(response.meetup.description);
-      setDate(response.meetup.date.split("T")[0]);
-      setTime(response.meetup.date.split("T")[1].slice(0, 5));
-      setLocation(response.meetup.location);
-      setImageUrl(response.meetup.imgUrl);
+      // redirect to homepage if userId is not the same as the meetup owner id
+      if (response.meetup.ownerId !== userId) {
+        navigate("/");
+      } else {
+        setTitle(response.meetup.title);
+        setCategory(response.meetup.category);
+        setDescription(response.meetup.description);
+        setDate(response.meetup.date.split("T")[0]);
+        setTime(response.meetup.date.split("T")[1].slice(0, 5));
+        setLocation(response.meetup.location);
+        setImageUrl(response.meetup.imgUrl);
+      }
     }
   };
 
