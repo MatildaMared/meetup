@@ -55,15 +55,15 @@ describe("Testing for the MeetupPage", () => {
     expect(button).toBeInTheDocument();
   });
 
-  it("shows a leave-button on the page if logged in", () => {
-    (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
-      () => "token"
-    );
-    render(<MeetupPage />);
-    const button = screen.getByText(/Attend Meetup/i);
-    userEvent.click(button);
-    expect(button).toHaveTextContent(/Unattend Meetup/i);
-  });
+  // it("shows a leave-button on the page if logged in an already attending", () => {
+  //   (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
+  //     () => "token"
+  //   );
+  //   render(<MeetupPage />);
+  //   const button = screen.getByText(/Attend Meetup/i);
+  //   userEvent.click(button);
+  //   expect(button).toHaveTextContent(/Unattend Meetup/i);
+  // });
 
   // it("check that the MeetupCard is renderd in the MeetupPate", () => {
   //   const { getByText } = render(<MeetupPage />);

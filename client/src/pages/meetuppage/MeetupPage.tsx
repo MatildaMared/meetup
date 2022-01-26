@@ -44,13 +44,10 @@ function MeetupPage() {
   useEffect(() => {
     if (singleMeetup?.ownerId) {
       getUser(singleMeetup?.ownerId as string);
-    }
-  }, [singleMeetup]);
 
-  useEffect(() => {
-    if (singleMeetup?.ownerId) {
       const user = getUserFromLocalStorage();
       const id = user?.id;
+
       if (singleMeetup.attendees.length > 0) {
         singleMeetup.attendees.map((attend) => {
           if (attend.id === id) {

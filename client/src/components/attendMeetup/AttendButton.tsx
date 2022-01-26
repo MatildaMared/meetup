@@ -37,13 +37,14 @@ function AttendButton({ attending, setAttending, setMeetup }: Props) {
       );
       console.log("Leave Meetup");
       setAttending(false);
+      // setMeetup(res);
     }
   };
 
   return (
     <div>
       <Button onClick={(e) => handleClick(e)}>
-        {attending ? "Leave Meetup" : "Unattend Meetup"}
+        {attending ? "Unattend Meetup" : "Attend Meetup"}
       </Button>
     </div>
   );
@@ -52,19 +53,22 @@ function AttendButton({ attending, setAttending, setMeetup }: Props) {
 export default AttendButton;
 
 const Button = styled.button`
-  padding: 0.4rem 0.9rem;
   display: block;
   position: absolute;
-  right: 22.4rem;
-  top: 3.5rem;
-  background-color: #fff;
-  border: 2px solid lightblue;
-  border-radius: 4px;
-  color: lightblue;
+  right: 16.4rem;
+  top: 28.9rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  background-color: #474747;
+  color: #eee;
+  padding: 4px 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
 
   &:hover {
-    background-color: #eee;
+    background-color: #7e7e7e;
   }
 
   &:active {
