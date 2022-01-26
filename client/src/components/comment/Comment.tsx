@@ -15,12 +15,15 @@ interface MeetupProps {
   setMeetup: Function;
 }
 
-const Comment: React.FC<MeetupProps> = ({ meetup, user, setMeetup }): JSX.Element => {
+const Comment: React.FC<MeetupProps> = ({
+  meetup,
+  user,
+  setMeetup,
+}): JSX.Element => {
   const [inputValue, setInputValue] = useState("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const userComments = meetup?.comments as UserComment[];
-  console.log(userComments)
-
+  console.log(userComments);
 
   function displayErrorMessage(message: string) {
     setErrorMessage(message);

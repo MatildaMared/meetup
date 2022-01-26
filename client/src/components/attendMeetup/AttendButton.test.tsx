@@ -4,6 +4,7 @@ import AttendButton from "./AttendButton";
 const props = {
   attending: true,
   setAttending: Function,
+  setMeetup: Function,
 };
 
 describe("Tests For attending meetup-button", () => {
@@ -12,6 +13,7 @@ describe("Tests For attending meetup-button", () => {
       <AttendButton
         attending={props.attending}
         setAttending={props.setAttending}
+        setMeetup={props.setMeetup}
       />
     );
   });

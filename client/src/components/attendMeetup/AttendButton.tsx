@@ -9,9 +9,10 @@ import styled from "styled-components";
 interface Props {
   attending: boolean;
   setAttending: Function;
+  setMeetup: Function;
 }
 
-function AttendButton({ attending, setAttending }: Props) {
+function AttendButton({ attending, setAttending, setMeetup }: Props) {
   const token = getTokenFromLocalStorage();
   const thisUser = getUserFromLocalStorage();
   const { meetupid } = useParams();
@@ -19,15 +20,17 @@ function AttendButton({ attending, setAttending }: Props) {
   const handleClick = async (e: any) => {
     e.preventDefault();
     if (attending === false && token && thisUser) {
-      await attendMeetup(
+      const res = await attendMeetup(
         meetupid as string,
         token as string,
         thisUser as object
       );
       console.log("attending!");
       setAttending(true);
+      console.log(res);
+      // setMeetup(res);
     } else if (attending === true && token && thisUser) {
-      await leaveMeetup(
+      const res = await leaveMeetup(
         meetupid as string,
         token as string,
         thisUser as object
