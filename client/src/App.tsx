@@ -7,6 +7,7 @@ import Footer from "./components/footer/Footer";
 import SignupPage from "./pages/signuppage/SignupPage";
 import LoginPage from "./pages/loginPage/LoginPage";
 import CreatePage from "./pages/createPage/CreatePage";
+import EditPage from "./pages/editPage/EditPage";
 
 function App() {
   return (
@@ -15,10 +16,11 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<StartPage />} />
-          <Route path="/meetups/:meetupid" element={<MeetupPage />} />
+          <Route path="/meetups/:meetupid/edit" element={<EditPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/create" element={<CreatePage />} />
+          <Route path="/meetups/:meetupid" element={<MeetupPage />} />
         </Routes>
         <Footer />
       </div>

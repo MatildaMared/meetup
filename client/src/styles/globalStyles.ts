@@ -53,4 +53,17 @@ p, h1, h2, h3, h4, h5, h6 {
 #root, #__next {
   isolation: isolate;
 }
+
+body {
+  font-family: "Raleway", sans-serif;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 800;
+}
+
+h2 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
 `;

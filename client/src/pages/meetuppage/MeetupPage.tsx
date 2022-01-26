@@ -11,16 +11,16 @@ import {
 import MeetupCard from "../../components/meetupcard/MeetupCard";
 import Comment from "../../components/comment/Comment";
 import AttendButton from "../../components/attendMeetup/AttendButton";
+import Attendees from "../../components/attendees/Attendees";
 import styled from "styled-components";
 
 function MeetupPage() {
   const [singleMeetup, setSingleMeetup] = useState<Meetup | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [attending, setAttending] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [attending, setAttending] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const { meetupid } = useParams();
   const token = getTokenFromLocalStorage();
-  const thisUser = getUserFromLocalStorage();
 
   async function getMeetup(id: string) {
     const meetupInfo = await getSingleMeetup(id);
@@ -47,30 +47,24 @@ function MeetupPage() {
     }
   }, [singleMeetup]);
 
-  const amAttending = (): void => {
-    console.log(singleMeetup?.attendees);
-    if (singleMeetup && singleMeetup.attendees.length > 0) {
-      singleMeetup?.attendees.map((attendees) => {
-        if (attendees.id === thisUser?.id) {
-          setAttending(true);
-        } else if (attendees.id !== thisUser?.id) {
-          setAttending(false);
-        }
-      });
-    }
-  };
-
   useEffect(() => {
-    amAttending();
+    if (singleMeetup?.ownerId) {
+      const user = getUserFromLocalStorage();
+      const id = user?.id;
+      if (singleMeetup.ownerId === id) {
+        setAttending(true);
+      }
+    }
   }, [singleMeetup]);
 
   return (
     <StyledPage>
       {isLoggedIn && (
-        <AttendButton meetup={singleMeetup as Meetup} user={user as User} />
+        <AttendButton attending={attending} setAttending={setAttending} />
       )}
       <MeetupCard meetup={singleMeetup as Meetup} user={user as User} />
       <Comment meetup={singleMeetup as Meetup} user={user as User} />
+      <Attendees meetup={singleMeetup as Meetup} />
     </StyledPage>
   );
 }
@@ -79,4 +73,5 @@ export default MeetupPage;
 
 const StyledPage = styled.div`
   position: relative;
+  width: 100%;
 `;

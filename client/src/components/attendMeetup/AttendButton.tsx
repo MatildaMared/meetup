@@ -1,6 +1,3 @@
-import { useState } from "react";
-import { User } from "../../models/User";
-import { Meetup } from "../../models/Meetup";
 import { useParams } from "react-router-dom";
 import {
   getTokenFromLocalStorage,
@@ -10,18 +7,18 @@ import { attendMeetup, leaveMeetup } from "../../services/meetupService";
 import styled from "styled-components";
 
 interface Props {
-  meetup: Meetup;
-  user: User;
+  attending: boolean;
+  setAttending: Function;
 }
 
-const AttendButton: React.FC<Props> = ({ meetup, user }): JSX.Element => {
-  const [attending, setAttending] = useState(false);
+function AttendButton({ attending, setAttending }: Props) {
   const token = getTokenFromLocalStorage();
   const thisUser = getUserFromLocalStorage();
   const { meetupid } = useParams();
 
   const handleClick = async (e: any) => {
-    if (!attending && token && thisUser) {
+    e.preventDefault();
+    if (attending === false && token && thisUser) {
       await attendMeetup(
         meetupid as string,
         token as string,
@@ -29,7 +26,7 @@ const AttendButton: React.FC<Props> = ({ meetup, user }): JSX.Element => {
       );
       console.log("attending!");
       setAttending(true);
-    } else if (attending && token && thisUser) {
+    } else if (attending === true && token && thisUser) {
       await leaveMeetup(
         meetupid as string,
         token as string,
@@ -43,11 +40,11 @@ const AttendButton: React.FC<Props> = ({ meetup, user }): JSX.Element => {
   return (
     <div>
       <Button onClick={(e) => handleClick(e)}>
-        {attending ? "Leave meetup" : "Attend Meetup"}
+        {attending ? "Leave Meetup" : "Attend Meetup"}
       </Button>
     </div>
   );
-};
+}
 
 export default AttendButton;
 
