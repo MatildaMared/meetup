@@ -4,7 +4,7 @@ import MeetupCardSmall from "../meetupCardSmall/MeetupCardSmall";
 import styled from "styled-components";
 import { getUserFromLocalStorage } from "../../services/localStorageService";
 
-function MeetupsAttending(props: { meetups: [] | [Meetup] }) {
+function MyMeetups(props: { meetups: [] | [Meetup] }) {
   const meetups = props.meetups;
   const [filteredMeetups, setFilteredMeetups] = useState<[] | [Meetup]>([]);
   const user = getUserFromLocalStorage();
@@ -12,9 +12,9 @@ function MeetupsAttending(props: { meetups: [] | [Meetup] }) {
 
   useEffect(() => {
     if (meetups.length > 0) {
-      // filter meetups that user is attending
+      // filter meetups that user is hosting
       const filtered = meetups.filter((meetup) => {
-        return meetup.attendees.some((attendee) => attendee.id === userId);
+        return meetup.ownerId === userId;
       });
 
       setFilteredMeetups(filtered as [] | [Meetup]);
@@ -23,7 +23,7 @@ function MeetupsAttending(props: { meetups: [] | [Meetup] }) {
 
   return (
     <Wrapper>
-      <h2>Meetups I'm attending</h2>
+      <h2>Meetups I'm hosting</h2>
       <MeetupWrapper>
         {filteredMeetups &&
           filteredMeetups.map((meetup: Meetup) => (
@@ -46,4 +46,4 @@ const MeetupWrapper = styled.ul`
   grid-template-columns: repeat(3, 1fr);
 `;
 
-export default MeetupsAttending;
+export default MyMeetups;

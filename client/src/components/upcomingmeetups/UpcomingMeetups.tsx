@@ -16,7 +16,7 @@ function UpcomingMeetups(props: { meetups: [] | [Meetup] }) {
         return meetupDate > currentDate;
       });
 
-      const filtered = removedPassedMeetups.sort((meetupA, meetupB) => {
+      let filtered = removedPassedMeetups.sort((meetupA, meetupB) => {
         return Number(new Date(meetupA.date)) - Number(new Date(meetupB.date));
       });
 

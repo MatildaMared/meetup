@@ -4,7 +4,9 @@ import Header from "../../components/header/Header";
 import styled from "styled-components";
 import UpcomingMeetups from "../../components/upcomingmeetups/UpcomingMeetups";
 import { Meetup } from "../../models/Meetup";
-import MeetupsAttending from "../../components/meetupsAttending/MeetupsAttending";
+import AttendingMeetups from "../../components/attendingMeetups/AttendingMeetups";
+import MyMeetups from "../../components/myMeetups/MyMeetups";
+import AllMeetups from "../../components/allMeetups/AllMeetups";
 
 function StartPage() {
   const [meetups, setMeetups] = useState<[] | [Meetup]>([]);
@@ -38,7 +40,9 @@ function StartPage() {
           </select>
         </SelectWrapper>
         {activeFilter === "upcoming" && <UpcomingMeetups meetups={meetups} />}
-        {activeFilter === "attending" && <MeetupsAttending meetups={meetups} />}
+        {activeFilter === "attending" && <AttendingMeetups meetups={meetups} />}
+        {activeFilter === "my" && <MyMeetups meetups={meetups} />}
+        {activeFilter === "all" && <AllMeetups meetups={meetups} />}
       </Wrapper>
     </>
   );
@@ -49,7 +53,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem .5rem;
+  padding: 2rem 0.5rem;
 `;
 
 const SelectWrapper = styled.div`
