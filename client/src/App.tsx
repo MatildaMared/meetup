@@ -17,10 +17,10 @@ function App() {
         <Routes>
           <Route path="/" element={<StartPage />} />
           <Route path="/meetups/:meetupid/edit" element={<EditPage />} />
-          <Route path="/meetups/:meetupid" element={<MeetupPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/create" element={<CreatePage />} />
+          <Route path="/meetups/:meetupid" element={<MeetupPage />} />
         </Routes>
         <Footer />
       </div>
