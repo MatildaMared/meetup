@@ -1,5 +1,5 @@
 export interface UserComment {
     comment: string;
-    firstName: string;
-    date: Date;
+    id: string;
+    userId: string;
 }
