@@ -72,6 +72,7 @@ const Comment: React.FC<MeetupProps> = ({ meetup, user, setMeetup }): JSX.Elemen
           userComments.map((comment) => (
             <CommentCard key={comment.id}>
               <p>{comment.comment}</p>
+              <p>by {comment.name}</p>
             </CommentCard>
           ))}
       </StyledDiv>
