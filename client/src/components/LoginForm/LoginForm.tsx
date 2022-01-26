@@ -40,7 +40,7 @@ function LoginForm() {
     } else if (data.success) {
       saveTokenInLocalStorage(data.token);
       saveUserInLocalStorage(data.user);
-      navigate("/");
+      navigate("/");      
     }
   }
 
