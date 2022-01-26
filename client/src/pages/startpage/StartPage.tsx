@@ -7,9 +7,11 @@ import { Meetup } from "../../models/Meetup";
 import AttendingMeetups from "../../components/attendingMeetups/AttendingMeetups";
 import MyMeetups from "../../components/myMeetups/MyMeetups";
 import AllMeetups from "../../components/allMeetups/AllMeetups";
+import CategorySorter from "../../components/categorySorter/CategorySorter";
 
 function StartPage() {
   const [meetups, setMeetups] = useState<[] | [Meetup]>([]);
+  const [sortedMeetups, setSortedMeetups] = useState<[] | [Meetup]>([]);
   const [activeFilter, setActiveFilter] = useState<string>("upcoming");
 
   useEffect(() => {
@@ -19,30 +21,38 @@ function StartPage() {
   async function getMeetups() {
     const data = await getAllMeetups();
     setMeetups(data.meetups);
+    setSortedMeetups(data.meetups);
   }
 
   return (
     <>
       <Header />
       <Wrapper>
-        <SelectWrapper>
-          <label htmlFor="activeFilter">Select Filter</label>
-          <select
-            name="activeFilter"
-            id="activeFilter"
-            value={activeFilter}
-            onChange={(e) => setActiveFilter(e.target.value)}
-          >
-            <option value="upcoming">Upcoming Meetups</option>
-            <option value="attending">Meetups that I'm attending</option>
-            <option value="my">My Meetups</option>
-            <option value="all">All Meetups</option>
-          </select>
-        </SelectWrapper>
-        {activeFilter === "upcoming" && <UpcomingMeetups meetups={meetups} />}
-        {activeFilter === "attending" && <AttendingMeetups meetups={meetups} />}
-        {activeFilter === "my" && <MyMeetups meetups={meetups} />}
-        {activeFilter === "all" && <AllMeetups meetups={meetups} />}
+        <UserSelects>
+          <SelectWrapper>
+            <label htmlFor="activeFilter">Filter: </label>
+            <select
+              name="activeFilter"
+              id="activeFilter"
+              value={activeFilter}
+              onChange={(e) => setActiveFilter(e.target.value)}
+            >
+              <option value="upcoming">Upcoming Meetups</option>
+              <option value="attending">Meetups that I'm attending</option>
+              <option value="my">My Meetups</option>
+              <option value="all">All Meetups</option>
+            </select>
+          </SelectWrapper>
+          <CategorySorter meetups={meetups} setMeetups={setSortedMeetups} />
+        </UserSelects>
+        {activeFilter === "upcoming" && (
+          <UpcomingMeetups meetups={sortedMeetups} />
+        )}
+        {activeFilter === "attending" && (
+          <AttendingMeetups meetups={sortedMeetups} />
+        )}
+        {activeFilter === "my" && <MyMeetups meetups={sortedMeetups} />}
+        {activeFilter === "all" && <AllMeetups meetups={sortedMeetups} />}
       </Wrapper>
     </>
   );
@@ -57,9 +67,7 @@ const Wrapper = styled.div`
 `;
 
 const SelectWrapper = styled.div`
-  margin: 0 auto;
   width: fit-content;
-  margin-bottom: 1rem;
 
   & label {
     margin-right: 0.5rem;
@@ -67,10 +75,17 @@ const SelectWrapper = styled.div`
   }
 
   & select {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem;
     border-radius: 0.5rem;
     border: 1px solid #ddd;
   }
 `;
+
+const UserSelects = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+`
 
 export default StartPage;

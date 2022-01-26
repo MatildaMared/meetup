@@ -2,7 +2,22 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getSingleMeetup } from "../../services/meetupService";
-import { getUserFromLocalStorage } from "../../services/localStorageService";
+import {
+  getTokenFromLocalStorage,
+  getUserFromLocalStorage,
+} from "../../services/localStorageService";
+
+async function updateMeetup(newMeetup: object, id: string, token: string) {
+  const response = await fetch(`/api/meetups/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getTokenFromLocalStorage()}`,
+    },
+    body: JSON.stringify(newMeetup),
+  });
+  return response.json();
+}
 
 function EditPage() {
   const [title, setTitle] = useState<string>("");
@@ -13,17 +28,19 @@ function EditPage() {
   const [location, setLocation] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string>("https://");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [meetupId, setMeetupId] = useState<string>("");
   const navigate = useNavigate();
 
   const { meetupid } = useParams();
   const user = getUserFromLocalStorage();
+  const token = getTokenFromLocalStorage();
   const userId = user?.id;
 
   const getMeetup = async () => {
     const response = await getSingleMeetup(meetupid as string);
     if (response.success) {
-      // redirect to homepage if userId is not the same as the meetup owner id
-      if (response.meetup.ownerId !== userId) {
+      // redirect to homepage if userId is not the same as the meetup owner id or token does not exist
+      if (response.meetup.ownerId !== userId || !token) {
         navigate("/");
       } else {
         setTitle(response.meetup.title);
@@ -33,15 +50,54 @@ function EditPage() {
         setTime(response.meetup.date.split("T")[1].slice(0, 5));
         setLocation(response.meetup.location);
         setImageUrl(response.meetup.imgUrl);
+        setMeetupId(response.meetup.id);
       }
+    }
+  };
+
+  function displayErrorMessage(message: string) {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 3000);
+  }
+
+  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (
+      !title ||
+      !category ||
+      !description ||
+      !date ||
+      !time ||
+      !location ||
+      !imageUrl
+    ) {
+      displayErrorMessage("Please fill in all fields");
+      return;
+    }
+
+    const meetupObj = {
+      title,
+      category,
+      description,
+      date: `${date}T${time}`,
+      location,
+      imgUrl: imageUrl,
+    };
+
+    const data = await updateMeetup(meetupObj, meetupId, token as string);
+    if (data.success) {
+      navigate("/meetups/" + meetupId);
+    } else {
+      displayErrorMessage(data.error);
     }
   };
 
   useEffect(() => {
     getMeetup();
   }, []);
-
-  const onSubmitHandler = () => {};
 
   return (
     <Wrapper>
@@ -118,7 +174,7 @@ function EditPage() {
             onChange={(e) => setImageUrl(e.target.value)}
           />
         </InputWrapper>
-        <Button type="submit">Create Meetup</Button>
+        <Button type="submit">Edit Meetup</Button>
         <ErrorMessage>{errorMessage}</ErrorMessage>
       </Form>
     </Wrapper>
