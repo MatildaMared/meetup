@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { getAllMeetups } from "../../services/meetupService";
 import { Meetup } from "../../models/Meetup";
 import MeetupCardSmall from "../meetupCardSmall/MeetupCardSmall";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 
 function UpcomingMeetups(props: { meetups: [] | [Meetup] }) {
   const meetups = props.meetups;
@@ -17,7 +16,7 @@ function UpcomingMeetups(props: { meetups: [] | [Meetup] }) {
         return meetupDate > currentDate;
       });
 
-      const filtered = removedPassedMeetups.sort((meetupA, meetupB) => {
+      let filtered = removedPassedMeetups.sort((meetupA, meetupB) => {
         return Number(new Date(meetupA.date)) - Number(new Date(meetupB.date));
       });
 
