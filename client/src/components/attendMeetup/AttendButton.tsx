@@ -18,7 +18,7 @@ function AttendButton({ attending, setAttending }: Props) {
 
   const handleClick = async (e: any) => {
     e.preventDefault();
-    if (!attending && token && thisUser) {
+    if (attending === false && token && thisUser) {
       await attendMeetup(
         meetupid as string,
         token as string,
@@ -26,7 +26,7 @@ function AttendButton({ attending, setAttending }: Props) {
       );
       console.log("attending!");
       setAttending(true);
-    } else if (attending && token && thisUser) {
+    } else if (attending === true && token && thisUser) {
       await leaveMeetup(
         meetupid as string,
         token as string,

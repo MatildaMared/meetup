@@ -69,3 +69,23 @@ export async function createMeetup(meetupObj: object, token: string) {
   const meetupData = await meetup.json();
   return meetupData;
 }
+
+export async function createComment(
+  meetupId: string,
+  token: string,
+  comment: string
+) {
+  const commentFetch = await fetch(`/api/meetups/${meetupId}/comments`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ comment }),
+  });
+
+  const commentData = await commentFetch.json();
+  console.log(commentData);
+
+  return commentData;
+}
