@@ -3,18 +3,25 @@ import {
   getTokenFromLocalStorage,
   getUserFromLocalStorage,
 } from "../../services/localStorageService";
+import { deleteComment } from "../../services/meetupService";
+import { Meetup } from "../../models/Meetup";
 import styled from "styled-components";
 
-interface Props {
-  attending: boolean;
-  setAttending: Function;
+interface MeetupProps {
+  meetup: Meetup;
   setMeetup: Function;
 }
 
-function DeleteCommentButton() {
+const DeleteCommentButton: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
+  const token = getTokenFromLocalStorage();
+  const user = getUserFromLocalStorage()  
 
   async function deleteHandler (e: any) {
-
+    if (token) {
+      let commentId = e.target.parentElement.getAttribute("data-id");
+      const fetchResponse = await deleteComment(meetup.id, token, commentId);
+      setMeetup(fetchResponse.meetup);    
+    }
   }
 
   return <DeleteButton onClick={(e) => deleteHandler(e)}>
@@ -23,7 +30,7 @@ function DeleteCommentButton() {
 }
 
 const DeleteButton = styled.button `
-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   z-index: 5;
   background-color: #474747;
   color: #eee;
