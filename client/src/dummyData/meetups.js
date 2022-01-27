@@ -38,7 +38,7 @@ export const meetups = [
     attendees: [
       {
         id: "1",
-        name: "Lisa",
+        name: "Test",
       },
       {
         id: "3",
