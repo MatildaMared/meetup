@@ -44,15 +44,18 @@ function MeetupPage() {
   useEffect(() => {
     if (singleMeetup?.ownerId) {
       getUser(singleMeetup?.ownerId as string);
-    }
-  }, [singleMeetup]);
 
-  useEffect(() => {
-    if (singleMeetup?.ownerId) {
       const user = getUserFromLocalStorage();
       const id = user?.id;
-      if (singleMeetup.ownerId === id) {
-        setAttending(true);
+
+      if (singleMeetup.attendees.length > 0) {
+        singleMeetup.attendees.map((attend) => {
+          if (attend.id === id) {
+            setAttending(true);
+          }
+        });
+      } else {
+        setAttending(false);
       }
     }
   }, [singleMeetup]);
@@ -60,10 +63,14 @@ function MeetupPage() {
   return (
     <StyledPage>
       {isLoggedIn && (
-        <AttendButton attending={attending} setAttending={setAttending} />
+        <AttendButton
+          attending={attending}
+          setAttending={setAttending}
+          setMeetup={setSingleMeetup}
+        />
       )}
       <MeetupCard meetup={singleMeetup as Meetup} user={user as User} />
-      <Comment meetup={singleMeetup as Meetup} user={user as User} setMeetup={setSingleMeetup} />
+      <Comment meetup={singleMeetup as Meetup} setMeetup={setSingleMeetup} />
       <Attendees meetup={singleMeetup as Meetup} />
     </StyledPage>
   );
@@ -73,5 +80,5 @@ export default MeetupPage;
 
 const StyledPage = styled.div`
   position: relative;
-  width: 100%;
+  margin: 0 auto;
 `;

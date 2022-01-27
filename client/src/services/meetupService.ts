@@ -21,7 +21,7 @@ export async function attendMeetup(
   meetupId: string,
   token: string,
   user: object
-): Promise<object> {
+) {
   // const token = localStorage.getItem('token')
 
   const res = await fetch(`/api/meetups/${meetupId}/register`, {
