@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createComment } from "../../services/meetupService";
-import { getTokenFromLocalStorage } from "../../services/localStorageService";
+import { getTokenFromLocalStorage, getUserFromLocalStorage } from "../../services/localStorageService";
 import { UserComment } from "../../models/UserComment";
 import { Meetup } from "../../models/Meetup";
 import styled from "styled-components";
@@ -16,6 +16,13 @@ const Comment: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const userComments = meetup?.comments as UserComment[];
   const token = getTokenFromLocalStorage();
+  const user = getUserFromLocalStorage();
+
+  console.log(userComments);
+  console.log(meetup);
+  console.log(user);
+  
+  
 
   function displayErrorMessage(message: string) {
     setErrorMessage(message);
@@ -71,11 +78,10 @@ const Comment: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
                 <p>{comment.comment}</p>
                 <small>by {comment.name}</small>
               </CommentAndBy>
-
-              <DeleteCommentButton
+             {(comment.userId === user?.id || meetup.ownerId === user?.id) && <DeleteCommentButton
                 meetup={meetup as Meetup}
                 setMeetup={setMeetup}
-              />
+              />}
             </CommentCard>
           ))}
       </StyledDiv>
