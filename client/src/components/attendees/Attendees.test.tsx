@@ -1,37 +1,48 @@
-import { render } from "@testing-library/react";
-import { Meetup } from "../../models/Meetup";
-
+import { render, screen } from "@testing-library/react";
+import { singleMeetup } from "../../dummyData/meetups";
 import Attendees from "./Attendees";
 
-const meetup: Meetup = {
-  title:
-    "Pokémon meetup (vi livesänder speedrun av pokémon Emerald på Twitch!)",
-  ownerId: "61ea80bcfe705abdc1db26e4",
-  category: "gaming",
-  description:
-    "Cat ipsum dolor sit amet, it's 3am, time to furballs time for night-hunt, human freakout mice blow up sofa in 3 seconds why caf hand. Cats are a queer kind of folk hate dogs, for flee in terror at cucumber discovered on floor, yet kitty poochy i vomit in the bed in the middle of the night.",
-  date: "2022-03-10T17:00:00.000Z",
+const noAttendeesTest = {
+  title: "Programming",
+  ownerId: "1",
+  category: "programming",
+  description: "Description",
+  date: "2022-10-10T19:00:00",
   location: "Online",
   imgUrl:
-    "https://images.unsplash.com/photo-1627856013091-fed6e4e30025?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80",
-  attendees: [
-    {
-      name: "Sara",
-      id: "sjdfhgksjdhferif",
-    },
-  ],
+    "https://images.unsplash.com/photo-1601933470096-0e34634ffcde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80",
+  attendees: [],
   comments: [
     {
-      id: "sdfsgsg",
-      userId: "kgjhlksrh",
-      content: "",
+      comment: "Så kul!",
+      userId: "2",
+      id: "378",
+      name: "Testsson",
     },
   ],
-  id: "61ea80effe705abdc1db26e8",
+  id: "234",
 };
 
-// describe("testing for attendees", () => {
-//   it("renders without crashing", () => {
-//     render(<Attendees meetup={meetup} />);
-//   });
-// });
+describe("Tests for attendees component", () => {
+  it("renders without crashing", () => {
+    render(<Attendees meetup={singleMeetup} />);
+  });
+
+  it("does not render any content if there are no attendes", () => {
+    render(<Attendees meetup={noAttendeesTest} />);
+    const items = screen.queryAllByRole("listitem");
+    expect(items.length).toBe(0);
+  });
+
+  it("render an Attendee header if there are attendees", () => {
+    render(<Attendees meetup={singleMeetup} />);
+    const heading = screen.getByRole("heading", { name: "Attendees" });
+    expect(heading).toBeInTheDocument();
+  });
+
+  it("does render a list of attendess if there are attendees", () => {
+    render(<Attendees meetup={singleMeetup} />);
+    const items = screen.getAllByRole("listitem");
+    expect(items.length).toBe(1);
+  });
+});
