@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 import { getTokenFromLocalStorage } from "../../services/localStorageService";
 

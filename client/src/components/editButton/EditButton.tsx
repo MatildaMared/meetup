@@ -43,8 +43,8 @@ function EditButton(props: { meetup: Meetup }) {
 
 const Button = styled.button`
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 1rem;
+  right: 1rem;
   display: flex;
   align-items: center;
   background-color: #474747;

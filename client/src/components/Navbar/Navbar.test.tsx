@@ -15,7 +15,6 @@ let successfulFetchResponse = {
   },
 };
 
-
 // Set up mock for localStorageService
 
 jest.mock("../../services/localStorageService", () => {

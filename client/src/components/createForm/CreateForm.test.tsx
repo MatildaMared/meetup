@@ -2,28 +2,15 @@ import { render, screen, waitFor } from "@testing-library/react";
 import CreateForm from "./CreateForm";
 import userEvent from "@testing-library/user-event";
 import { getTokenFromLocalStorage } from "../../services/localStorageService";
+import { singleMeetup } from "./../../dummyData/meetups";
+import { singleUser } from "./../../dummyData/users";
 
 // Dummy fetch responses
 
 let successfulFetchResponse = {
   success: true,
-  meetup: {
-    id: 1,
-    title: "Test",
-    category: "gaming",
-    description: "Test",
-    date: "2022-01-01T19:00",
-    location: "Test",
-    imgUrl: "https://",
-    attendees: [],
-    comments: [],
-    ownerId: 1,
-  },
-  user: {
-    id: 1,
-    username: "username",
-    firstName: "First Name",
-  },
+  meetup: singleMeetup,
+  user: singleUser,
 };
 
 let unsuccessfulFetchResponse = {
@@ -32,7 +19,6 @@ let unsuccessfulFetchResponse = {
 };
 
 // Set up mock for useNavigate from react-router-dom
-
 const mockedNavigator = jest.fn();
 
 jest.mock("react-router-dom", () => ({
@@ -40,7 +26,6 @@ jest.mock("react-router-dom", () => ({
 }));
 
 // Set up mock for localStorageService
-
 jest.mock("../../services/localStorageService", () => {
   return {
     saveUserInLocalStorage: jest.fn(),

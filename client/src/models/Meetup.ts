@@ -8,5 +8,5 @@ export interface Meetup {
   location: string;
   imgUrl: string;
   attendees: [] | { name: string; id: string }[];
-  comments: [] | { id: string; userId: string; content: string }[];
+  comments: Array<object> | [];
 }

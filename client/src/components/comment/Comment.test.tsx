@@ -51,13 +51,6 @@ describe("Testing for Comment-form", () => {
     expect(button).toBeInTheDocument();
   });
 
-  //   it("empties the input field when submitting the comment", () => {
-  //     render(<Comment meetup={meetupMock} setMeetup={setMeetupMock} />);
-  //     const inputElem = screen.getByRole("textbox");
-  //     userEvent.type(inputElem, "Hello{enter}");
-  //     expect(inputElem).toHaveValue("");
-  //   });
-
   it("displays an error message if input field is empty", () => {
     (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
       () => "token"
@@ -92,11 +85,17 @@ describe("Testing for Comment-form", () => {
   });
 });
 
-// it("clears the value in textbox after submitting")
+ //   it("empties the input field when submitting the comment", () => {
+  //     render(<Comment meetup={meetupMock} setMeetup={setMeetupMock} />);
+  //     const inputElem = screen.getByRole("textbox");
+  //     userEvent.type(inputElem, "Hello{enter}");
+  //     expect(inputElem).toHaveValue("");
+  //   });
 // it("shows the post in the comments, after submitting")
 //it("shows who posted the comment", () => {});
 //it("does not delete a comment when user is not owner of meetup or person who wrote the comment", () => {})
 //it("deletes a comment when valid user clicks the delete button", () => {})
+// textbox does not show if user is not logged in
 
 function createMeetup(): Meetup {
   return {
