@@ -17,6 +17,7 @@ function MyMeetups(props: { meetups: [] | [Meetup] }) {
         return meetup.ownerId === userId;
       });
 
+      // update filteredMeetups
       setFilteredMeetups(filtered as [] | [Meetup]);
     }
   }, [meetups]);
