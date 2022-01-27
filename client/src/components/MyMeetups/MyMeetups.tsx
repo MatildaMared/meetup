@@ -4,9 +4,13 @@ import MeetupCardSmall from "../meetupCardSmall/MeetupCardSmall";
 import styled from "styled-components";
 import { getUserFromLocalStorage } from "../../services/localStorageService";
 
-function MyMeetups(props: { meetups: [] | [Meetup] }) {
+interface Props {
+  meetups: Meetup[] | [];
+}
+
+function MyMeetups(props: Props) {
   const meetups = props.meetups;
-  const [filteredMeetups, setFilteredMeetups] = useState<[] | [Meetup]>([]);
+  const [filteredMeetups, setFilteredMeetups] = useState<[] | Meetup[]>([]);
   const user = getUserFromLocalStorage();
   const userId = user?.id;
 
@@ -18,9 +22,9 @@ function MyMeetups(props: { meetups: [] | [Meetup] }) {
       });
 
       // update filteredMeetups
-      setFilteredMeetups(filtered as [] | [Meetup]);
+      setFilteredMeetups(filtered);
     }
-  }, [meetups]);
+  }, [meetups, userId]);
 
   return (
     <Wrapper>
@@ -31,6 +35,9 @@ function MyMeetups(props: { meetups: [] | [Meetup] }) {
             <MeetupCardSmall key={meetup.id} meetup={meetup} />
           ))}
       </MeetupWrapper>
+      {filteredMeetups.length === 0 && (
+        <p>You need to be logged in to see meetups that you are hosting.</p>
+      )}
     </Wrapper>
   );
 }
