@@ -45,11 +45,9 @@ function AttendButton({ attending, setAttending, setMeetup }: Props) {
   };
 
   return (
-    <div>
-      <Button onClick={(e) => handleClick(e)}>
-        {attending ? "Unattend Meetup" : "Attend Meetup"}
-      </Button>
-    </div>
+    <Button onClick={(e) => handleClick(e)}>
+      {attending ? "Unattend Meetup" : "Attend Meetup"}
+    </Button>
   );
 }
 
