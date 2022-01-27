@@ -66,6 +66,7 @@ function MeetupPage() {
         <AttendButton
           attending={attending}
           setAttending={setAttending}
+          setMeetup={setSingleMeetup}
         />
       )}
       <MeetupCard meetup={singleMeetup as Meetup} user={user as User} />
