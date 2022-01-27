@@ -54,7 +54,7 @@ export const meetups = [
     category: "programming",
     description:
       "Cat ipsum dolor sit amet, find a way to fit in tiny box for fooled again",
-    date: "2022-02-15T18:00:00.000Z",
+    date: "2024-02-15T18:00:00.000Z",
     location: "The white house",
     imgUrl:
       "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2671&q=80",
@@ -77,7 +77,7 @@ export const meetups = [
     category: "programming",
     description:
       "Cat ipsum dolor sit amet, it's 3am, time to create some chaos",
-    date: "2022-02-27T19:00:00.000Z",
+    date: "2021-01-27T19:00:00.000Z",
     location: "Globen",
     imgUrl:
       "https://images.unsplash.com/photo-1601933470096-0e34634ffcde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80",

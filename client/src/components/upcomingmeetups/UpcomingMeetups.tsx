@@ -3,7 +3,11 @@ import { Meetup } from "../../models/Meetup";
 import MeetupCardSmall from "../meetupCardSmall/MeetupCardSmall";
 import styled from "styled-components";
 
-function UpcomingMeetups(props: { meetups: [] | [Meetup] }) {
+interface Props {
+  meetups: Meetup[] | [];
+}
+
+function UpcomingMeetups(props: Props) {
   const meetups = props.meetups;
   const [upcomingMeetups, setUpcomingMeetups] = useState<[] | [Meetup]>([]);
 
