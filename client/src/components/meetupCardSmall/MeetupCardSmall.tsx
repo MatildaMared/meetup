@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Meetup } from "../../models/Meetup";
 import { useNavigate } from "react-router-dom";
-import { RiMapPin5Fill, RiTimeFill } from "react-icons/ri";
+import { Clock, MapPin } from "react-feather";
 import EditButton from "../editButton/EditButton";
 
 function MeetupCardSmall(props: { meetup: Meetup }) {
@@ -21,10 +21,10 @@ function MeetupCardSmall(props: { meetup: Meetup }) {
         <h3>{meetup.title}</h3>
         <EditButton meetup={meetup} />
         <p>
-          <RiMapPin5Fill style={{ display: "inline" }} /> {meetup.location},
+          <MapPin size={16} /> {meetup.location},
         </p>
         <p>
-          <RiTimeFill style={{ display: "inline" }} />{" "}
+          <Clock size={16} />
           {new Date(meetup.date).toLocaleString([], {
             weekday: "long",
             year: "numeric",
@@ -45,9 +45,11 @@ const MeetupCard = styled.li`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 1rem;
+  /* margin: 1rem; */
   cursor: pointer;
   background: rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+  border-radius: 1rem;
 `;
 
 const MeetupAvatar = styled.img`

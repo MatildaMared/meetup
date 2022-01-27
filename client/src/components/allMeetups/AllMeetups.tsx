@@ -3,7 +3,11 @@ import { Meetup } from "../../models/Meetup";
 import MeetupCardSmall from "../meetupCardSmall/MeetupCardSmall";
 import styled from "styled-components";
 
-function AllMeetups(props: { meetups: [] | [Meetup] }) {
+interface Props {
+  meetups: Meetup[] | [];
+}
+
+function AllMeetups(props: Props) {
   const meetups = props.meetups;
   const [filteredMeetups, setFilteredMeetups] = useState<[] | [Meetup]>([]);
 
@@ -46,6 +50,16 @@ const Wrapper = styled.section`
 const MeetupWrapper = styled.ul`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2rem;
+  padding: 0 2rem;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 850px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 export default AllMeetups;
