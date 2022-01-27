@@ -1,15 +1,20 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components/macro";
 import { getTokenFromLocalStorage } from "../../services/localStorageService";
 
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const token = getTokenFromLocalStorage();
 
   function logoutHandler() {
     localStorage.removeItem("meetupToken");
     localStorage.removeItem("meetupUser");
-    navigate("/");
+    if (location.pathname === "/") {
+      window.location.reload();
+    } else {
+      navigate("/");
+    }
   }
 
   return (
@@ -24,13 +29,11 @@ function Navbar() {
         )}
         {token && (
           <ListElement onClick={() => navigate("/create")}>
-              Create Meetup           
+            Create Meetup
           </ListElement>
         )}
         {token && (
-          <ListElement onClick={() => logoutHandler()}>
-              Logout
-          </ListElement>
+          <ListElement onClick={() => logoutHandler()}>Logout</ListElement>
         )}
       </ListWrapper>
     </NavbarWrapper>
