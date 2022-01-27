@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
-import MyMeetups from "./MyMeetups";
+import AttendingMeetups from "./AttendingMeetups";
 import { meetups } from "./../../dummyData/meetups";
-import { singleUser } from "./../../dummyData/users";
 import { getUserFromLocalStorage } from "../../services/localStorageService";
+import { singleUser } from "./../../dummyData/users";
 
 // Set up mock for localStorageService
 jest.mock("../../services/localStorageService", () => {
@@ -19,34 +19,34 @@ jest.mock("react-router-dom", () => ({
 }));
 
 // Actual tests
-describe("MyMeetups component", () => {
+describe("AttendingMeetups component", () => {
   it("renders without crashing", () => {
-    render(<MyMeetups meetups={meetups} />);
+    render(<AttendingMeetups meetups={meetups} />);
   });
 
   it("displays a title", () => {
-    render(<MyMeetups meetups={meetups} />);
+    render(<AttendingMeetups meetups={meetups} />);
 
-    expect(screen.getByText(/Meetups I'm hosting/i)).toBeInTheDocument();
+    expect(screen.getByText(/Meetups I'm attending/i)).toBeInTheDocument();
   });
 
   it("displays no meetups if user is not logged in", () => {
-    render(<MyMeetups meetups={meetups} />);
+    render(<AttendingMeetups meetups={meetups} />);
 
     expect(
       screen.getByText(
-        /You need to be logged in to see meetups that you are hosting/i
+        /You need to be logged in to see meetups that you are attending/i
       )
     ).toBeInTheDocument();
   });
 
-  it("displays meetups that the user is hosting if user is logged in", () => {
+  it("displays meetups that the user is attending if user is logged in", () => {
     // Mock return value for getUserFromLocalStorage function
     (getUserFromLocalStorage as jest.Mock).mockReturnValue(singleUser);
-    render(<MyMeetups meetups={meetups} />);
+    render(<AttendingMeetups meetups={meetups} />);
 
-    const filteredMeetups = meetups.filter(
-      (meetup) => meetup.ownerId === singleUser.id
+    const filteredMeetups = meetups.filter((meetup) =>
+      meetup.attendees.some((attendee) => attendee.id === singleUser.id)
     );
 
     const renderedMeetups = screen.queryAllByRole("listitem");

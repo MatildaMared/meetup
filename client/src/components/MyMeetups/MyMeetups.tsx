@@ -36,7 +36,9 @@ function MyMeetups(props: Props) {
           ))}
       </MeetupWrapper>
       {filteredMeetups.length === 0 && (
-        <p>You need to be logged in to see meetups that you are hosting.</p>
+        <Message>
+          You need to be logged in to see meetups that you are hosting.
+        </Message>
       )}
     </Wrapper>
   );
@@ -47,6 +49,10 @@ const Wrapper = styled.section`
   flex-direction: column;
   align-items: center;
   flex: 3;
+`;
+
+const Message = styled.p`
+  padding-bottom: 200px;
 `;
 
 const MeetupWrapper = styled.ul`
