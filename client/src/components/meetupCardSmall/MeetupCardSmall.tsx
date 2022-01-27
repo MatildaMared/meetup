@@ -70,6 +70,11 @@ const MeetupCard = styled.li`
   border-radius: 1rem;
   padding: 2rem;
   color: #202020;
+  transition: all 0.3s;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.2);
+  }
 `;
 
 const Divider = styled.div`

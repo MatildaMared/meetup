@@ -48,6 +48,24 @@ describe("MeetupCardSmall component", () => {
     expect(screen.getByRole("img")).toBeInTheDocument();
   });
 
+  it("displays a slice of the description", () => {
+    render(<MeetupCardSmall meetup={singleMeetup} />);
+
+    expect(
+      screen.getByText(singleMeetup.description.slice(0, 110))
+    ).toBeInTheDocument();
+  });
+
+  it("displays number of users attending the meetup", () => {
+    render(<MeetupCardSmall meetup={singleMeetup} />);
+
+    const attendeesString = `${singleMeetup.attendees.length} ${
+      singleMeetup.attendees.length === 1 ? "person" : "people"
+    } attending`;
+
+    expect(screen.getByText(attendeesString)).toBeInTheDocument();
+  });
+
   it("redirects user to meetup page if element is clicked", () => {
     render(<MeetupCardSmall meetup={singleMeetup} />);
 
