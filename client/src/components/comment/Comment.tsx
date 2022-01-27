@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { createComment } from "../../services/meetupService";
-import {
-  getTokenFromLocalStorage,
-  getUserFromLocalStorage,
-} from "../../services/localStorageService";
+import { getTokenFromLocalStorage } from "../../services/localStorageService";
 import { UserComment } from "../../models/UserComment";
 import { Meetup } from "../../models/Meetup";
 import styled from "styled-components";
@@ -17,6 +14,7 @@ const Comment: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
   const [inputValue, setInputValue] = useState("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const userComments = meetup?.comments as UserComment[];
+  const token = getTokenFromLocalStorage();
   
   function displayErrorMessage(message: string) {
     setErrorMessage(message);
@@ -27,7 +25,6 @@ const Comment: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const token = getTokenFromLocalStorage();
     const newComment: string = e.target.firstChild.nextSibling.value;
 
     if (!token) {

@@ -95,6 +95,7 @@ describe("Testing for Comment-form", () => {
 //it("shows who posted the comment", () => {});
 //it("does not delete a comment when user is not owner of meetup or person who wrote the comment", () => {})
 //it("deletes a comment when valid user clicks the delete button", () => {})
+// textbox does not show if user is not logged in
 
 function createMeetup(): Meetup {
   return {
