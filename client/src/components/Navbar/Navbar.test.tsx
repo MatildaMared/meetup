@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { getTokenFromLocalStorage, getUserFromLocalStorage, saveUserInLocalStorage, saveTokenInLocalStorage } from "../../services/localStorageService";
+import {getTokenFromLocalStorage} from "../../services/localStorageService";
 import Navbar from "./Navbar";
 
 // Dummy fetch responses
@@ -15,19 +15,12 @@ let successfulFetchResponse = {
   },
 };
 
-let unsuccessfulFetchResponse = {
-  success: false,
-  error: "Error message",
-};
 
 // Set up mock for localStorageService
 
 jest.mock("../../services/localStorageService", () => {
   return {
-    saveUserInLocalStorage: jest.fn(),
-    saveTokenInLocalStorage: jest.fn(),
     getTokenFromLocalStorage: jest.fn(),
-    getUserFromLocalStorage: jest.fn(),
   };
 });
 
@@ -58,78 +51,67 @@ describe("navbar component", () => {
   });
 });
 
-// describe("if user is logged in", () => {
-//   beforeEach(() => {
-//     global.fetch = jest.fn(() =>
-//       Promise.resolve({
-//         json: () => Promise.resolve(successfulFetchResponse),
-//       })
-//     ) as jest.Mock<any>;
-  
-//   });
+describe("if user is logged in", () => {
+  beforeEach(() => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(successfulFetchResponse),
+      })
+    ) as jest.Mock<any>;
+  });
 
-//   it("does not show links Login and Sign up", async () => {
-  
-//     (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
-//       () => "token"
-//     );
-      
-//     render(<Navbar />);
+  it("does not show links Login and Sign up", () => {
+    (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
+      () => "token"
+    );
 
-//     await waitFor(() => {
-//       expect(screen.getByText("Login")).not.toBeInTheDocument();
-//       expect(screen.getByText("Sign up")).not.toBeInTheDocument();
-//     });
+    render(<Navbar />);
+    expect(screen.queryByText("Login")).toBe(null);
+    expect(screen.queryByText("Sign up")).toBe(null);
+  });
 
-//   });
+  it("shows links Home, Create Meetup and Logout", () => {
+    (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
+      () => "token"
+      );
+    render(<Navbar />);
 
-  // it("shows links Home, Create Meetup and Logout", () => {
-  //   (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
-  //     () => "token"
-  //     );
-  //   render(<Navbar />);
+    expect(screen.getByText("Home" )).toBeInTheDocument();
+    expect(screen.getByText("Create Meetup")).toBeInTheDocument();
+    expect(screen.getByText("Logout")).toBeInTheDocument();
+  });
 
-  //   expect(screen.getByRole("button", { name: "Home" })).toBeInTheDocument();
-  //   expect(screen.getByRole("button", { name: "Create Meetup" })).toBeInTheDocument();
-  //   expect(screen.getByRole("button", { name: "Logout" })).toBeInTheDocument();
-  // });
+  it("user is redirected to HomePage when clicks Logout", async () => {
+    (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
+      () => "token"
+    );
+    render(<Navbar />);
+    const logoutLink = screen.getByText("Logout");
+    userEvent.click(logoutLink);
 
-  // it("user is redirected to HomePage when click Logout", async () => {
-  //   (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
-  //     () => "token"
-  //   );
-  //   render(<Navbar />);
-  //   const logoutLink = screen.getByText("Logout");
-  //   userEvent.click(logoutLink);
+    await waitFor(() => {
+      expect(mockedNavigator).toHaveBeenCalledWith("/");
+    });
+  });
 
-  //   await waitFor(() => {
-  //     expect(mockedNavigator).toHaveBeenCalledWith("/");
-  //   });
-  // });
+  it("user is redirected to CreatePage when clicks Create Meetup", async () => {
+    (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
+      () => "token"
+      );
+      render(<Navbar />);
 
-  // it("user is redirected to CreatePage when click Create Meetup", async () => {
-  //   (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
-  //     () => "token"
-  //     );
-  //     render(<Navbar />);
+      const createLink = screen.getByText("Create Meetup");
+    userEvent.click(createLink);
 
-  //     const createLink = screen.getByText("Create Meetup");
-  //   userEvent.click(createLink);
+    await waitFor(() => {
+      expect(mockedNavigator).toHaveBeenCalledWith("/create");
+    });
+  });
 
-  //   await waitFor(() => {
-  //     expect(mockedNavigator).toHaveBeenCalledWith("/create");
-  //   });
-  // });
-
-
-  // it("localStorage is cleared when user logs out", () => {
-  //   render(<Navbar />, { wrapper: MemoryRouter });
-  // });
-
-//   afterAll(() => {
-//     jest.clearAllMocks();
-//   });
-// });
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+});
 
 describe("if user is not logged in", () => {
   it("shows links Home, Login, Sign up", () => {
