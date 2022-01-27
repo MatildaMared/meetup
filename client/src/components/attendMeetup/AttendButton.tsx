@@ -5,7 +5,6 @@ import {
 } from "../../services/localStorageService";
 import { attendMeetup, leaveMeetup } from "../../services/meetupService";
 import styled from "styled-components";
-import { Meetup } from "../../models/Meetup";
 
 interface Props {
   attending: boolean;
@@ -58,8 +57,8 @@ export default AttendButton;
 
 const Button = styled.button`
   position: absolute;
-  right: 18rem;
-  top: 28.9rem;
+  right: 1rem;
+  top: 3.4rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   z-index: 5;
   background-color: #474747;
