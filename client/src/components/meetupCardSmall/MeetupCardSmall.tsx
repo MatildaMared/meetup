@@ -5,7 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { Clock, MapPin } from "react-feather";
 import EditButton from "../editButton/EditButton";
 
-function MeetupCardSmall(props: { meetup: Meetup }) {
+interface Props {
+  meetup: Meetup;
+}
+
+function MeetupCardSmall(props: Props) {
   const { meetup } = props;
   const navigate = useNavigate();
 
@@ -16,15 +20,18 @@ function MeetupCardSmall(props: { meetup: Meetup }) {
 
   return (
     <MeetupCard key={meetup.id} onClick={redirectToMeetup}>
-      <MeetupAvatar src={meetup.imgUrl} alt={meetup.title} />
+      <ImgWrapper>
+        <MeetupImg src={meetup.imgUrl} alt={meetup.title} />
+      </ImgWrapper>
+      <Heading>{meetup.title}</Heading>
+      <EditButton meetup={meetup} />
       <MeetupInfo>
-        <h3>{meetup.title}</h3>
-        <EditButton meetup={meetup} />
+        <MapPin size={16} />
+        <p>{meetup.location}</p>
+      </MeetupInfo>
+      <MeetupInfo>
+        <Clock size={16} />
         <p>
-          <MapPin size={16} /> {meetup.location},
-        </p>
-        <p>
-          <Clock size={16} />
           {new Date(meetup.date).toLocaleString([], {
             weekday: "long",
             year: "numeric",
@@ -34,30 +41,47 @@ function MeetupCardSmall(props: { meetup: Meetup }) {
             minute: "2-digit",
           })}
         </p>
-        {/* {getUserId(meet.ownerId)}@{meet.location}{" "} */}
       </MeetupInfo>
     </MeetupCard>
   );
 }
 
 const MeetupCard = styled.li`
+  list-style-type: none;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* margin: 1rem; */
   cursor: pointer;
   background: rgba(0, 0, 0, 0.1);
   box-shadow: 0px 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
   border-radius: 1rem;
+  padding: 2rem;
+  color: #202020;
 `;
 
-const MeetupAvatar = styled.img`
-  padding: 2rem;
+const ImgWrapper = styled.div`
+  border-radius: 0.5rem;
+  overflow: hidden;
+`;
+
+const Heading = styled.h3`
+  margin: 1rem 0 0.5rem 0;
+  font-size: 1.8rem;
+`;
+
+const MeetupImg = styled.img`
+  width: 100%;
+  height: auto;
 `;
 
 const MeetupInfo = styled.div`
-  padding: 0 2rem 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: fit-content;
+  margin-bottom: 0.5rem;
+
+  & svg {
+    margin-right: 0.5rem;
+  }
 `;
 
 export default MeetupCardSmall;

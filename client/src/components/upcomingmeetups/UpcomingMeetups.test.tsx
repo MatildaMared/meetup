@@ -1,43 +1,44 @@
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import UpcomingMeetups from "./UpcomingMeetups";
+import { meetups } from "./../../dummyData/meetups";
 
-jest.mock("react-router-dom", () => {
+// Set up mock for localStorageService
+jest.mock("../../services/localStorageService", () => {
   return {
-    useNavigate: jest.fn(),
+    getUserFromLocalStorage: jest.fn(),
   };
 });
 
-// describe("Upcoming meetups component", () => {
-//   it("renders without crashing", () => {
-//     render(<UpcomingMeetups />);
-//   });
+// Set up mock for useNavigate from react-router-dom
+const mockedNavigator = jest.fn();
 
-//   it("displays heading with text 'Upcoming Meetups'", () => {
-//     render(<UpcomingMeetups />);
-//     const header = screen.getByRole("heading", { level: 2 });
-//     const text = "Upcoming Meetups";
-//     expect(header).toHaveTextContent(text);
-//   });
+jest.mock("react-router-dom", () => ({
+  useNavigate: () => mockedNavigator,
+}));
 
-//   it("displays meetupCards", () => {
-//     render(<UpcomingMeetups />);
-//     const listItems = screen.queryAllByRole("listitem");
-//     console.log(listItems)
-//     expect(listItems).not.toBeNull();
-//   });
+// Actual tests
+describe("UpcomingMeetups component", () => {
+  it("renders without crashing", () => {
+    render(<UpcomingMeetups meetups={meetups} />);
+  });
 
-//   it("displays title of meetup in every card", () => {
-//     render(<UpcomingMeetups />);
-//     const listItems = screen.queryAllByRole("listitem");
-//     const headers = screen.getAllByRole("heading", { level: 3 });
+  it("displays a title", () => {
+    render(<UpcomingMeetups meetups={meetups} />);
 
-//     expect(listItems).not.toBeNull();
-//     expect(headers).toBeInTheDocument();
-//     expect(listItems.length === headers.length).toBeTruthy();
-//   })
-// });
+    expect(screen.getByText(/Upcoming Meetups/i)).toBeInTheDocument();
+  });
 
-//displays address of meetup in card
-//dispalys time and date of meetup in card
-//links to single meetup page when user clicks card
+  it("displays only the meetups that has not happened yet", () => {
+    render(<UpcomingMeetups meetups={meetups} />);
+
+    const today = new Date();
+
+    const filteredMeetups = [...meetups].filter(
+      (meetup) => new Date(meetup.date) > today
+    );
+
+    const renderedMeetups = screen.queryAllByRole("listitem");
+
+    expect(renderedMeetups.length).toBe(filteredMeetups.length);
+  });
+});
