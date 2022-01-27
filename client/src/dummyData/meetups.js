@@ -3,6 +3,7 @@ export const singleMeetup = {
   ownerId: "1",
   category: "programming",
   description: "Description",
+  date: "2022-10-10T19:00:00",
   location: "Online",
   imgUrl:
     "https://images.unsplash.com/photo-1601933470096-0e34634ffcde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80",

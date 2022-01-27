@@ -19,7 +19,6 @@ let unsuccessfulFetchResponse = {
 };
 
 // Set up mock for useNavigate from react-router-dom
-
 const mockedNavigator = jest.fn();
 
 jest.mock("react-router-dom", () => ({
@@ -27,7 +26,6 @@ jest.mock("react-router-dom", () => ({
 }));
 
 // Set up mock for localStorageService
-
 jest.mock("../../services/localStorageService", () => {
   return {
     saveUserInLocalStorage: jest.fn(),
