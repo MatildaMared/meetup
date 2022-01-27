@@ -8,7 +8,6 @@ import { singleMeetup } from "../../dummyData/meetups";
 let meetupMock: Meetup;
 let setMeetupMock: jest.Mock;
 
-
 let successfulPostResponse = {
   success: true,
   meetup: singleMeetup,
@@ -99,35 +98,40 @@ describe("if comment was created succesfully", () => {
     (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
       () => "token"
     );
-    render(<Comment meetup={meetupMock} setMeetup={setMeetupMock}  />);
+    render(<Comment meetup={meetupMock} setMeetup={setMeetupMock} />);
     const button = screen.getByRole("button", { name: "Submit" });
     const inputElem = screen.getByRole("textbox");
     userEvent.type(inputElem, "Hello");
     userEvent.click(button);
-    
 
     await waitFor(() => {
       expect(inputElem).toHaveValue("");
     });
   });
 
-  // it("to call fetch when submitting", async () => {
-  //   (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
-  //     () => "token"
-  //   );
+  it("to call fetch when submitting", async () => {
+    (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
+      () => "token"
+    );
 
-  //   render(<Comment meetup={meetupMock} setMeetup={setMeetupMock} isLoggedIn={props.isLoggedIn}  />);
-  //   const button = screen.getByRole("button", { name: "Submit" });
-  //   const inputElem = screen.getByRole("textbox");
-  //   userEvent.type(inputElem, "This is a dummy comment");
-  //   userEvent.click(button);
+    render(<Comment meetup={meetupMock} setMeetup={setMeetupMock} />);
+    const button = screen.getByRole("button", { name: "Submit" });
+    const inputElem = screen.getByRole("textbox");
+    userEvent.type(inputElem, "This is a dummy comment");
+    userEvent.click(button);
 
-  //   //console.log(setMeetupMock.mock.calls[0]);
-    
-  //   await waitFor(() => {
-  //     expect(setMeetupMock.mock).toHaveBeenCalled();
-  //   });
-  // });
+    await waitFor(() => {
+      expect(setMeetupMock.mock.calls.length).toBe(1);
+    });
+
+    const firstCall = setMeetupMock.mock.calls[0];
+    const response = firstCall[0];
+
+    //test if the correct ID in the mock singleMeetup is returned
+    await waitFor(() => {
+      expect(response.id).toBe("234");
+    });
+  });
 
   afterAll(() => {
     jest.clearAllMocks();
@@ -148,4 +152,3 @@ function createMeetup(): Meetup {
     ownerId: "1",
   };
 }
-

@@ -18,12 +18,6 @@ const Comment: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
   const token = getTokenFromLocalStorage();
   const user = getUserFromLocalStorage();
 
-  console.log(userComments);
-  console.log(meetup);
-  console.log(user);
-  
-  
-
   function displayErrorMessage(message: string) {
     setErrorMessage(message);
     setTimeout(() => {
