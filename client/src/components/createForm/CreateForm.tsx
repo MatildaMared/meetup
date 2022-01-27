@@ -148,13 +148,19 @@ function CreateForm() {
 }
 
 const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  max-width: 500px;
+  width: 650px;
   margin: 0 auto;
   border: 1px solid #ddd;
   border-radius: 1rem;
   padding: 2rem;
+
+  @media (max-width: 700px) {
+    width: 500px;
+  }
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `;
 
 const Heading = styled.h1`
@@ -167,6 +173,7 @@ const Heading = styled.h1`
 
 const InputWrapper = styled.div`
   margin-bottom: 1rem;
+  width: 100%;
 
   & label {
     display: block;

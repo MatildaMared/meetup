@@ -40,7 +40,7 @@ function LoginForm() {
     } else if (data.success) {
       saveTokenInLocalStorage(data.token);
       saveUserInLocalStorage(data.user);
-      navigate("/");      
+      navigate("/");
     }
   }
 
@@ -90,11 +90,15 @@ function LoginForm() {
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  max-width: 400px;
+  width: 400px;
   margin: 0 auto;
   border: 1px solid #ddd;
   border-radius: 1rem;
   padding: 2rem;
+
+  @media (max-width: 700px) {
+    width: 300px;
+  }
 `;
 
 const Heading = styled.h1`

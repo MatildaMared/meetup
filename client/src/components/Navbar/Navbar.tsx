@@ -41,15 +41,19 @@ function Navbar() {
 }
 
 const NavbarWrapper = styled.nav`
-  background: #454545;
-  height: 75px;
+  background: rgba(46, 46, 46, 0.8);
+  backdrop-filter: blur(8px);
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  width: 100%;
 `;
 
 const ListWrapper = styled.ul`
   display: flex;
   justify-content: space-evenly;
   list-style-type: none;
-  padding-top: 20px;
+  padding: 1.5rem 0;
 `;
 
 const ListElement = styled.li`
