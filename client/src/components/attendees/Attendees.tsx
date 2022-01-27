@@ -3,10 +3,9 @@ import { Meetup } from "../../models/Meetup";
 import styled from "styled-components";
 interface Props {
   meetup: Meetup;
-  setMeetup: Function;
 }
 
-const Attendees: React.FC<Props> = ({ meetup, setMeetup }): JSX.Element => {
+const Attendees: React.FC<Props> = ({ meetup }): JSX.Element => {
   return (
     <>
       {meetup && (

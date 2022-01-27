@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { createComment } from "../../services/meetupService";
-import {
-  getTokenFromLocalStorage,
-  getUserFromLocalStorage,
-} from "../../services/localStorageService";
+import { getTokenFromLocalStorage } from "../../services/localStorageService";
 import { UserComment } from "../../models/UserComment";
 import { Meetup } from "../../models/Meetup";
 import { User } from "../../models/User";
@@ -11,15 +8,10 @@ import styled from "styled-components";
 
 interface MeetupProps {
   meetup: Meetup;
-  user: User;
   setMeetup: Function;
 }
 
-const Comment: React.FC<MeetupProps> = ({
-  meetup,
-  user,
-  setMeetup,
-}): JSX.Element => {
+const Comment: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
   const [inputValue, setInputValue] = useState("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const userComments = meetup?.comments as UserComment[];

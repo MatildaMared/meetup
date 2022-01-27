@@ -70,12 +70,8 @@ function MeetupPage() {
         />
       )}
       <MeetupCard meetup={singleMeetup as Meetup} user={user as User} />
-      <Comment
-        meetup={singleMeetup as Meetup}
-        user={user as User}
-        setMeetup={setSingleMeetup}
-      />
-      <Attendees meetup={singleMeetup as Meetup} setMeetup={setSingleMeetup} />
+      <Comment meetup={singleMeetup as Meetup} setMeetup={setSingleMeetup} />
+      <Attendees meetup={singleMeetup as Meetup} />
     </StyledPage>
   );
 }
@@ -84,5 +80,5 @@ export default MeetupPage;
 
 const StyledPage = styled.div`
   position: relative;
-  width: 100%;
+  margin: 0 auto;
 `;

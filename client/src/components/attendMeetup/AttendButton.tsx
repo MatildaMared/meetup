@@ -5,6 +5,7 @@ import {
 } from "../../services/localStorageService";
 import { attendMeetup, leaveMeetup } from "../../services/meetupService";
 import styled from "styled-components";
+import { Meetup } from "../../models/Meetup";
 
 interface Props {
   attending: boolean;
@@ -27,8 +28,9 @@ function AttendButton({ attending, setAttending, setMeetup }: Props) {
       );
       console.log("attending!");
       setAttending(true);
-      console.log(res);
-      // setMeetup(res);
+      if (res.success === true) {
+        setMeetup(res.meetup);
+      }
     } else if (attending === true && token && thisUser) {
       const res = await leaveMeetup(
         meetupid as string,
@@ -37,7 +39,9 @@ function AttendButton({ attending, setAttending, setMeetup }: Props) {
       );
       console.log("Leave Meetup");
       setAttending(false);
-      // setMeetup(res);
+      if (res.success === true) {
+        setMeetup(res.meetup);
+      }
     }
   };
 
@@ -53,9 +57,8 @@ function AttendButton({ attending, setAttending, setMeetup }: Props) {
 export default AttendButton;
 
 const Button = styled.button`
-  display: block;
   position: absolute;
-  right: 16.4rem;
+  right: 18rem;
   top: 28.9rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   z-index: 5;
