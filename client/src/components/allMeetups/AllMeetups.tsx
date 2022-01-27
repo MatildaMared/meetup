@@ -3,7 +3,11 @@ import { Meetup } from "../../models/Meetup";
 import MeetupCardSmall from "../meetupCardSmall/MeetupCardSmall";
 import styled from "styled-components";
 
-function AllMeetups(props: { meetups: [] | [Meetup] }) {
+interface Props {
+  meetups: Meetup[] | [];
+}
+
+function AllMeetups(props: Props) {
   const meetups = props.meetups;
   const [filteredMeetups, setFilteredMeetups] = useState<[] | [Meetup]>([]);
 
