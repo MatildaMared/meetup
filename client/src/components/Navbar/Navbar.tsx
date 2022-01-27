@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
+import { getTokenFromLocalStorage } from "../../services/localStorageService";
 
 function Navbar() {
   const navigate = useNavigate();
+  const token = getTokenFromLocalStorage();
 
   function logoutHandler() {
     localStorage.removeItem("meetupToken");
@@ -15,18 +16,18 @@ function Navbar() {
     <NavbarWrapper>
       <ListWrapper>
         <ListElement onClick={() => navigate("/")}>Home</ListElement>
-        {!localStorage.meetupToken && (
+        {!token && (
           <ListElement onClick={() => navigate("/login")}>Login</ListElement>
         )}
-        {!localStorage.meetupToken && (
+        {!token && (
           <ListElement onClick={() => navigate("/signup")}>Sign up</ListElement>
         )}
-        {localStorage.meetupToken && (
+        {token && (
           <ListElement onClick={() => navigate("/create")}>
               Create Meetup           
           </ListElement>
         )}
-        {localStorage.meetupToken && (
+        {token && (
           <ListElement onClick={() => logoutHandler()}>
               Logout
           </ListElement>
