@@ -1,6 +1,7 @@
 import { Meetup } from "../../models/Meetup";
 import { User } from "../../models/User";
 import styled from "styled-components";
+import EditButton from "../editButton/EditButton";
 
 interface MeetupProps {
   meetup: Meetup;
@@ -12,6 +13,7 @@ const MeetupCard: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
     <div>
       {meetup && (
         <StyledCard>
+          <EditButton meetup={meetup} />
           <Image src={meetup.imgUrl} alt="" />
           <Info>
             <h3>{meetup.title}</h3>
@@ -40,9 +42,7 @@ const MeetupCard: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
 export default MeetupCard;
 
 const StyledCard = styled.div`
-  @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap");
-
-  font-family: "Roboto", sans-serif;
+  position: relative;
   display: flex;
   max-width: 60vw;
   padding: 3rem;

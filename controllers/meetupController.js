@@ -130,7 +130,11 @@ async function addComment(req, res, next) {
 
 		comment.userId = req.userId;
 
+		const user = await User.findById(req.userId);
+
 		comment.id = new mongoose.Types.ObjectId();
+
+		comment.name = user.firstName;
 
 		meetup.comments = [...meetup.comments, comment];
 

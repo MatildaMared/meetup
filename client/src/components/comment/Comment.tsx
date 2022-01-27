@@ -43,19 +43,22 @@ const Comment: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
 
   return (
     <>
-      <StyledDiv>
-        <StyledForm onSubmit={(e) => handleSubmit(e)}>
-          <h3>Comment</h3>
-          <input
-            type="text"
-            placeholder="Enter your comment here..."
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-          <button type="submit">Submit</button>
-        </StyledForm>
-        <p>{errorMessage}</p>
-      </StyledDiv>
+      {token ? (
+        <StyledDiv>
+          <StyledForm onSubmit={(e) => handleSubmit(e)}>
+            <h3>Comment</h3>
+            <input
+              type="text"
+              placeholder="Enter your comment here..."
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+            <button type="submit">Submit</button>
+          </StyledForm>
+          <p>{errorMessage}</p>
+        </StyledDiv>
+      ) : null}
+
       <StyledDiv>
         <h3>Comments</h3>
         {userComments?.length === 0 && (
@@ -65,6 +68,7 @@ const Comment: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
           userComments.map((comment) => (
             <CommentCard key={comment.id}>
               <p>{comment.comment}</p>
+              <small>by {comment.name}</small>
             </CommentCard>
           ))}
       </StyledDiv>
@@ -78,9 +82,13 @@ const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
   width: 90vw;
-  margin: 0 auto;
+  margin: 0 auto 10px;
   padding: 3rem 5rem;
   border: 2px solid lightgrey;
+
+  h3 {
+    color: lightblue;
+  }
 `;
 
 const StyledForm = styled.form`
@@ -115,4 +123,5 @@ const StyledForm = styled.form`
 const CommentCard = styled.article`
   border: 1px solid black;
   padding: 1rem 2rem;
+  border-radius: 4px;
 `;

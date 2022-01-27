@@ -9,7 +9,6 @@ function AllMeetups(props: { meetups: [] | [Meetup] }) {
 
   useEffect(() => {
     if (meetups.length > 0) {
-      // sort meetups alphabetically by title
       const filtered = meetups.sort((a, b) => {
         if (a.title < b.title) {
           return -1;

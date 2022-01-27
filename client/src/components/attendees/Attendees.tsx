@@ -48,17 +48,19 @@ const StyledList = styled.ul`
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background-color: #eee;
     font-size: 1.6rem;
-    color: lightblue;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px solid transparent;
+    transition: all 0.3s;
+    background-color: #474747;
+    color: #eee;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
 
     &:hover {
-      border: 2px solid lightblue;
       box-shadow: 0 0 7px rgba(0, 0, 0, 0.5);
+      /* transform: scale(1.01); */
     }
   }
 `;
