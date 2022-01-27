@@ -168,7 +168,7 @@ async function deleteComment(req, res, next) {
 			return next(new ErrorResponse("Comment not found", 404));
 		}
 
-		if (comment.userId !== req.userId || meetup.ownerId !== req.userId) {
+		if (comment.userId.toString() !== req.userId && meetup.ownerId !== req.userId) {		
 			return next(new ErrorResponse("Not authorized", 401));
 		}
 

@@ -46,7 +46,7 @@ describe("Testing for the MeetupPage", () => {
     render(<MeetupPage />);
   });
 
-  it("shows a attend-button on the page if logged in", () => {
+  it("shows an attend-button on the page if logged in", () => {
     (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
       () => "token"
     );
@@ -55,15 +55,24 @@ describe("Testing for the MeetupPage", () => {
     expect(button).toBeInTheDocument();
   });
 
-  // it("shows a leave-button on the page if logged in an already attending", () => {
-  //   (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
-  //     () => "token"
-  //   );
-  //   render(<MeetupPage />);
-  //   const button = screen.getByText(/Attend Meetup/i);
-  //   userEvent.click(button);
-  //   expect(button).toHaveTextContent(/Unattend Meetup/i);
-  // });
+  it("does not shows an attend-button on the page if not logged in", () => {
+    (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
+      () => ""
+    );
+    render(<MeetupPage />);
+    const button = screen.queryByText(/Attend Meetup/i);
+    expect(button).not.toBeInTheDocument();
+  });
+
+  it("shows a leave-button on the page if logged in an already attending", () => {
+    (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
+      () => "token"
+    );
+    render(<MeetupPage />);
+    const button = screen.getByText(/Attend Meetup/i);
+    userEvent.click(button);
+    expect(button).toHaveTextContent(/Unattend Meetup/i);
+  });
 
   // it("check that the MeetupCard is renderd in the MeetupPate", () => {
   //   const { getByText } = render(<MeetupPage />);

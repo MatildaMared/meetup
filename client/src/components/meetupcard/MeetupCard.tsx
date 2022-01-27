@@ -2,18 +2,37 @@ import { Meetup } from "../../models/Meetup";
 import { User } from "../../models/User";
 import styled from "styled-components";
 import EditButton from "../editButton/EditButton";
+import AttendButton from "../attendMeetup/AttendButton";
 
 interface MeetupProps {
   meetup: Meetup;
   user: User;
+  attending: boolean;
+  setAttending: Function;
+  isLoggedIn: boolean;
+  setSingleMeetup: Function;
 }
 
-const MeetupCard: React.FC<MeetupProps> = ({ meetup, user }): JSX.Element => {
+const MeetupCard: React.FC<MeetupProps> = ({
+  meetup,
+  user,
+  attending,
+  setAttending,
+  isLoggedIn,
+  setSingleMeetup,
+}): JSX.Element => {
   return (
     <div>
       {meetup && (
         <StyledCard>
           <EditButton meetup={meetup} />
+          {isLoggedIn && (
+            <AttendButton
+              attending={attending}
+              setAttending={setAttending}
+              setMeetup={setSingleMeetup}
+            />
+          )}
           <Image src={meetup.imgUrl} alt="" />
           <Info>
             <h3>{meetup.title}</h3>

@@ -10,7 +10,6 @@ import {
 } from "../../services/localStorageService";
 import MeetupCard from "../../components/meetupcard/MeetupCard";
 import Comment from "../../components/comment/Comment";
-import AttendButton from "../../components/attendMeetup/AttendButton";
 import Attendees from "../../components/attendees/Attendees";
 import styled from "styled-components";
 
@@ -62,14 +61,14 @@ function MeetupPage() {
 
   return (
     <StyledPage>
-      {isLoggedIn && (
-        <AttendButton
-          attending={attending}
-          setAttending={setAttending}
-          setMeetup={setSingleMeetup}
-        />
-      )}
-      <MeetupCard meetup={singleMeetup as Meetup} user={user as User} />
+      <MeetupCard
+        meetup={singleMeetup as Meetup}
+        user={user as User}
+        attending={attending}
+        setAttending={setAttending}
+        isLoggedIn={isLoggedIn}
+        setSingleMeetup={setSingleMeetup}
+      />
       <Comment meetup={singleMeetup as Meetup} setMeetup={setSingleMeetup} />
       <Attendees meetup={singleMeetup as Meetup} />
     </StyledPage>

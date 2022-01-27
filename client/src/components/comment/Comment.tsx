@@ -4,6 +4,7 @@ import { getTokenFromLocalStorage } from "../../services/localStorageService";
 import { UserComment } from "../../models/UserComment";
 import { Meetup } from "../../models/Meetup";
 import styled from "styled-components";
+import DeleteCommentButton from "../deleteCommentButton/DeleteCommentButton";
 
 interface MeetupProps {
   meetup: Meetup;
@@ -15,7 +16,7 @@ const Comment: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const userComments = meetup?.comments as UserComment[];
   const token = getTokenFromLocalStorage();
-  
+
   function displayErrorMessage(message: string) {
     setErrorMessage(message);
     setTimeout(() => {
@@ -35,7 +36,6 @@ const Comment: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
     } else {
       const fetchResponse = await createComment(meetup.id, token, newComment);
       setMeetup(fetchResponse.meetup);
-
       setInputValue("");
       return fetchResponse;
     }
@@ -66,9 +66,16 @@ const Comment: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
         )}
         {userComments?.length > 0 &&
           userComments.map((comment) => (
-            <CommentCard key={comment.id}>
-              <p>{comment.comment}</p>
-              <small>by {comment.name}</small>
+            <CommentCard key={comment.id} data-id={comment.id}>
+              <CommentAndBy>
+                <p>{comment.comment}</p>
+                <small>by {comment.name}</small>
+              </CommentAndBy>
+
+              <DeleteCommentButton
+                meetup={meetup as Meetup}
+                setMeetup={setMeetup}
+              />
             </CommentCard>
           ))}
       </StyledDiv>
@@ -120,8 +127,15 @@ const StyledForm = styled.form`
   }
 `;
 
+const CommentAndBy = styled.div `
+  min-width: 300px;
+` 
+
 const CommentCard = styled.article`
   border: 1px solid black;
   padding: 1rem 2rem;
   border-radius: 4px;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
 `;

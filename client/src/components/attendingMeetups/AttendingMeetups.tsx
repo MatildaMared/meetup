@@ -4,7 +4,11 @@ import MeetupCardSmall from "../meetupCardSmall/MeetupCardSmall";
 import styled from "styled-components";
 import { getUserFromLocalStorage } from "../../services/localStorageService";
 
-function AttendingMeetups(props: { meetups: [] | [Meetup] }) {
+interface Props {
+  meetups: Meetup[] | [];
+}
+
+function AttendingMeetups(props: Props) {
   const meetups = props.meetups;
   const [filteredMeetups, setFilteredMeetups] = useState<[] | [Meetup]>([]);
   const user = getUserFromLocalStorage();
@@ -30,6 +34,11 @@ function AttendingMeetups(props: { meetups: [] | [Meetup] }) {
             <MeetupCardSmall key={meetup.id} meetup={meetup} />
           ))}
       </MeetupWrapper>
+      {filteredMeetups.length === 0 && (
+        <Message>
+          You need to be logged in to see meetups that you are attending.
+        </Message>
+      )}
     </Wrapper>
   );
 }
@@ -39,6 +48,10 @@ const Wrapper = styled.section`
   flex-direction: column;
   align-items: center;
   flex: 3;
+`;
+
+const Message = styled.p`
+  padding-bottom: 200px;
 `;
 
 const MeetupWrapper = styled.ul`
