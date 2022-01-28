@@ -8,7 +8,9 @@ function CreateForm() {
   const [title, setTitle] = useState<string>("");
   const [category, setCategory] = useState<string>("gaming");
   const [description, setDescription] = useState<string>("");
-  const [date, setDate] = useState<string>("2022-01-01");
+  const [date, setDate] = useState<string>(
+    new Date().toISOString().split("T")[0]
+  );
   const [time, setTime] = useState<string>("19:00");
   const [location, setLocation] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string>("https://");

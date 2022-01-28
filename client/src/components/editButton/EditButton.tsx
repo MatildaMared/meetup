@@ -41,7 +41,6 @@ function EditButton(props: { meetup: Meetup }) {
         "Are you sure you want to delete this meetup? You cannot undo this decision later."
       )
     ) {
-      console.log("Will try do delete");
       const response = await deleteMeetup(token as string, id);
       if (response.success) {
         if (location.pathname === "/") {
