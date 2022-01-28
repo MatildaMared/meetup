@@ -6,7 +6,7 @@ const setAttendingMock = jest.fn();
 
 const testData = true;
 
-describe("Tests For attending meetup-button", () => {
+describe("Tests For AttendButton", () => {
   it("render without crashing", () => {
     render(
       <AttendButton
@@ -17,7 +17,7 @@ describe("Tests For attending meetup-button", () => {
     );
   });
 
-  it("show an button where you can attend the meetup", async () => {
+  it("show an Attend-button where you can attend the meetup", () => {
     render(
       <AttendButton
         attending={testData}
@@ -29,7 +29,7 @@ describe("Tests For attending meetup-button", () => {
     expect(button).toBeInTheDocument();
   });
 
-  it('show a button with "leave meeting" if clicked to attend the event', async () => {
+  it("replace the text from Attend to Unattend when clicked", () => {
     render(
       <AttendButton
         attending={testData}
