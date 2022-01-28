@@ -93,14 +93,27 @@ export async function createComment(
 export async function deleteComment(
   meetupId: string,
   token: string,
-  commentId: string,
+  commentId: string
 ) {
+  const response = await fetch(
+    `/api/meetups/${meetupId}/comments/${commentId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  const data = await response.json();
+  return data;
+}
 
-  const response = await fetch(`/api/meetups/${meetupId}/comments/${commentId}`, {
-    method: 'DELETE',
+export async function deleteMeetup(token: string, meetupId: string) {
+  const response = await fetch(`/api/meetups/${meetupId}`, {
+    method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
-    }
+    },
   });
   const data = await response.json();
   return data;

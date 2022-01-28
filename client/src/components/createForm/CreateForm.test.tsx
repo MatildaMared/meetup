@@ -2,14 +2,13 @@ import { render, screen, waitFor } from "@testing-library/react";
 import CreateForm from "./CreateForm";
 import userEvent from "@testing-library/user-event";
 import { getTokenFromLocalStorage } from "../../services/localStorageService";
-import { singleMeetup } from "./../../dummyData/meetups";
 import { singleUser } from "./../../dummyData/users";
 
 // Dummy fetch responses
 
 let successfulFetchResponse = {
   success: true,
-  meetup: singleMeetup,
+  message: "Meetup deleted",
   user: singleUser,
 };
 

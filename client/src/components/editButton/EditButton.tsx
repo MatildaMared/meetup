@@ -7,17 +7,7 @@ import {
 import { useNavigate, useLocation } from "react-router-dom";
 import { Meetup } from "../../models/Meetup";
 import { Edit, XSquare } from "react-feather";
-
-async function deleteMeetup(token: string, meetupId: string) {
-  const response = await fetch(`/api/meetups/${meetupId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const data = await response.json();
-  return data;
-}
+import { deleteMeetup } from "../../services/meetupService";
 
 function EditButton(props: { meetup: Meetup }) {
   const { ownerId, date, id } = props.meetup;
@@ -29,10 +19,12 @@ function EditButton(props: { meetup: Meetup }) {
   const token = getTokenFromLocalStorage();
   const userId = user?.id;
 
-  const redirectToEditPage = (e: any) => {
+  function redirectToEditPage(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) {
     e.stopPropagation();
     navigate(`/meetups/${id}/edit`);
-  };
+  }
 
   const onDeleteHandler = async (e: any) => {
     e.stopPropagation();
