@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Meetup } from "../../models/Meetup";
 import { useNavigate } from "react-router-dom";
 import { Clock, MapPin, Users } from "react-feather";
-import EditButton from "../editButton/EditButton";
+import OwnerButtons from "../ownerButtons/OwnerButtons";
 
 interface Props {
   meetup: Meetup;
@@ -30,7 +30,7 @@ function MeetupCardSmall(props: Props) {
           : meetup.description}
       </DescriptionSlice>
       <Divider />
-      <EditButton meetup={meetup} />
+      <OwnerButtons meetup={meetup} />
       <MeetupInfo>
         <MapPin size={16} strokeWidth={2} />
         <p>{meetup.location}</p>

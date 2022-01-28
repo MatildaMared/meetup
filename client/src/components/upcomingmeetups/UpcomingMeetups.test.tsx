@@ -6,6 +6,7 @@ import { meetups } from "./../../dummyData/meetups";
 jest.mock("../../services/localStorageService", () => {
   return {
     getUserFromLocalStorage: jest.fn(),
+    getTokenFromLocalStorage: jest.fn()
   };
 });
 

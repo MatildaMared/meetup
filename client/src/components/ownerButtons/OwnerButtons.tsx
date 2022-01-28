@@ -9,7 +9,7 @@ import { Meetup } from "../../models/Meetup";
 import { Edit, XSquare } from "react-feather";
 import { deleteMeetup } from "../../services/meetupService";
 
-function EditButton(props: { meetup: Meetup }) {
+function OwnerButtons(props: { meetup: Meetup }) {
   const { ownerId, date, id } = props.meetup;
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const [isOwner, setIsOwner] = useState<boolean>(false);
@@ -113,4 +113,4 @@ const DeleteButton = styled(Button)`
   }
 `;
 
-export default EditButton;
+export default OwnerButtons;

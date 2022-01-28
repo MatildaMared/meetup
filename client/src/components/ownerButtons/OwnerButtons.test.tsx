@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import EditButton from "./EditButton";
+import OwnerButtons from "./OwnerButtons";
 import { singleMeetup } from "../../dummyData/meetups";
 import {
   getUserFromLocalStorage,
@@ -47,11 +47,11 @@ global.confirm = () => true;
 // Actual tests
 describe("EditButton component", () => {
   it("renders without crashing", () => {
-    render(<EditButton meetup={singleMeetup} />);
+    render(<OwnerButtons meetup={singleMeetup} />);
   });
 
   it("displays no buttons if user is not logged in", () => {
-    render(<EditButton meetup={singleMeetup} />);
+    render(<OwnerButtons meetup={singleMeetup} />);
 
     const buttons = screen.queryByRole("button");
 
@@ -67,7 +67,7 @@ describe("EditButton component", () => {
     });
 
     it("displays an edit button", () => {
-      render(<EditButton meetup={singleMeetup} />);
+      render(<OwnerButtons meetup={singleMeetup} />);
 
       const button = screen.queryByRole("button", { name: "Edit" });
 
@@ -75,7 +75,7 @@ describe("EditButton component", () => {
     });
 
     it("calls the useNavigate function with correct arguments if user clicks the edit button", () => {
-      render(<EditButton meetup={singleMeetup} />);
+      render(<OwnerButtons meetup={singleMeetup} />);
 
       const button = screen.getByRole("button", { name: "Edit" });
 
@@ -87,7 +87,7 @@ describe("EditButton component", () => {
     });
 
     it("displays a delete button", () => {
-      render(<EditButton meetup={singleMeetup} />);
+      render(<OwnerButtons meetup={singleMeetup} />);
 
       const button = screen.queryByRole("button", { name: "Delete" });
 
@@ -102,7 +102,7 @@ describe("EditButton component", () => {
         () => successfulFetchResponse
       );
 
-      render(<EditButton meetup={singleMeetup} />);
+      render(<OwnerButtons meetup={singleMeetup} />);
 
       const deleteButton = screen.getByRole("button", { name: "Delete" });
       userEvent.click(deleteButton);
