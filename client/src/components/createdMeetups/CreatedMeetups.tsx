@@ -8,7 +8,7 @@ interface Props {
   meetups: Meetup[] | [];
 }
 
-function MyMeetups(props: Props) {
+function CreatedMeetups(props: Props) {
   const meetups = props.meetups;
   const [filteredMeetups, setFilteredMeetups] = useState<[] | Meetup[]>([]);
   const user = getUserFromLocalStorage();
@@ -70,4 +70,4 @@ const MeetupWrapper = styled.ul`
   }
 `;
 
-export default MyMeetups;
+export default CreatedMeetups;
