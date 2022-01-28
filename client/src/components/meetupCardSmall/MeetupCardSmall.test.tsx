@@ -2,11 +2,13 @@ import { render, screen } from "@testing-library/react";
 import MeetupCardSmall from "./MeetupCardSmall";
 import { singleMeetup } from "./../../dummyData/meetups";
 
-// Set up mock for useNavigate from react-router-dom
+// Set up mock for useNavigate and useLocation from react-router-dom
 const mockedNavigator = jest.fn();
+const mockedLocation = jest.fn();
 
 jest.mock("react-router-dom", () => ({
   useNavigate: () => mockedNavigator,
+  useLocation: () => mockedLocation,
 }));
 
 // Actual tests
@@ -46,6 +48,24 @@ describe("MeetupCardSmall component", () => {
     render(<MeetupCardSmall meetup={singleMeetup} />);
 
     expect(screen.getByRole("img")).toBeInTheDocument();
+  });
+
+  it("displays a slice of the description", () => {
+    render(<MeetupCardSmall meetup={singleMeetup} />);
+
+    expect(
+      screen.getByText(singleMeetup.description.slice(0, 110))
+    ).toBeInTheDocument();
+  });
+
+  it("displays number of users attending the meetup", () => {
+    render(<MeetupCardSmall meetup={singleMeetup} />);
+
+    const attendeesString = `${singleMeetup.attendees.length} ${
+      singleMeetup.attendees.length === 1 ? "person" : "people"
+    } attending`;
+
+    expect(screen.getByText(attendeesString)).toBeInTheDocument();
   });
 
   it("redirects user to meetup page if element is clicked", () => {

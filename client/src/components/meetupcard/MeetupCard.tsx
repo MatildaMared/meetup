@@ -1,7 +1,7 @@
 import { Meetup } from "../../models/Meetup";
 import { User } from "../../models/User";
 import styled from "styled-components";
-import EditButton from "../editButton/EditButton";
+import OwnerButtons from "../ownerButtons/OwnerButtons";
 import AttendButton from "../attendMeetup/AttendButton";
 import MeetupInfo from "../meetupInfo/MeetupInfo";
 
@@ -26,7 +26,7 @@ const MeetupCard: React.FC<MeetupProps> = ({
     <>
       {meetup && (
         <StyledCard>
-          <EditButton meetup={meetup} />
+          <OwnerButtons meetup={meetup} />
           {isLoggedIn && (
             <AttendButton
               attending={attending}

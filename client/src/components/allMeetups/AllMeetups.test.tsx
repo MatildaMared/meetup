@@ -2,12 +2,13 @@ import { render, screen } from "@testing-library/react";
 import AllMeetups from "./AllMeetups";
 import { meetups } from "../../dummyData/meetups";
 
-// Set up mock for useNavigate from react-router-dom
-
+// Set up mock for useNavigate and useLocation from react-router-dom
 const mockedNavigator = jest.fn();
+const mockedLocation = jest.fn();
 
 jest.mock("react-router-dom", () => ({
   useNavigate: () => mockedNavigator,
+  useLocation: () => mockedLocation,
 }));
 
 describe("AllMeetups component", () => {

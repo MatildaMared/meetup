@@ -8,7 +8,9 @@ function CreateForm() {
   const [title, setTitle] = useState<string>("");
   const [category, setCategory] = useState<string>("gaming");
   const [description, setDescription] = useState<string>("");
-  const [date, setDate] = useState<string>("2022-01-01");
+  const [date, setDate] = useState<string>(
+    new Date().toISOString().split("T")[0]
+  );
   const [time, setTime] = useState<string>("19:00");
   const [location, setLocation] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string>("https://");
@@ -148,13 +150,19 @@ function CreateForm() {
 }
 
 const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  max-width: 500px;
+  width: 650px;
   margin: 0 auto;
   border: 1px solid #ddd;
   border-radius: 1rem;
   padding: 2rem;
+
+  @media (max-width: 700px) {
+    width: 500px;
+  }
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `;
 
 const Heading = styled.h1`
@@ -167,6 +175,7 @@ const Heading = styled.h1`
 
 const InputWrapper = styled.div`
   margin-bottom: 1rem;
+  width: 100%;
 
   & label {
     display: block;

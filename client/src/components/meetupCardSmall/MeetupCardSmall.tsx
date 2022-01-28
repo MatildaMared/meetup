@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { Meetup } from "../../models/Meetup";
 import { useNavigate } from "react-router-dom";
-import { Clock, MapPin } from "react-feather";
-import EditButton from "../editButton/EditButton";
+import { Clock, MapPin, Users } from "react-feather";
+import OwnerButtons from "../ownerButtons/OwnerButtons";
 
 interface Props {
   meetup: Meetup;
@@ -24,13 +24,19 @@ function MeetupCardSmall(props: Props) {
         <MeetupImg src={meetup.imgUrl} alt={meetup.title} />
       </ImgWrapper>
       <Heading>{meetup.title}</Heading>
-      <EditButton meetup={meetup} />
+      <DescriptionSlice>
+        {meetup.description.length > 110
+          ? meetup.description.slice(0, 110) + "..."
+          : meetup.description}
+      </DescriptionSlice>
+      <Divider />
+      <OwnerButtons meetup={meetup} />
       <MeetupInfo>
-        <MapPin size={16} />
+        <MapPin size={16} strokeWidth={2} />
         <p>{meetup.location}</p>
       </MeetupInfo>
       <MeetupInfo>
-        <Clock size={16} />
+        <Clock size={16} strokeWidth={2} />
         <p>
           {new Date(meetup.date).toLocaleString([], {
             weekday: "long",
@@ -40,6 +46,15 @@ function MeetupCardSmall(props: Props) {
             hour: "2-digit",
             minute: "2-digit",
           })}
+        </p>
+      </MeetupInfo>
+      <MeetupInfo>
+        <Users size={16} strokeWidth={2} />
+        <p>
+          {meetup.attendees.length}{" "}
+          {meetup.attendees.length === 1
+            ? " person attending"
+            : " people attending"}
         </p>
       </MeetupInfo>
     </MeetupCard>
@@ -55,6 +70,24 @@ const MeetupCard = styled.li`
   border-radius: 1rem;
   padding: 2rem;
   color: #202020;
+  transition: all 0.3s;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.2);
+  }
+`;
+
+const Divider = styled.div`
+  width: 100%;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.07);
+  margin: 0 auto;
+  margin-bottom: 1rem;
+`;
+
+const DescriptionSlice = styled.p`
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
 `;
 
 const ImgWrapper = styled.div`
@@ -81,6 +114,7 @@ const MeetupInfo = styled.div`
 
   & svg {
     margin-right: 0.5rem;
+    color: #5b5b5b;
   }
 `;
 

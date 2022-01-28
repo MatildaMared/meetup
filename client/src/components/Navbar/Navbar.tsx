@@ -1,15 +1,20 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components/macro";
 import { getTokenFromLocalStorage } from "../../services/localStorageService";
 
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const token = getTokenFromLocalStorage();
 
   function logoutHandler() {
     localStorage.removeItem("meetupToken");
     localStorage.removeItem("meetupUser");
-    navigate("/");
+    if (location.pathname === "/") {
+      window.location.reload();
+    } else {
+      navigate("/");
+    }
   }
 
   return (
@@ -24,13 +29,11 @@ function Navbar() {
         )}
         {token && (
           <ListElement onClick={() => navigate("/create")}>
-              Create Meetup           
+            Create Meetup
           </ListElement>
         )}
         {token && (
-          <ListElement onClick={() => logoutHandler()}>
-              Logout
-          </ListElement>
+          <ListElement onClick={() => logoutHandler()}>Logout</ListElement>
         )}
       </ListWrapper>
     </NavbarWrapper>
@@ -38,15 +41,19 @@ function Navbar() {
 }
 
 const NavbarWrapper = styled.nav`
-  background: #454545;
-  height: 75px;
+  background: rgba(46, 46, 46, 0.8);
+  backdrop-filter: blur(8px);
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  width: 100%;
 `;
 
 const ListWrapper = styled.ul`
   display: flex;
   justify-content: space-evenly;
   list-style-type: none;
-  padding-top: 20px;
+  padding: 1.5rem 0;
 `;
 
 const ListElement = styled.li`

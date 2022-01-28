@@ -6,14 +6,17 @@ import { meetups } from "./../../dummyData/meetups";
 jest.mock("../../services/localStorageService", () => {
   return {
     getUserFromLocalStorage: jest.fn(),
+    getTokenFromLocalStorage: jest.fn()
   };
 });
 
-// Set up mock for useNavigate from react-router-dom
+// Set up mock for useNavigate and useLocation from react-router-dom
 const mockedNavigator = jest.fn();
+const mockedLocation = jest.fn();
 
 jest.mock("react-router-dom", () => ({
   useNavigate: () => mockedNavigator,
+  useLocation: () => mockedLocation,
 }));
 
 // Actual tests

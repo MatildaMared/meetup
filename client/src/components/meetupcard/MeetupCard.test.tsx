@@ -30,10 +30,13 @@ jest.mock("../attendMeetup/AttendButton", () => {
   };
 });
 
+// Set up mock for useNavigate and useLocation from react-router-dom
 const mockedNavigator = jest.fn();
+const mockedLocation = jest.fn();
 
 jest.mock("react-router-dom", () => ({
   useNavigate: () => mockedNavigator,
+  useLocation: () => mockedLocation,
 }));
 
 describe("Testing for MeetupCard", () => {

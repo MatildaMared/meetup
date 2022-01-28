@@ -6,6 +6,7 @@ import {
   getTokenFromLocalStorage,
   getUserFromLocalStorage,
 } from "../../services/localStorageService";
+import Header from "./../../components/header/Header";
 
 async function updateMeetup(newMeetup: object, id: string, token: string) {
   const response = await fetch(`/api/meetups/${id}`, {
@@ -100,84 +101,87 @@ function EditPage() {
   }, []);
 
   return (
-    <Wrapper>
-      <Form onSubmit={onSubmitHandler}>
-        <Heading>Edit Meetup</Heading>
-        <InputWrapper>
-          <label htmlFor="title">Title</label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <label htmlFor="category">Category</label>
-          <select
-            name="category"
-            id="category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value="gaming">Gaming</option>
-            <option value="programming">Programming</option>
-          </select>
-        </InputWrapper>
-        <InputWrapper>
-          <label htmlFor="description">Description</label>
-          <textarea
-            name="description"
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          ></textarea>
-        </InputWrapper>
-        <InputWrapper>
-          <label htmlFor="date">Date</label>
-          <input
-            type="date"
-            id="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            min="2022-01-01"
-            max="2022-12-31"
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <label htmlFor="time">Time</label>
-          <input
-            type="time"
-            id="time"
-            name="time"
-            min="00:00"
-            max="23:59"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-          ></input>
-        </InputWrapper>
-        <InputWrapper>
-          <label htmlFor="location">Location</label>
-          <input
-            type="text"
-            id="location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <label htmlFor="imageUrl">Image URL</label>
-          <input
-            type="text"
-            id="imageUrl"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-          />
-        </InputWrapper>
-        <Button type="submit">Edit Meetup</Button>
-        <ErrorMessage>{errorMessage}</ErrorMessage>
-      </Form>
-    </Wrapper>
+    <>
+      <Header />
+      <Wrapper>
+        <Form onSubmit={onSubmitHandler}>
+          <Heading>Edit Meetup</Heading>
+          <InputWrapper>
+            <label htmlFor="title">Title</label>
+            <input
+              type="text"
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <label htmlFor="category">Category</label>
+            <select
+              name="category"
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="gaming">Gaming</option>
+              <option value="programming">Programming</option>
+            </select>
+          </InputWrapper>
+          <InputWrapper>
+            <label htmlFor="description">Description</label>
+            <textarea
+              name="description"
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            ></textarea>
+          </InputWrapper>
+          <InputWrapper>
+            <label htmlFor="date">Date</label>
+            <input
+              type="date"
+              id="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              min="2022-01-01"
+              max="2022-12-31"
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <label htmlFor="time">Time</label>
+            <input
+              type="time"
+              id="time"
+              name="time"
+              min="00:00"
+              max="23:59"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+            ></input>
+          </InputWrapper>
+          <InputWrapper>
+            <label htmlFor="location">Location</label>
+            <input
+              type="text"
+              id="location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <label htmlFor="imageUrl">Image URL</label>
+            <input
+              type="text"
+              id="imageUrl"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+            />
+          </InputWrapper>
+          <Button type="submit">Edit Meetup</Button>
+          <ErrorMessage>{errorMessage}</ErrorMessage>
+        </Form>
+      </Wrapper>
+    </>
   );
 }
 
@@ -189,8 +193,8 @@ const Wrapper = styled.main`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  max-width: 500px;
-  margin: 0 auto;
+  max-width: 700px;
+  margin: 2rem auto;
   border: 1px solid #ddd;
   border-radius: 1rem;
   padding: 2rem;

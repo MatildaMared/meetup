@@ -23,12 +23,12 @@ const HeaderWrapper = styled.header`
   flex-direction: column;
   align-items: center;
 
-  @media (max-width: 1200px) {
-    height: 500px;
+  @media (max-width: 1550px) {
+    height: 600px;
   }
 
   @media (max-width: 900px) {
-    height: 400px;
+    height: 500px;
   }
 `;
 
@@ -46,7 +46,7 @@ const Heading = styled.h1`
   font-weight: 800;
   color: rgba(255, 255, 255, 0.85);
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  padding-top: 100px;
+  padding-top: 150px;
   z-index: 2;
 
   @media (max-width: 900px) {
