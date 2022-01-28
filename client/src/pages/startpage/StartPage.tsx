@@ -5,8 +5,8 @@ import styled from "styled-components";
 import UpcomingMeetups from "../../components/upcomingmeetups/UpcomingMeetups";
 import { Meetup } from "../../models/Meetup";
 import AttendingMeetups from "../../components/attendingMeetups/AttendingMeetups";
-import MyMeetups from "../../components/myMeetups/MyMeetups";
 import AllMeetups from "../../components/allMeetups/AllMeetups";
+import CreatedMeetups from "../../components/createdMeetups/CreatedMeetups";
 import CategorySorter from "../../components/categorySorter/CategorySorter";
 
 function StartPage() {
@@ -51,7 +51,7 @@ function StartPage() {
         {activeFilter === "attending" && (
           <AttendingMeetups meetups={sortedMeetups} />
         )}
-        {activeFilter === "my" && <MyMeetups meetups={sortedMeetups} />}
+        {activeFilter === "my" && <CreatedMeetups meetups={sortedMeetups} />}
         {activeFilter === "all" && <AllMeetups meetups={sortedMeetups} />}
       </Wrapper>
     </>

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import MyMeetups from "./MyMeetups";
+import CreatedMeetups from "./CreatedMeetups";
 import { meetups } from "./../../dummyData/meetups";
 import { singleUser } from "./../../dummyData/users";
 import { getUserFromLocalStorage } from "../../services/localStorageService";
@@ -24,17 +24,17 @@ jest.mock("react-router-dom", () => ({
 // Actual tests
 describe("MyMeetups component", () => {
   it("renders without crashing", () => {
-    render(<MyMeetups meetups={meetups} />);
+    render(<CreatedMeetups meetups={meetups} />);
   });
 
   it("displays a title", () => {
-    render(<MyMeetups meetups={meetups} />);
+    render(<CreatedMeetups meetups={meetups} />);
 
     expect(screen.getByText(/Meetups I'm hosting/i)).toBeInTheDocument();
   });
 
   it("displays no meetups if user is not logged in", () => {
-    render(<MyMeetups meetups={meetups} />);
+    render(<CreatedMeetups meetups={meetups} />);
 
     expect(
       screen.getByText(
@@ -46,7 +46,7 @@ describe("MyMeetups component", () => {
   it("displays meetups that the user is hosting if user is logged in", () => {
     // Mock return value for getUserFromLocalStorage function
     (getUserFromLocalStorage as jest.Mock).mockReturnValue(singleUser);
-    render(<MyMeetups meetups={meetups} />);
+    render(<CreatedMeetups meetups={meetups} />);
 
     const filteredMeetups = meetups.filter(
       (meetup) => meetup.ownerId === singleUser.id
