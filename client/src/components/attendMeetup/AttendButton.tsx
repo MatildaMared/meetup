@@ -45,27 +45,33 @@ function AttendButton({ attending, setAttending, setMeetup }: Props) {
   };
 
   return (
-    <Button onClick={(e) => handleClick(e)}>
-      {attending ? "Unattend Meetup" : "Attend Meetup"}
-    </Button>
+    <div>
+      {attending ? (
+        <UnattendButton onClick={(e) => handleClick(e)}>
+          Unattend Meetup
+        </UnattendButton>
+      ) : (
+        <AttendingButton onClick={(e) => handleClick(e)}>
+          Attend Meetup
+        </AttendingButton>
+      )}
+    </div>
   );
 }
 
 export default AttendButton;
 
-const Button = styled.button`
-  position: absolute;
-  right: 1rem;
-  top: 3.4rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-  z-index: 5;
-  background-color: #474747;
-  color: #eee;
-  padding: 4px 0.5rem;
-  border-radius: 0.5rem;
-  transition: all 0.3s;
+const BaseButton = styled.button`
   border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  color: #eee;
   cursor: pointer;
+  margin: 1rem 0;
+  padding: 1rem 2rem;
+  transition: all 0.3s;
+  width: fit-content;
+  z-index: 5;
 
   &:hover {
     background-color: #7e7e7e;
@@ -74,4 +80,12 @@ const Button = styled.button`
   &:active {
     transform: scale(0.98);
   }
+`;
+
+const AttendingButton = styled(BaseButton)`
+  background-color: #be8315;
+`;
+
+const UnattendButton = styled(BaseButton)`
+  background-color: #474747;
 `;

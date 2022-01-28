@@ -4,6 +4,7 @@ import styled from "styled-components";
 import OwnerButtons from "../ownerButtons/OwnerButtons";
 import AttendButton from "../attendMeetup/AttendButton";
 import MeetupInfo from "../meetupInfo/MeetupInfo";
+import Attendees from "../../components/attendees/Attendees";
 
 interface MeetupProps {
   meetup: Meetup;
@@ -27,6 +28,7 @@ const MeetupCard: React.FC<MeetupProps> = ({
       {meetup && (
         <StyledCard>
           <OwnerButtons meetup={meetup} />
+          <Image src={meetup.imgUrl} alt="" />
           {isLoggedIn && (
             <AttendButton
               attending={attending}
@@ -35,6 +37,7 @@ const MeetupCard: React.FC<MeetupProps> = ({
             />
           )}
           <MeetupInfo meetup={meetup} user={user} />
+          <Attendees meetup={meetup as Meetup} />
         </StyledCard>
       )}
     </>
@@ -48,14 +51,15 @@ const StyledCard = styled.div`
   display: flex;
   max-width: 60vw;
   padding: 3rem;
-  margin: 10px auto;
+  margin: 1.5rem auto;
   flex-direction: column;
   background-color: lightgrey;
-  border-radius: 5px;
+  border-radius: 1rem;
 
   h3 {
     text-transform: uppercase;
     margin-bottom: 5px;
+    font-size: 1.6rem;
   }
 
   small {
@@ -69,4 +73,10 @@ const StyledCard = styled.div`
   @media (max-width: 640px) {
     max-width: 400px;
   }
+`;
+
+const Image = styled.img`
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
 `;

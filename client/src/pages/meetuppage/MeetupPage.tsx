@@ -8,9 +8,9 @@ import {
   getTokenFromLocalStorage,
   getUserFromLocalStorage,
 } from "../../services/localStorageService";
+import Header from "../../components/header/Header";
 import MeetupCard from "../../components/meetupcard/MeetupCard";
 import Comment from "../../components/comment/Comment";
-import Attendees from "../../components/attendees/Attendees";
 import styled from "styled-components";
 
 function MeetupPage() {
@@ -60,18 +60,20 @@ function MeetupPage() {
   }, [singleMeetup]);
 
   return (
-    <StyledPage>
-      <MeetupCard
-        meetup={singleMeetup as Meetup}
-        user={user as User}
-        attending={attending}
-        setAttending={setAttending}
-        isLoggedIn={isLoggedIn}
-        setSingleMeetup={setSingleMeetup}
-      />
-      <Comment meetup={singleMeetup as Meetup} setMeetup={setSingleMeetup} />
-      <Attendees meetup={singleMeetup as Meetup} />
-    </StyledPage>
+    <>
+      <Header />
+      <StyledPage>
+        <MeetupCard
+          meetup={singleMeetup as Meetup}
+          user={user as User}
+          attending={attending}
+          setAttending={setAttending}
+          isLoggedIn={isLoggedIn}
+          setSingleMeetup={setSingleMeetup}
+        />
+        <Comment meetup={singleMeetup as Meetup} setMeetup={setSingleMeetup} />
+      </StyledPage>
+    </>
   );
 }
 
@@ -79,5 +81,6 @@ export default MeetupPage;
 
 const StyledPage = styled.div`
   position: relative;
+  max-width: 1400px;
   margin: 0 auto;
 `;
