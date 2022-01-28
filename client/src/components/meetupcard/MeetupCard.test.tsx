@@ -95,3 +95,5 @@ describe("Testing for MeetupCard", () => {
     expect(button).not.toBeInTheDocument();
   });
 });
+
+// Om man behöver kolla att någon som redan är attendad när den loggar in...
