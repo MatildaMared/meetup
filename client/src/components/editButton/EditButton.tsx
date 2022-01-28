@@ -1,15 +1,32 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { getUserFromLocalStorage } from "../../services/localStorageService";
-import { useNavigate } from "react-router-dom";
+import {
+  getTokenFromLocalStorage,
+  getUserFromLocalStorage,
+} from "../../services/localStorageService";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Meetup } from "../../models/Meetup";
-import { Edit } from "react-feather";
+import { Edit, XSquare } from "react-feather";
+
+async function deleteMeetup(token: string, meetupId: string) {
+  const response = await fetch(`/api/meetups/${meetupId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const data = await response.json();
+  return data;
+}
 
 function EditButton(props: { meetup: Meetup }) {
   const { ownerId, date, id } = props.meetup;
   const [canEdit, setCanEdit] = useState<boolean>(false);
+  const [isOwner, setIsOwner] = useState<boolean>(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const user = getUserFromLocalStorage();
+  const token = getTokenFromLocalStorage();
   const userId = user?.id;
 
   const redirectToEditPage = (e: any) => {
@@ -17,9 +34,29 @@ function EditButton(props: { meetup: Meetup }) {
     navigate(`/meetups/${id}/edit`);
   };
 
+  const onDeleteHandler = async (e: any) => {
+    e.stopPropagation();
+    if (
+      window.confirm(
+        "Are you sure you want to delete this meetup? You cannot undo this decision later."
+      )
+    ) {
+      console.log("Will try do delete");
+      const response = await deleteMeetup(token as string, id);
+      if (response.success) {
+        if (location.pathname === "/") {
+          window.location.reload();
+        } else {
+          navigate("/");
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     // if current user is the owner of the meetup
     if (ownerId === userId) {
+      setIsOwner(true);
       // and if meetup has not already happened
       if (new Date(date) > new Date()) {
         // set canEdit to true
@@ -29,22 +66,34 @@ function EditButton(props: { meetup: Meetup }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (canEdit) {
+  if (isOwner) {
     return (
-      <Button onClick={redirectToEditPage}>
-        <Edit size={16} />
-        <span>Edit</span>
-      </Button>
+      <Wrapper>
+        {canEdit && (
+          <Button onClick={redirectToEditPage}>
+            <Edit size={16} />
+            <span>Edit</span>
+          </Button>
+        )}
+        <DeleteButton onClick={onDeleteHandler}>
+          <XSquare size={16} />
+          <span>Delete</span>
+        </DeleteButton>
+      </Wrapper>
     );
   } else {
     return null;
   }
 }
 
-const Button = styled.button`
+const Wrapper = styled.div`
   position: absolute;
   top: 1rem;
   right: 1rem;
+  display: flex;
+`;
+
+const Button = styled.button`
   display: flex;
   align-items: center;
   background-color: #474747;
@@ -61,6 +110,15 @@ const Button = styled.button`
 
   &:hover {
     background-color: #7e7e7e;
+  }
+`;
+
+const DeleteButton = styled(Button)`
+  margin-left: 0.5rem;
+  background-color: #b45053;
+
+  &:hover {
+    background-color: #b43026;
   }
 `;
 
