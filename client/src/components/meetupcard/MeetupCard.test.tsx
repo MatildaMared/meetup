@@ -97,6 +97,21 @@ describe("Testing for MeetupCard", () => {
     const button = screen.queryByText(/AttendButton/i);
     expect(button).not.toBeInTheDocument();
   });
+
+  it("render the image for the event", () => {
+    render(
+      <MeetupCard
+        meetup={singleMeetup}
+        user={user}
+        attending={trueProps.attending}
+        setAttending={setIsLoggedInMock}
+        isLoggedIn={falseProps.isLoggedIn}
+        setSingleMeetup={setSingleMeetupMock}
+      />
+    );
+    const image = screen.getByRole("img");
+    expect(image).toBeInTheDocument();
+  });
 });
 
 // Om man behöver kolla att någon som redan är attendad när den loggar in...

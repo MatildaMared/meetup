@@ -14,12 +14,6 @@ describe("Test for MeetupInfo component", () => {
     expect(title).toBeInTheDocument();
   });
 
-  it("render the image for the event", () => {
-    render(<MeetupInfo meetup={singleMeetup} user={singleUser} />);
-    const image = screen.getByRole("img");
-    expect(image).toBeInTheDocument();
-  });
-
   it("render the name of the owner, for the event", () => {
     render(<MeetupInfo meetup={singleMeetup} user={singleUser} />);
     const username = screen.getByText(/test/i);
