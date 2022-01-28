@@ -136,6 +136,32 @@ describe("if comment was created succesfully", () => {
   afterAll(() => {
     jest.clearAllMocks();
   });
+
+    describe("delete button doesnt show", () => {
+    it("does not display a delete button if user is not logged in", () => {
+
+      render(
+        <Comment meetup={meetupMock} setMeetup={setMeetupMock} />
+      );
+
+      const button = screen.queryByRole("button", { name: "Delete Comment" });
+
+      expect(button).not.toBeInTheDocument();
+    });
+
+    // it("does not display a delete button if user has not written the comment", () => {})
+    // it("does not display a delete button if user it not the owner of the event", () => {})
+  });
+
+  // describe("delete button does show", () => {
+  //   it("displays a delete button if user has written the comment", () => {
+
+  //   })
+
+  //   it("displays a delete button if user is the owner of the event", () => {
+
+  //   })
+  // })
 });
 
 function createMeetup(): Meetup {
