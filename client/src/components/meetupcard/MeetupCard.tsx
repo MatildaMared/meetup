@@ -3,6 +3,7 @@ import { User } from "../../models/User";
 import styled from "styled-components";
 import EditButton from "../editButton/EditButton";
 import AttendButton from "../attendMeetup/AttendButton";
+import MeetupInfo from "../meetupInfo/MeetupInfo";
 
 interface MeetupProps {
   meetup: Meetup;
@@ -22,7 +23,7 @@ const MeetupCard: React.FC<MeetupProps> = ({
   setSingleMeetup,
 }): JSX.Element => {
   return (
-    <div>
+    <>
       {meetup && (
         <StyledCard>
           <EditButton meetup={meetup} />
@@ -33,28 +34,10 @@ const MeetupCard: React.FC<MeetupProps> = ({
               setMeetup={setSingleMeetup}
             />
           )}
-          <Image src={meetup.imgUrl} alt="" />
-          <Info>
-            <h3>{meetup.title}</h3>
-            <p>
-              {meetup.location} <br />
-              {new Date(meetup.date).toLocaleString([], {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-              <br />
-              <small>created by {user ? user.firstName : "unknown"}</small>
-            </p>
-            <h4>Event Info</h4>
-            <p>{meetup.description}</p>
-          </Info>
+          <MeetupInfo meetup={meetup} user={user} />
         </StyledCard>
       )}
-    </div>
+    </>
   );
 };
 
@@ -85,25 +68,5 @@ const StyledCard = styled.div`
 
   @media (max-width: 640px) {
     max-width: 400px;
-  }
-`;
-
-const Image = styled.img`
-  max-width: 50vw;
-  margin: 0 auto;
-
-  @media (max-width: 640px) {
-    max-width: 300px;
-  }
-`;
-
-const Info = styled.div`
-  max-width: 50vw;
-  margin: 0 auto;
-  padding: 1rem 1rem 5rem;
-  background-color: #ffffff;
-
-  @media (max-width: 640px) {
-    max-width: 300px;
   }
 `;
