@@ -18,8 +18,8 @@ let successfulPostResponse = {
 
 jest.mock("../../services/localStorageService", () => {
   return {
-    getTokenFromLocalStorage: jest.fn() as jest.Mock,
-    getUserFromLocalStorage: jest.fn() as jest.Mock,
+    getTokenFromLocalStorage: jest.fn(),
+    getUserFromLocalStorage: jest.fn(),
   };
 });
 
@@ -28,14 +28,42 @@ beforeEach(() => {
   setMeetupMock = jest.fn();
 });
 
+//more tests in Comment.test.tsx
+
 describe("deleteCommentButton component", () => {
+  beforeEach(() => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(successfulPostResponse),
+      })
+    ) as jest.Mock<any>;
+  });
+
   it("renders without crashing", () => {
     render(
       <DeleteCommentButton meetup={meetupMock} setMeetup={setMeetupMock} />
     );
   });
 
+  it("calls delete function when valid user clicks the delete button", async () => {
+    (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
+      () => "token"
+    );
 
+    render(
+      <DeleteCommentButton meetup={meetupMock} setMeetup={setMeetupMock} />
+    );
+
+    const button = screen.getByRole("button", { name: "Delete Comment" });
+    expect(button).toBeInTheDocument();
+    userEvent.click(button);
+
+    await waitFor(() => {
+      expect(setMeetupMock.mock.calls.length).toBe(1);
+    });
+  });
 });
 
-//it("deletes a comment when valid user clicks the delete button", () => {})
+afterAll(() => {
+  jest.clearAllMocks();
+});

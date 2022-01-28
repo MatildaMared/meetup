@@ -16,7 +16,7 @@ export const singleMeetup = {
   comments: [
     {
       comment: "Så kul!",
-      userId: "2",
+      userId: "1",
       id: "378",
       name: "Testsson",
     },

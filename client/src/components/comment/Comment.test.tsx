@@ -1,7 +1,10 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Comment from "./Comment";
-import { getTokenFromLocalStorage } from "../../services/localStorageService";
+import {
+  getTokenFromLocalStorage,
+  getUserFromLocalStorage,
+} from "../../services/localStorageService";
 import { Meetup } from "../../models/Meetup";
 import { singleMeetup } from "../../dummyData/meetups";
 
@@ -133,35 +136,75 @@ describe("if comment was created succesfully", () => {
     });
   });
 
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
-    describe("delete button doesnt show", () => {
+  describe("delete button doesnt show", () => {
     it("does not display a delete button if user is not logged in", () => {
-
-      render(
-        <Comment meetup={meetupMock} setMeetup={setMeetupMock} />
-      );
+      render(<Comment meetup={meetupMock} setMeetup={setMeetupMock} />);
 
       const button = screen.queryByRole("button", { name: "Delete Comment" });
-
       expect(button).not.toBeInTheDocument();
     });
+    beforeEach(() => {
+      global.fetch = jest.fn(() =>
+        Promise.resolve({
+          json: () => Promise.resolve(successfulPostResponse),
+        })
+      ) as jest.Mock<any>;
+    });
 
-    // it("does not display a delete button if user has not written the comment", () => {})
-    // it("does not display a delete button if user it not the owner of the event", () => {})
+    it("does not display a delete button if user has not written the comment", () => {
+      
+      const user = {
+        id: "2",
+        firstName: "Test",
+        username: "username",
+      };
+
+      (getUserFromLocalStorage as jest.Mock<object>).mockImplementation(
+        () => user
+      );
+      (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
+        () => "token"
+      );
+
+      render(<Comment meetup={meetupMock} setMeetup={setMeetupMock} />);
+
+      const button = screen.queryByRole("button", { name: "Delete Comment" });
+      expect(button).toBe(null);
+    })
   });
 
-  // describe("delete button does show", () => {
-  //   it("displays a delete button if user has written the comment", () => {
+  describe("delete button does show", () => {
+    beforeEach(() => {
+      global.fetch = jest.fn(() =>
+        Promise.resolve({
+          json: () => Promise.resolve(successfulPostResponse),
+        })
+      ) as jest.Mock<any>;
+    });
 
-  //   })
+    it("displays a delete button if user has written the comment", () => {
+      const user = {
+        id: "1",
+        firstName: "Test",
+        username: "username",
+      };
 
-  //   it("displays a delete button if user is the owner of the event", () => {
+      (getUserFromLocalStorage as jest.Mock<object>).mockImplementation(
+        () => user
+      );
+      (getTokenFromLocalStorage as jest.Mock<string>).mockImplementation(
+        () => "token"
+      );
 
-  //   })
-  // })
+      render(<Comment meetup={meetupMock} setMeetup={setMeetupMock} />);
+
+      const button = screen.getByRole("button", { name: "Delete Comment" });
+      expect(button).toBeInTheDocument();
+    });
+  });
+});
+afterAll(() => {
+  jest.clearAllMocks();
 });
 
 function createMeetup(): Meetup {
@@ -174,7 +217,14 @@ function createMeetup(): Meetup {
     location: "Test",
     imgUrl: "https://",
     attendees: [],
-    comments: [],
+    comments: [
+      {
+        comment: "Så kul!",
+        userId: "1",
+        id: "378",
+        name: "Testsson",
+      },
+    ],
     ownerId: "1",
   };
 }

@@ -85,8 +85,6 @@ export async function createComment(
   });
 
   const commentData = await commentFetch.json();
-  console.log(commentData);
-
   return commentData;
 }
 

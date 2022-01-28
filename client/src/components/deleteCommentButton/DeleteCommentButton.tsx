@@ -14,12 +14,11 @@ interface MeetupProps {
 
 const DeleteCommentButton: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
   const token = getTokenFromLocalStorage();
-  const user = getUserFromLocalStorage()  
 
   async function deleteHandler (e: any) {
     if (token) {
       let commentId = e.target.parentElement.getAttribute("data-id");
-      const fetchResponse = await deleteComment(meetup.id, token, commentId);
+      const fetchResponse = await deleteComment(meetup?.id, token, commentId);
       setMeetup(fetchResponse.meetup);    
     }
   }
