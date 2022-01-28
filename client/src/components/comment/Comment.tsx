@@ -88,10 +88,11 @@ export default Comment;
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
-  width: 90vw;
-  margin: 0 auto 10px;
-  padding: 3rem 5rem;
+  width: 100%;
+  padding: 2rem;
   border: 2px solid lightgrey;
+  border-radius: 1rem;
+  margin-bottom: 2rem;
 
   h3 {
     color: lightblue;
@@ -106,7 +107,9 @@ const StyledForm = styled.form`
   }
 
   input {
-    padding: 1rem 2rem 3rem 2rem;
+    padding: 1rem;
+    width: 100%;
+    max-width: 400px;
     margin-bottom: 0.4rem;
     font-family: sans-serif;
 
@@ -118,7 +121,6 @@ const StyledForm = styled.form`
   button {
     padding: 0.4rem 0.9rem;
     display: block;
-    position: absolute;
     left: 11.4rem;
     background-color: transparent;
     border: 2px solid lightblue;
