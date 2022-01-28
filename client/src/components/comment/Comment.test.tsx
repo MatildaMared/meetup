@@ -103,7 +103,6 @@ describe("if comment was created succesfully", () => {
     const inputElem = screen.getByRole("textbox");
     userEvent.type(inputElem, "Hello");
     userEvent.click(button);
-    
 
     await waitFor(() => {
       expect(inputElem).toHaveValue("");
@@ -121,16 +120,48 @@ describe("if comment was created succesfully", () => {
     userEvent.type(inputElem, "This is a dummy comment");
     userEvent.click(button);
 
-    //console.log(setMeetupMock.mock.calls[0]);
-    
     await waitFor(() => {
-      expect(setMeetupMock.mock).toHaveBeenCalled();
+      expect(setMeetupMock.mock.calls.length).toBe(1);
+    });
+
+    const firstCall = setMeetupMock.mock.calls[0];
+    const response = firstCall[0];
+
+    //test if the correct ID in the mock singleMeetup is returned
+    await waitFor(() => {
+      expect(response.id).toBe("234");
     });
   });
 
   afterAll(() => {
     jest.clearAllMocks();
   });
+
+    describe("delete button doesnt show", () => {
+    it("does not display a delete button if user is not logged in", () => {
+
+      render(
+        <Comment meetup={meetupMock} setMeetup={setMeetupMock} />
+      );
+
+      const button = screen.queryByRole("button", { name: "Delete Comment" });
+
+      expect(button).not.toBeInTheDocument();
+    });
+
+    // it("does not display a delete button if user has not written the comment", () => {})
+    // it("does not display a delete button if user it not the owner of the event", () => {})
+  });
+
+  // describe("delete button does show", () => {
+  //   it("displays a delete button if user has written the comment", () => {
+
+  //   })
+
+  //   it("displays a delete button if user is the owner of the event", () => {
+
+  //   })
+  // })
 });
 
 function createMeetup(): Meetup {
@@ -147,4 +178,3 @@ function createMeetup(): Meetup {
     ownerId: "1",
   };
 }
-
