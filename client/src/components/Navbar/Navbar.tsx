@@ -59,6 +59,12 @@ const ListWrapper = styled.ul`
 const ListElement = styled.li`
   cursor: pointer;
   color: #eee;
+  border-bottom: 1px solid transparent;
+  transition: ease-in 0.2s all;
+
+  &:hover {
+    border-bottom: 0.3px solid #eee;
+  }
 `;
 
 export default Navbar;
