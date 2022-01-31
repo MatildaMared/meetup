@@ -2,6 +2,15 @@
 
 An app where you can sign up to log in and attend meetups with focus on programmning and gaming. The app is tested with Supertest on the backend and Jest on the frontend. It's written in Typescript and React. The programmers involved are MatildaMared, herv3us and sarablom and we created the app as an assignment for testing course in our Frontend development education.
 
+## To run the app
+
+1. Get the correct information for the .env file (if you get permission from us)
+2. Type `npm install` in the root folder
+3. Type `npm run dev` in the root folder
+4. Type `npm install` in the client folder
+5. Type `npm run start` in the client folder
+6. For tests: `npm run test` in both root and client folder
+
 ## User stories
 
 1. As a user/guest I want to initially see upcoming Meetups sorted after date so that I can see which Meetups is arranged in the future.
@@ -22,13 +31,6 @@ An app where you can sign up to log in and attend meetups with focus on programm
 16. As the creator of a Meetup I am not allowed to edit an ongoing or passed meeting, since it has already taken place.
 17. As the creator of a Meetup I want to able to edit my own Meetup in case I need to do some updates.
 18. As the creator of a Meetup I want to be able to see my created Meetups so that I can keep track of which Meetups I am arranging.
-
-## To run the app
-
-1. Get the correct information and install the .env file (if you get permission from us)
-2. Type `npm run dev` in the root folder
-3. Type `npm run start` in the client folder
-4. For tests: `npm run test` in both root and client folder
 
 ## API routes
 
