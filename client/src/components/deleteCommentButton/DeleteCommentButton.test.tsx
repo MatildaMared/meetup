@@ -54,7 +54,7 @@ describe("deleteCommentButton component", () => {
       <DeleteCommentButton meetup={meetupMock} setMeetup={setMeetupMock} />
     );
 
-    const button = screen.getByRole("button", { name: "Delete Comment" });
+    const button = screen.getByRole("button", { name: "Delete" });
     expect(button).toBeInTheDocument();
     userEvent.click(button);
 

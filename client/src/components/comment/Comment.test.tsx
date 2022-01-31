@@ -140,7 +140,7 @@ describe("if comment was created succesfully", () => {
     it("does not display a delete button if user is not logged in", () => {
       render(<Comment meetup={meetupMock} setMeetup={setMeetupMock} />);
 
-      const button = screen.queryByRole("button", { name: "Delete Comment" });
+      const button = screen.queryByRole("button", { name: "Delete" });
       expect(button).not.toBeInTheDocument();
     });
     beforeEach(() => {
@@ -152,7 +152,6 @@ describe("if comment was created succesfully", () => {
     });
 
     it("does not display a delete button if user has not written the comment", () => {
-      
       const user = {
         id: "2",
         firstName: "Test",
@@ -170,7 +169,7 @@ describe("if comment was created succesfully", () => {
 
       const button = screen.queryByRole("button", { name: "Delete Comment" });
       expect(button).toBe(null);
-    })
+    });
   });
 
   describe("delete button does show", () => {
@@ -198,7 +197,7 @@ describe("if comment was created succesfully", () => {
 
       render(<Comment meetup={meetupMock} setMeetup={setMeetupMock} />);
 
-      const button = screen.getByRole("button", { name: "Delete Comment" });
+      const button = screen.getByRole("button", { name: "Delete" });
       expect(button).toBeInTheDocument();
     });
   });

@@ -51,12 +51,11 @@ const Comment: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
         <StyledDiv>
           <StyledForm onSubmit={(e) => handleSubmit(e)}>
             <h3>Comment</h3>
-            <input
-              type="text"
+            <textarea
               placeholder="Enter your comment here..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-            />
+            ></textarea>
             <button type="submit">Submit</button>
           </StyledForm>
           <p>{errorMessage}</p>
@@ -93,28 +92,34 @@ export default Comment;
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
-  width: 90%;
+  max-width: 60vw;
   padding: 2rem;
   border: 2px solid lightgrey;
   border-radius: 1rem;
   margin: 0 auto 1rem;
   color: #000;
+
+  @media (max-width: 940px) {
+    max-width: 90%;
+  }
 `;
 
 const StyledForm = styled.form`
   position: relative;
 
-  input {
-    padding: 1rem;
+  textarea {
     width: 100%;
-    max-width: 400px;
-    margin-bottom: 0.4rem;
-    font-family: sans-serif;
-    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
     border: 1px solid #ddd;
+    outline: none;
+    font: inherit;
+    resize: none;
+    margin: 5px 0;
 
     &:focus {
-      outline: none;
+      outline: 2px dotted #5b5b5b;
+      outline-offset: 4px;
     }
   }
 
@@ -142,7 +147,7 @@ const CommentAndBy = styled.div`
 const CommentCard = styled.article`
   border: 1px solid #ddd;
   padding: 1rem 2rem;
-  border-radius: 4px;
+  border-radius: 0.5rem;
   max-width: 1200px;
   display: flex;
   justify-content: space-between;
