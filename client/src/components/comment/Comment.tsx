@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { createComment } from "../../services/meetupService";
-import { getTokenFromLocalStorage, getUserFromLocalStorage } from "../../services/localStorageService";
+import {
+  getTokenFromLocalStorage,
+  getUserFromLocalStorage,
+} from "../../services/localStorageService";
 import { UserComment } from "../../models/UserComment";
 import { Meetup } from "../../models/Meetup";
 import styled from "styled-components";
@@ -72,10 +75,12 @@ const Comment: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
                 <p>{comment.comment}</p>
                 <small>by {comment.name}</small>
               </CommentAndBy>
-             {(comment.userId === user?.id || meetup.ownerId === user?.id) && <DeleteCommentButton
-                meetup={meetup as Meetup}
-                setMeetup={setMeetup}
-              />}
+              {(comment.userId === user?.id || meetup.ownerId === user?.id) && (
+                <DeleteCommentButton
+                  meetup={meetup as Meetup}
+                  setMeetup={setMeetup}
+                />
+              )}
             </CommentCard>
           ))}
       </StyledDiv>
@@ -88,23 +93,16 @@ export default Comment;
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 90%;
   padding: 2rem;
   border: 2px solid lightgrey;
   border-radius: 1rem;
-  margin-bottom: 2rem;
-
-  h3 {
-    color: lightblue;
-  }
+  margin: 0 auto 1rem;
+  color: #000;
 `;
 
 const StyledForm = styled.form`
   position: relative;
-
-  h3 {
-    color: lightblue;
-  }
 
   input {
     padding: 1rem;
@@ -112,6 +110,8 @@ const StyledForm = styled.form`
     max-width: 400px;
     margin-bottom: 0.4rem;
     font-family: sans-serif;
+    border-radius: 4px;
+    border: 1px solid #ddd;
 
     &:focus {
       outline: none;
@@ -119,25 +119,37 @@ const StyledForm = styled.form`
   }
 
   button {
-    padding: 0.4rem 0.9rem;
     display: block;
-    left: 11.4rem;
-    background-color: transparent;
-    border: 2px solid lightblue;
-    border-radius: 4px;
-    color: lightblue;
+    background-color: #474747;
+    color: #eee;
+    padding: 4px 0.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+
+    &:hover {
+      background-color: #7e7e7e;
+    }
   }
 `;
 
-const CommentAndBy = styled.div `
+const CommentAndBy = styled.div`
   min-width: 300px;
-` 
+`;
 
 const CommentCard = styled.article`
-  border: 1px solid black;
+  border: 1px solid #ddd;
   padding: 1rem 2rem;
   border-radius: 4px;
   max-width: 1200px;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 0.6rem;
+  align-items: center;
+
+  @media (max-width: 560px) {
+    flex-direction: column;
+  }
 `;

@@ -66,7 +66,6 @@ const StyledList = styled.ul`
 
     &:hover {
       box-shadow: 0 0 7px rgba(0, 0, 0, 0.5);
-      /* transform: scale(1.01); */
     }
   }
 `;

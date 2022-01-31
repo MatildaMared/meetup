@@ -70,8 +70,8 @@ const StyledCard = styled.div`
     margin-top: 1.6rem;
   }
 
-  @media (max-width: 640px) {
-    max-width: 400px;
+  @media (max-width: 940px) {
+    max-width: 90%;
   }
 `;
 

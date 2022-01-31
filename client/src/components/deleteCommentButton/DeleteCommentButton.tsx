@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   getTokenFromLocalStorage,
   getUserFromLocalStorage,
@@ -12,23 +12,24 @@ interface MeetupProps {
   setMeetup: Function;
 }
 
-const DeleteCommentButton: React.FC<MeetupProps> = ({ meetup, setMeetup }): JSX.Element => {
+const DeleteCommentButton: React.FC<MeetupProps> = ({
+  meetup,
+  setMeetup,
+}): JSX.Element => {
   const token = getTokenFromLocalStorage();
 
-  async function deleteHandler (e: any) {
+  async function deleteHandler(e: any) {
     if (token) {
       let commentId = e.target.parentElement.getAttribute("data-id");
       const fetchResponse = await deleteComment(meetup?.id, token, commentId);
-      setMeetup(fetchResponse.meetup);    
+      setMeetup(fetchResponse.meetup);
     }
   }
 
-  return <DeleteButton onClick={(e) => deleteHandler(e)}>
-    Delete Comment
-  </DeleteButton>;
-}
+  return <DeleteButton onClick={(e) => deleteHandler(e)}>Delete</DeleteButton>;
+};
 
-const DeleteButton = styled.button `
+const DeleteButton = styled.button`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   z-index: 5;
   background-color: #474747;
@@ -38,6 +39,8 @@ const DeleteButton = styled.button `
   transition: all 0.3s;
   border: none;
   cursor: pointer;
+  margin-left: 5px;
+  height: fit-content;
 
   &:hover {
     background-color: #7e7e7e;
@@ -46,6 +49,6 @@ const DeleteButton = styled.button `
   &:active {
     transform: scale(0.98);
   }
-`
+`;
 
 export default DeleteCommentButton;

@@ -80,6 +80,10 @@ const BaseButton = styled.button`
   &:active {
     transform: scale(0.98);
   }
+
+  @media (max-width: 560px) {
+    padding: 0.6rem 1.2rem;
+  }
 `;
 
 const AttendingButton = styled(BaseButton)`
